@@ -1,0 +1,15 @@
+version: 0.0
+os: linux
+files:
+  - source: ./
+    destination: /var/logonServer
+    overwrite: yes
+hooks:
+ BeforeInstall:
+    - location: scripts/removeApp.sh
+      timeout: 180
+      runas: root
+ AfterInstall:
+    - location: scripts/changePermissions.sh
+      timeout: 180
+      runas: root

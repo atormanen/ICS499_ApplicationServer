@@ -1,0 +1,82 @@
+Format for json requests
+requestTypes: signin, createAccount, getUserStats, sendFriendRequest,
+  validateFriendRequest
+
+User must be signed in for getUserStats, sendFriendRequest,and validateFriendRequest
+********************************************************
+signin
+{
+  "requestType":"signin",
+  "username":"ATormanen",
+  "password":"testpass",
+  "publicKey":"pub key here"
+}
+
+signin response
+{
+  "reqeustType":"siginin",
+  "status":"succes", --- or failure
+  "token","blahblahblah" - or null if failure
+}
+********************************************************
+createAccount
+{
+  "requestType":"createAccount",
+  "username":"testaccount1344",
+  "firstName":"test",
+  "lastName":"accoutn12",
+  "email":"testaccount12@yahoo.com",
+  "password":"test649845634684sdfsdf"
+}
+
+createAccount response
+{
+  "requestType":"createAccount",
+  "status":"succes" --- or failure
+  "reason":"uname exests..."
+}
+********************************************************
+getUserStats
+{
+  "requestType":"getUserStats",
+  "username":"testaccount1344",
+}
+
+return user stats
+********************************************************
+getFriendsList
+{
+  "requestType":"getFriendsList",
+  "username":"testaccount1344",
+}
+
+getFriendsListResponse
+{
+  "requestType":"getFriendsList",
+  "status":"succus"
+}
+********************************************************
+sendFriendRequest
+{
+  "requestType":"sendFriendRequest",
+  "username":"testaccount1344",
+  "friendsUsername":"freindsname"
+}
+
+freind request sendRequestedData
+{
+  "requestType":"sendFriendRequest",
+  "status":"succus"
+}
+********************************************************
+acceptFriendRequest
+{
+  "requestType":"validateFriendRequest",
+  "username":"testaccount1344",
+  "friendsUsername":"freindsname"
+}
+
+{
+  "requestType":"validateFriendRequest",
+  "status":"succus"
+}

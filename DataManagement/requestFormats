@@ -1,82 +1,59 @@
 Format for json requests
-requestTypes: signin, createAccount, getUserStats, sendFriendRequest,
-  validateFriendRequest
+requestTypes: MakeMove, CreateGame, AcceptGame
 
-User must be signed in for getUserStats, sendFriendRequest,and validateFriendRequest
 ********************************************************
-signin
+CreateGame - client to server
 {
-  "requestType":"signin",
+  "requestType":"CreateGame",
+  "player_one":"ATormanen",
+  "player_two":"second_player",
+  "signon_token:"player_one's token"
+}
+
+Player_two accept game - client to server
+{
+  "requestType":"AcceptGame",
+  "player_one":"player_one",
+  "player_two":"second_player",
+  "signon_token:"player_two's token"
+  "game_token":"gameToken"
+}
+
+CreateGame Response - server to both clients
+{
+  "requestType":"CreateGame",
+  "player_one":"ATormanen",
+  "player_two":"second_player",
+  "game_token":"laksdjf;laksjdf;lkasjdf"
+}
+
+********************************************************
+
+MakeMove
+{
+  "requestType":"MakeMove",
   "username":"ATormanen",
-  "password":"testpass",
-  "publicKey":"pub key here"
+  "signon_token:"tokenstuff",
+  "game_token":"alskdjf;laksjdg;laksjdf",
+  "game_id":"123456",
+  "move_type":"standard_move",
+  "piece_origin":"coordinate",
+  "Piece_destination":"coordinate",
+  "piece_type":"bishop"
 }
 
-signin response
+MakeMove response
 {
-  "reqeustType":"siginin",
-  "status":"succes", --- or failure
-  "token","blahblahblah" - or null if failure
+"requestType":"MakeMove",
+"game_token":"alskdjf;laksjdg;laksjdf",
+"stats":"move_accepted"
 }
+
 ********************************************************
-createAccount
-{
-  "requestType":"createAccount",
-  "username":"testaccount1344",
-  "firstName":"test",
-  "lastName":"accoutn12",
-  "email":"testaccount12@yahoo.com",
-  "password":"test649845634684sdfsdf"
-}
 
-createAccount response
+CheckForGames
 {
-  "requestType":"createAccount",
-  "status":"succes" --- or failure
-  "reason":"uname exests..."
-}
-********************************************************
-getUserStats
-{
-  "requestType":"getUserStats",
-  "username":"testaccount1344",
-}
-
-return user stats
-********************************************************
-getFriendsList
-{
-  "requestType":"getFriendsList",
-  "username":"testaccount1344",
-}
-
-getFriendsListResponse
-{
-  "requestType":"getFriendsList",
-  "status":"succus"
-}
-********************************************************
-sendFriendRequest
-{
-  "requestType":"sendFriendRequest",
-  "username":"testaccount1344",
-  "friendsUsername":"freindsname"
-}
-
-freind request sendRequestedData
-{
-  "requestType":"sendFriendRequest",
-  "status":"succus"
-}
-********************************************************
-acceptFriendRequest
-{
-  "requestType":"validateFriendRequest",
-  "username":"testaccount1344",
-  "friendsUsername":"freindsname"
-}
-
-{
-  "requestType":"validateFriendRequest",
-  "status":"succus"
+"requestType":"CheckForGame",
+"username":"ATormanen",
+"signon_token:"tokenstuff"
 }

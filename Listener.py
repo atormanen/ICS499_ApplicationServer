@@ -43,7 +43,7 @@ class Listener:
         msg = "ERROR - BAD REQUEST"
         connectionSocket.send(msg.encode())
 
-    def processRequest(self,connectionSocket):
+    def processRequest(self,connectionSocket, addr):
         full_msg = ''
         rcvd_msg = ''
         bufferExceeded = False
@@ -72,7 +72,7 @@ class Listener:
             self.sendBadRequest(connectionSocket)
             #print("Badd req from listener")
             return
-        msgItem = MessageItem(connectionSocket,parsedData)
+        msgItem = MessageItem(connectionSocket, addr, parsedData)
         self.requestQueue.put(msgItem)
 
 
@@ -82,7 +82,8 @@ class Listener:
             self.reqCount = self.reqCount + 1
             try:
                 connectionSocket, addr = self.serverSocket.accept()
-                thread = Thread(target=self.processRequest,args=(connectionSocket,))
+                print(addr[0])
+                thread = Thread(target=self.processRequest,args=(connectionSocket, addr,))
                 thread.start()
                 #is thread.join nececary?
                 #thread.join()

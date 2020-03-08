@@ -12,57 +12,24 @@ class MysqlDB:
         parsedData = json.loads(data)
         return insertStatement
 
-    def getPasswordFor(self, username):
-        selectStatement = "SELECT password FROM user WHERE username ='" +\
-            username + "';"
-        return selectStatement
+    def createGame(self, gameId, gameToken, playerOneId, playerTwoId):
+        statement = "INSERT INTO game VALUES("+ str(gameId)+ ",'" + gameToken + "',"\
+        + str(playerOneId) + "," + str(playerTwoId) + "," + "0);"
+        print(statement)
+        return statement
 
-    def validateUserExists(self,username):
-        return "SELECT EXISTS(SLECT username FROM user WHERE username = " +\
-            username + " );"
+    def createPlayer(self, gameId, playerId, ip4, ip6, port, signon_token):
+        statement = "INSERT INTO player VALUES(" + str(gameId) + "," + str(playerId) +\
+        ",'" + ip4 +"','" + ip6 + "'," + str(port) + ",'" + signon_token + "');"
+        print(statement)
+        return statement
 
-    def validateUsernameAvailable(self,username):
-        return "SELECT EXISTS(SELECT username FROM user WHERE username = '" +\
-            username + "' );"
+    def getLastGameId(self):
+        return "SELECT MAX(game_id) FROM game;"
 
-    def getLastUserId(self):
-        return "SELECT MAX(user_id) FROM user;"
-
-    def createUser(self, id, parsedData):
-        now = time.strftime('%Y-%m-%d %H-%M-%S')
-        return "INSERT INTO user VALUES("+ id +",'" + parsedData["username"] +\
-            "','" +parsedData["firstName"] + "','" + parsedData["lastName"] +\
-            "','" + parsedData["email"] + "',0,'" + parsedData["password"] +\
-            "','" + now + "','" + "null" +\
-             "');"
-
-    def createUserStats(self, id):
-        return "INSERT INTO user_statistics VALUES("+ id +" ,0,0,0,0,0,1);"
-
-    def getFriendsList(self, id):
-        querry = "select user.user_id, user.username \
-                    from user \
-                    inner join  friend_list \
-                    on user.user_id = friend_list.friend_id \
-                    where friend_list.user_id = " + str(id) + ";"
-        return querry
 
     def getUserId(self, username):
         querry = "SELECT user_id FROM user WHERE username = '" + username + "';"
-        return querry
-
-    def getUserStats(self, id):
-        querry = "SELECT * FROM user_statistics WHERE user_id = " + id + ";"
-        return querry
-
-    def signin(self, username, token, tokenExpiration):
-        querry = "UPDATE user SET token_expiration='"+tokenExpiration + \
-                    "',signon_token='" + token + "' WHERE username = " + \
-                    "'" + username + "';"
-        return querry
-
-    def getToken(self,username):
-        querry = "SELECT signon_token FROM user WHERE username='" + username + "';"
         return querry
 
     def getTokenCreationTime(self,username):
@@ -78,4 +45,29 @@ class MysqlDB:
         querry = "UPDATE friend_list set request_accepted = " + str(acceptedRequest) +\
                     " WHERE friend_id = " + str(friendId) + " AND user_id = " +\
                     str(userId) + ";"
+        return querry
+
+    def validateUserExists(self,username):
+        querry = "SELECT EXISTS(SELECT username FROM user WHERE username = '" +\
+            username + "');"
+        print(querry)
+        return querry
+
+    def getSignonToken(self, username):
+        querry = "SELECT signon_token FROM user WHERE username='" + username + "';"
+        return querry
+
+    def acceptGame(self, gameToken):
+        querry = "UPDATE game SET game_accepted = 1 WHERE game_token = '" +\
+            gameToken + "';"
+        return querry
+
+    def checkForGame(self, usernameId):
+        querry = "SELECT game_token FROM game WHERE player_two = '" +\
+            usernameId + "' AND game_accpted = 0;"
+        return querry
+
+    def updateSocket(self, userId, ip, port):
+        querry = "UPDATE player SET ip4 ='" + ip + "', port =" + port + " WHERE" + \
+            " player_id = " + userId + ";"
         return querry

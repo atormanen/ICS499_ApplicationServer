@@ -7,10 +7,47 @@ import json
 #Too much happening here
 
 class MessageItem:
-    def __init__(self,connectionSocket, parsedData):
+    def __init__(self,connectionSocket, addr, parsedData):
         self.connectionSocket = connectionSocket
+        self.ipAddress = addr[0]
+        self.port = addr[1]
         self.parsedData = parsedData
         self.responseObj = ''
+
+    def createGameRespNotAccepted(self, playerOne, gameToken):
+        response = {
+                    "requestType":"CreateGame",
+                    "player_one":"",
+                    "game_token":""
+        }
+        response["player_one"] = playerOne
+        response["game_token"] = gameToken
+        self.responseObj = json.dumps(response)
+
+    def acceptGame(self, playerOne, playerTwo, gameToken):
+        response = {
+                    "requestType":"CreateGame",
+                    "player_one":"",
+                    "player_two":"",
+                    "game_token":""
+        }
+        response["player_one"] = playerOne
+        response["player_two"] = playerTwo
+        response["game_token"] = gameToken
+        self.responseObj = json.dumps(response)
+
+    def acceptGame(self, playerOne, playerTwo, gameToken):
+        response = {
+                    "requestType":"CreateGame",
+                    "player_one":"",
+                    "player_two":"",
+                    "game_token":""
+        }
+        response["player_one"] = playerOne
+        response["player_two"] = playerTwo
+        response["game_token"] = gameToken
+        self.responseObj = json.dumps(response)
+
 
     def signinResponse(self,token):
         response = {

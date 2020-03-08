@@ -33,6 +33,26 @@ class DB:
                 mydb.close()
             return result
 
+    def userDBFetch(self, statement):
+       try:
+           result = ''
+           mydb = mysql.connector.connect(user=self.user, password=self.password,
+                                 host=self.host,
+                                 database='userdb',
+                                 auth_plugin='mysql_native_password')
+           cursor = mydb.cursor()
+           cursor.execute(statement)
+           result = cursor.fetchall()
+       except Error as e:
+           ## TODO: Log error to log
+           print("Error fetching data from db")
+           result = False
+       finally:
+           if(mydb.is_connected()):
+               cursor.close()
+               mydb.close()
+           return result
+
     def dbFetch(self, statement):
         try:
             result = ''
@@ -73,82 +93,50 @@ class DB:
                 mydb.close()
             return result
 
+    def createGame(self, gameToken, playerOne, playerOneSignonToken,\
+                    playerTwo, pOneIp4, pOnePort):
+        pOneId = self.userDBFetch(self.builder.getUserId(playerOne))
+        pOneId = pOneId[0][0]
+        pTwoId = self.userDBFetch(self.builder.getUserId(playerTwo))
+        pTwoId = pTwoId[0][0]
+        tokenCreation = self.getTokenCreationTime(playerOne)
+        nextId = self.dbFetch(self.builder.getLastGameId())
+        nextId = nextId[0][0] + 1;
+        self.dbInsert(self.builder.createGame(nextId, gameToken, pOneId, pTwoId))
+        self.dbInsert(self.builder.createPlayer(nextId, pOneId, pOneIp4, "", \
+                pOnePort, playerOneSignonToken))
 
-    def getPasswordFor(self, username):
-        result = self.dbFetch(self.builder.getPasswordFor(username))
-        return result
 
-    def incrementSigninFailed(self):
-        return False
 
+    #Return 0 if false, 1 if true
     def validateUserExists(self, username):
-        statement = self.builder.validateUserExists(username)
-        result = self.dbFetch(statement)
-        return result
-
-    #Returns 1\true if exits, false\0 if not
-    def validateUsernameAvailable(self, username):
-        statement = self.builder.validateUsernameAvailable(username)
-        result = self.dbFetch(statement)
-        intResult = result[0][0]
-        return intResult
-
-    def createUser(self, parsedData):
-        id = self.dbFetch(self.builder.getLastUserId())
-        id = str(id[0][0] + 1)
-        statement = self.builder.createUser(id,parsedData)
-        print(statement)
-        self.dbInsert(statement)
-        result = self.dbInsert(self.builder.createUserStats(id))
-        return result
-
-    def signin(self, username, token, tokenCreationTime):
-        result = self.dbUpdate(self.builder.signin(username,token,tokenCreationTime))
-        return result
-
-    def getToken(self,username):
-        result = self.dbFetch(self.builder.getToken(username))
+        result = self.userDBFetch(self.builder.validateUserExists(username))
         return result
 
     def getTokenCreationTime(self,username):
-        result = self.dbFetch(self.builder.getTokenCreationTime(username))
+        result = self.userDBFetch(self.builder.getTokenCreationTime(username))
         return result
 
-    def getFriendsList(self, username):
-        userId = self.dbFetch(self.builder.getUserId(username))
-        result = self.dbFetch(self.builder.getFriendsList(userId[0][0]))
+    def getSignonToken(self, username):
+        result = self.userDBFetch(self.builder.getSignonToken(username))
         return result
 
-    def getUserInfo(self, username):
+    def acceptGame(self, gameToken):
+        self.dbUpdate(self.builder.acceptGame(gameToken))
 
-        return False
-
-    def getUserStats(self, username):
-        userId = self.dbFetch(self.builder.getUserId(username))
-        userId = str(userId[0][0])
-        result = self.dbFetch(self.builder.getUserStats(userId))
-        return result
-
-    def sendFriendRequest(self, username, friendsUsername):
-        userId = self.dbFetch(self.builder.getUserId(username))
-        friendsId = self.dbFetch(self.builder.getUserId(friendsUsername))
-        if(userId == False):
-            return False
-        if(friendsId == False):
-            return False
+    def checkForGame(self, username):
+        userId = self.userDBFetch(self.builder.getUserId(username))
         userId = userId[0][0]
-        friendsId = friendsId[0][0]
-        result = self.dbInsert(self.builder.sendFriendRequest(userId,friendsId))
-        return result
+        gameToken = self.dbFetch(self.builder.checkForGame(userId))
+        gameToken = gameToken[0][0]
+        return gameToken
 
-    def acceptFriendRequest(self, username, friendsUsername, acceptedRequest):
-        userId = self.dbFetch(self.builder.getUserId(username))
-        friendsId = self.dbFetch(self.builder.getUserId(friendsUsername))
-        if(userId == False):
-            return False
-        if(friendsId == False):
-            return False
-        friendsId = friendsId[0][0]
-        userId = userId[0][0]
-        result = self.dbUpdate(self.builder.acceptFriendRequest(userId, friendsId, acceptedRequest))
-        return result
+    def updateSocket(self, username, ip, port):
+        userId = self.userDBFetch(self.builder.getUserId(username))
+        userId = userid[0][0]
+        self.dbUpdate(self.builder.updateSocket(userId, ip, port))
+
+    def getLastGameId(self):
+        id = self.dbFetch(self.builder.getLastGameId())
+        id = id[0][0]
+        return id

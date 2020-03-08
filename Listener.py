@@ -40,7 +40,7 @@ class Listener:
 
     def sendBadRequest(self,connectionSocket):
         #print("Error-bad request")
-        msg = "ERROR - BAD REQUEST"
+        msg = "{'ERROR':'BAD REQUEST'}"
         connectionSocket.send(msg.encode())
 
     def processRequest(self,connectionSocket, addr):

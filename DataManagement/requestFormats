@@ -1,6 +1,8 @@
 Format for json requests
 requestTypes: MakeMove, CreateGame, AcceptGame
 
+Clients always listen on port 43489
+
 ********************************************************
 CreateGame - client to server
 {

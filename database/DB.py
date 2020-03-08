@@ -140,3 +140,10 @@ class DB:
         id = self.dbFetch(self.builder.getLastGameId())
         id = id[0][0]
         return id
+
+    def getSocket(self, username):
+        userId = self.userDBFetch(self.builder.getUserId(username))
+        userId = userId[0][0]
+        socket = self.dbFetch(self.builder.getSocket(userId))
+        print(socket)
+        return socket

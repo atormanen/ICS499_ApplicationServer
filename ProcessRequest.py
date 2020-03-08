@@ -1,6 +1,3 @@
-#from userManagement.Signin import Signin
-#from userManagement.AccountManagement import AccountManagement
-#from userManagement.ValidateRequest import ValidateRequest
 from database.DB import DB
 from threading import Thread
 from DataManagement.Responder import Responder
@@ -33,14 +30,18 @@ class ProcessRequest:
         parsedData = reqItem.parsedData
 
         if parsedData["requestType"] == "CreateGame":
-            print("inside process req")
             self.gameGenerator.createGame(parsedData, reqItem)
             self.responder.sendResponse(reqItem)
         elif parsedData["requestType"] == "AcceptGame":
-            return True
+            self.gameGenerator.acceptGame(parsedData, reqItem)
+            addr = self.database.getSocket(parsedData["player_one"])
+            pOneMsgItem = MessageItem(null,addr,null)
+            self.responder.sendAcceptedResponse(reqItem)
         elif parsedData["requestType"] == "MakeMove":
             return True
         elif parsedData["requestType"] == "CheckForGame":
+            self.gameGenerator.checkForGame(parsedData, reqItem)
+            self.responser.sendResponse(reqItem)
             return True
         elif parsedData["requestType"] == "GameRequest":
             return True

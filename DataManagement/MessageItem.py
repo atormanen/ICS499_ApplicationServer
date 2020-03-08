@@ -36,18 +36,6 @@ class MessageItem:
         response["game_token"] = gameToken
         self.responseObj = json.dumps(response)
 
-    def acceptGame(self, playerOne, playerTwo, gameToken):
-        response = {
-                    "requestType":"CreateGame",
-                    "player_one":"",
-                    "player_two":"",
-                    "game_token":""
-        }
-        response["player_one"] = playerOne
-        response["player_two"] = playerTwo
-        response["game_token"] = gameToken
-        self.responseObj = json.dumps(response)
-
 
     def signinResponse(self,token):
         response = {

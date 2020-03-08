@@ -56,13 +56,13 @@ class GameGenerator:
         playerTwoSignonToken = parsedData["signon_token"]
         gameToken = parsedData["game_token"]
 
-        if(self.validateUsername(playerOne) == 0):
+        if(self.validateUsername(playerOne) == False):
             return False
-        if(self.validateUsername(playerTwo) == 0):
+        if(self.validateUsername(playerTwo) == False):
             return False
         if(self.validateToken(playerTwo, playerTwoSignonToken) == False):
             return False
-        if(self.tokenUpToDate(username) == 0):
+        if(self.tokenUpToDate(playerOne) == False):
             return False
 
         self.db.acceptGame(gameToken)
@@ -72,11 +72,11 @@ class GameGenerator:
     def checkForGames(self, parsedData, reqItem):
         playerOne = parsedData["username"]
         playerOneSignonToken = parsedData["signon_token"]
-        if(self.validateUsername(playerOne) == 0):
+        if(self.validateUsername(playerOne) == False):
             return False
         if(self.validateToken(playerOne, playerOneSignonToken) == False):
             return False
-        if(self.tokenUpToDate(username) == 0):
+        if(self.tokenUpToDate(username) == False):
             return False
 
         token = self.db.checkForGame(playerOne)

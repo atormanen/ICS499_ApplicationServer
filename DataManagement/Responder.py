@@ -5,6 +5,7 @@ import sys
 #Responder will handle all the return messages for the servers
 ## TODO: clean this up... find a better way to implement responder
 class Responder:
+    clientPort = 43489
 
     def __init__(self):
         self.num = 0
@@ -23,3 +24,10 @@ class Responder:
 
     def sendResponse(self, msgItem):
         msgItem.connectionSocket.send(msgItem.responseObj.encode())
+
+    def sendAcceptedResponse(self, msgItemPOne, msgItemPTwo):
+        msgItem.connectionSocket.send(msgItemPTwo.responseObj.encode())
+        socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        socket.connect(ip,self.clientPort)
+        socket.send(msgItemPTwo.responseObj.encode())
+        socket.close()

@@ -37,10 +37,9 @@ MakeMove
   "username":"ATormanen",
   "signon_token:"tokenstuff",
   "game_token":"alskdjf;laksjdg;laksjdf",
-  "game_id":"123456",
   "move_type":"standard_move",
   "piece_origin":"coordinate",
-  "Piece_destination":"coordinate",
+  "piece_destination":"coordinate",
   "piece_type":"bishop"
 }
 

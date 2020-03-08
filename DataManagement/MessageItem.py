@@ -36,6 +36,15 @@ class MessageItem:
         response["game_token"] = gameToken
         self.responseObj = json.dumps(response)
 
+    def checkForGameResponse(self, playerOne, token):
+        response = {
+                    "requestType":"CreateGame",
+                    "username":"",
+                    "game_token":""
+        }
+        response["username"] = playerOne
+        response["game_token"] = token
+        self.responseObj = json.dumps(response)
 
     def signinResponse(self,token):
         response = {

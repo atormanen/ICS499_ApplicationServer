@@ -35,14 +35,14 @@ class ProcessRequest:
         elif parsedData["requestType"] == "AcceptGame":
             self.gameGenerator.acceptGame(parsedData, reqItem)
             addr = self.database.getSocket(parsedData["player_one"])
-            pOneMsgItem = MessageItem(null,addr,null)
-            self.responder.sendAcceptedResponse(reqItem)
+            pOneMsgItem = MessageItem(None,addr,None)
+            self.responder.sendAcceptedResponse(pOneMsgItem, reqItem)
         elif parsedData["requestType"] == "MakeMove":
+
             return True
         elif parsedData["requestType"] == "CheckForGame":
             self.gameGenerator.checkForGame(parsedData, reqItem)
-            self.responser.sendResponse(reqItem)
-            return True
+            self.responder.sendResponse(reqItem)
         elif parsedData["requestType"] == "GameRequest":
             return True
         else:

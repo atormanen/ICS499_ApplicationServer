@@ -64,14 +64,19 @@ class MysqlDB:
 
     def checkForGame(self, usernameId):
         querry = "SELECT game_token FROM game WHERE player_two = " +\
-            str(usernameId) + " AND game_accpted = 0;"
+            str(usernameId) + " AND game_accepted = 0;"
         return querry
 
     def updateSocket(self, userId, ip, port):
-        querry = "UPDATE player SET ip4 ='" + ip + "', port =" + port + " WHERE" + \
-            " player_id = " + userId + ";"
+        querry = "UPDATE player SET ip4 ='" + ip + "', port =" + str(port) + " WHERE" + \
+            " player_id = " + str(userId) + ";"
         return querry
 
-    def getSocket(self, userId, ip, port):
-        querry = "SELECT ip, port FROM player WHERE userId = " + str(userId) + ";"
+    def getSocket(self, userId):
+        querry = "SELECT ip4, port FROM player WHERE player_id = " + str(userId) + ";"
+        print(querry)
         return querry;
+
+    def getGameId(self, token):
+        querry = "SELECT game_id FROM game WHERE game_token = '" + token + "';"
+        return querry

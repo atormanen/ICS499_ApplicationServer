@@ -18,7 +18,7 @@ class GameGenerator:
         tokenExpiration = self.db.getTokenCreationTime(username)
         currentTime = time.time()
         timeDiference = currentTime - tokenExpiration[0][0]
-        if(timeDiference > 86400):
+        if(timeDiference > 86400*5):
             return False
         return True
 
@@ -67,17 +67,20 @@ class GameGenerator:
 
         self.db.acceptGame(gameToken)
         self.db.updateSocket(playerTwo, reqItem.ipAddress, reqItem.port)
-        reqItem.createGameResponse(playerOne, playerTwo, gameToken)
+        gameId = self.db.getGameId(gameToken)
+        self.db.createPlayer(gameId, playerTwo, reqItem.ipAddress, reqItem.port,\
+            gameToken)
+        reqItem.acceptGame(playerOne, playerTwo, gameToken)
 
-    def checkForGames(self, parsedData, reqItem):
-        playerOne = parsedData["username"]
+    def checkForGame(self, parsedData, reqItem):
+        username = parsedData["username"]
         playerOneSignonToken = parsedData["signon_token"]
-        if(self.validateUsername(playerOne) == False):
+        if(self.validateUsername(username) == False):
             return False
-        if(self.validateToken(playerOne, playerOneSignonToken) == False):
+        if(self.validateToken(username, playerOneSignonToken) == False):
             return False
         if(self.tokenUpToDate(username) == False):
             return False
 
-        token = self.db.checkForGame(playerOne)
-        print(token)
+        token = self.db.checkForGame(username)
+        reqItem.checkForGameResponse(username, token)

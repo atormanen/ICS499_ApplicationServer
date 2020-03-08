@@ -129,11 +129,12 @@ class DB:
         userId = userId[0][0]
         gameToken = self.dbFetch(self.builder.checkForGame(userId))
         gameToken = gameToken[0][0]
+        print(gameToken)
         return gameToken
 
     def updateSocket(self, username, ip, port):
         userId = self.userDBFetch(self.builder.getUserId(username))
-        userId = userid[0][0]
+        userId = userId[0][0]
         self.dbUpdate(self.builder.updateSocket(userId, ip, port))
 
     def getLastGameId(self):
@@ -145,5 +146,17 @@ class DB:
         userId = self.userDBFetch(self.builder.getUserId(username))
         userId = userId[0][0]
         socket = self.dbFetch(self.builder.getSocket(userId))
+        socket = socket[0]
         print(socket)
         return socket
+
+    def getGameId(self, token):
+        gameId = self.dbFetch(self.builder.getGameId(token))
+        gameId = gameId[0][0]
+        return gameId
+
+    def createPlayer(self, gameId, username, ip4, port, signonToken):
+        userId = self.userDBFetch(self.builder.getUserId(username))
+        userId = userId[0][0]
+        self.dbInsert(self.builder.createPlayer(gameId, userId, ip4, "", \
+                port, signonToken))

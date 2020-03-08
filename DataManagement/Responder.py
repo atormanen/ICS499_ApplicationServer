@@ -26,8 +26,10 @@ class Responder:
         msgItem.connectionSocket.send(msgItem.responseObj.encode())
 
     def sendAcceptedResponse(self, msgItemPOne, msgItemPTwo):
-        msgItem.connectionSocket.send(msgItemPTwo.responseObj.encode())
-        socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        socket.connect(ip,self.clientPort)
-        socket.send(msgItemPTwo.responseObj.encode())
-        socket.close()
+        ip = msgItemPOne.ipAddress
+        port = msgItemPOne.port
+        msgItemPTwo.connectionSocket.send(msgItemPTwo.responseObj.encode())
+        #sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        #sock.connect((ip,self.clientPort))
+        #sock.send(msgItemPTwo.responseObj.encode())
+        #sock.close()

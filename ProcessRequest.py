@@ -14,7 +14,7 @@ class ProcessRequest:
     #will hold the shared request queue object. It will pull requests
     #from the queue as they are inserted from the listener
     def __init__(self, requestQueue):
-        self.database = DB('admin','ICS4992020','chessgamedb.cxwhpucd0m6k.us-east-2.rds.amazonaws.com','userdb')
+        self.database = DB('admin','ICS4992020','chessgamedb.cxwhpucd0m6k.us-east-2.rds.amazonaws.com','gamedb')
         #self.database = DB('app','123','192.168.1.106','gamedb')
         self.requestQueue = requestQueue
         self.gameGenerator = GameGenerator(self.database)

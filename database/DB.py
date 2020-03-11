@@ -13,7 +13,7 @@ class DB:
         self.host = host
         self.database = database
 
-    def dbInsert(self, statement):
+    def _dbInsert(self, statement):
         try:
             mydb = mysql.connector.connect(user=self.user, password=self.password,
                                   host=self.host,
@@ -33,7 +33,7 @@ class DB:
                 mydb.close()
             return result
 
-    def userDBFetch(self, statement):
+    def _userDBFetch(self, statement):
        try:
            result = ''
            mydb = mysql.connector.connect(user=self.user, password=self.password,
@@ -53,7 +53,7 @@ class DB:
                mydb.close()
            return result
 
-    def dbFetch(self, statement):
+    def _dbFetch(self, statement):
         try:
             result = ''
             mydb = mysql.connector.connect(user=self.user, password=self.password,
@@ -73,7 +73,7 @@ class DB:
                 mydb.close()
             return result
 
-    def dbUpdate(self, statement):
+    def _dbUpdate(self, statement):
         try:
             mydb = mysql.connector.connect(user=self.user, password=self.password,
                                   host=self.host,

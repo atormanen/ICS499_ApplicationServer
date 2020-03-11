@@ -7,11 +7,6 @@ class MysqlDB:
     def __init__(self):
         self.tableName = 'test'
 
-    def buildQuery(self, data):
-        now = time.strftime('%Y-%m-%d %H-%M-%S')
-        parsedData = json.loads(data)
-        return insertStatement
-
     def createGame(self, gameId, gameToken, playerOneId, playerTwoId):
         statement = "INSERT INTO game VALUES("+ str(gameId)+ ",'" + gameToken + "',"\
         + str(playerOneId) + "," + str(playerTwoId) + "," + "0);"
@@ -36,16 +31,6 @@ class MysqlDB:
         querry = "SELECT unix_timestamp(token_creation) FROM user WHERE username='" + username + "';"
         return querry
 
-    def sendFriendRequest(self, user_id, friend_id):
-        querry = "INSERT INTO friend_list VALUES(" + str(user_id) +\
-                    ","+ str(friend_id) + ",0);"
-        return querry
-
-    def acceptFriendRequest(self, userId, friendId, acceptedRequest):
-        querry = "UPDATE friend_list set request_accepted = " + str(acceptedRequest) +\
-                    " WHERE friend_id = " + str(friendId) + " AND user_id = " +\
-                    str(userId) + ";"
-        return querry
 
     def validateUserExists(self,username):
         querry = "SELECT EXISTS(SELECT username FROM user WHERE username = '" +\

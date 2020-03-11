@@ -30,6 +30,25 @@ CreateGame Response - server to both clients
 }
 
 ********************************************************
+{
+ "requestType":"move_available",
+ "game_token":"gameToken"
+}
+CheckForMove
+{
+  "requestType":"MakeMove",
+  "username":"ATormanen",
+  "signon_token:"tokenstuff",
+  "game_token":"alskdjf;laksjdg;laksjdf"
+}
+
+CheckForMoveResponse
+{
+  "requestType":"MakeMove",
+  "move_available":"True\False"
+}
+
+********************************************************
 
 MakeMove
 {

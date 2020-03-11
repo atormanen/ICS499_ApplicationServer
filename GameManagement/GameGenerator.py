@@ -10,7 +10,7 @@ class GameGenerator:
     def validateUsername(self, username):
         userExits = self.db.validateUserExists(username)
         if(userExits[0][0] == 1):
-            print("user exits")
+            #print("user exists")
             return True
         return False
 
@@ -24,7 +24,7 @@ class GameGenerator:
 
     def validateToken(self, username, signonToken):
         savedToken = self.db.getSignonToken(username)
-        print("signonToken: " + signonToken)
+        #print("signonToken: " + signonToken)
         if(savedToken == signonToken):
             return True
         return False

@@ -15,13 +15,13 @@ class MysqlDB:
     def createGame(self, gameId, gameToken, playerOneId, playerTwoId):
         statement = "INSERT INTO game VALUES("+ str(gameId)+ ",'" + gameToken + "',"\
         + str(playerOneId) + "," + str(playerTwoId) + "," + "0);"
-        print(statement)
+        #print(statement)
         return statement
 
     def createPlayer(self, gameId, playerId, ip4, ip6, port, signon_token):
         statement = "INSERT INTO player VALUES(" + str(gameId) + "," + str(playerId) +\
         ",'" + ip4 +"','" + ip6 + "'," + str(port) + ",'" + signon_token + "');"
-        print(statement)
+        #print(statement)
         return statement
 
     def getLastGameId(self):
@@ -50,7 +50,7 @@ class MysqlDB:
     def validateUserExists(self,username):
         querry = "SELECT EXISTS(SELECT username FROM user WHERE username = '" +\
             username + "');"
-        print(querry)
+        #print(querry)
         return querry
 
     def getSignonToken(self, username):
@@ -74,7 +74,7 @@ class MysqlDB:
 
     def getSocket(self, userId):
         querry = "SELECT ip4, port FROM player WHERE player_id = " + str(userId) + ";"
-        print(querry)
+        #print(querry)
         return querry;
 
     def getGameId(self, token):

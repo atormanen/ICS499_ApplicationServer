@@ -25,7 +25,7 @@ class DB:
             result = True
         except mysql.connector.Error as error:
             ## TODO: Log to error log
-            print("Insert errror")
+            #print("Insert errror")
             result = False
         finally:
             if(mydb.is_connected()):
@@ -45,7 +45,7 @@ class DB:
            result = cursor.fetchall()
        except Error as e:
            ## TODO: Log error to log
-           print("Error fetching data from db")
+           #print("Error fetching data from db")
            result = False
        finally:
            if(mydb.is_connected()):
@@ -65,7 +65,7 @@ class DB:
             result = cursor.fetchall()
         except Error as e:
             ## TODO: Log error to log
-            print("Error fetching data from db")
+            #print("Error fetching data from db")
             result = False
         finally:
             if(mydb.is_connected()):
@@ -85,7 +85,7 @@ class DB:
             result = True
         except mysql.connector.Error as error:
             ## TODO: Log error to Log
-            print("Error updating data to db")
+            #print("Error updating data to db")
             result = False
         finally:
             if(mydb.is_connected()):
@@ -120,7 +120,6 @@ class DB:
     def getSignonToken(self, username):
         result = self.userDBFetch(self.builder.getSignonToken(username))
         result = result[0][0]
-        print("savedToken: " + result)
         return result
 
     def acceptGame(self, gameToken):
@@ -131,7 +130,7 @@ class DB:
         userId = userId[0][0]
         gameToken = self.dbFetch(self.builder.checkForGame(userId))
         gameToken = gameToken[0][0]
-        print(gameToken)
+        #print(gameToken)
         return gameToken
 
     def updateSocket(self, username, ip, port):
@@ -149,7 +148,7 @@ class DB:
         userId = userId[0][0]
         socket = self.dbFetch(self.builder.getSocket(userId))
         socket = socket[0]
-        print(socket)
+        #print(socket)
         return socket
 
     def getGameId(self, token):

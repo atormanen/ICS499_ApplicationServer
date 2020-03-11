@@ -36,76 +36,12 @@ class MessageItem:
         response["game_token"] = gameToken
         self.responseObj = json.dumps(response)
 
-    def checkForGameResponse(self, playerOne, token):
+    def checkForGameResponse(self, playerOne, gameToken):
         response = {
                     "requestType":"CreateGame",
                     "username":"",
                     "game_token":""
         }
         response["username"] = playerOne
-        response["game_token"] = token
-        self.responseObj = json.dumps(response)
-
-    def signinResponse(self,token):
-        response = {
-                    "requestType":"signin",
-                    "status":"succes",
-                    "token":""
-        }
-        response["token"] = token
-        self.responseObj = json.dumps(response)
-
-    def createAccountResponse(self,status,reason='null'):
-        response = {
-                    "requestType":"createAccount",
-                    "status":"",
-                    "reason":""
-        }
-        response["status"] = status
-        response["reason"] = reason
-        self.responseObj = json.dumps(response)
-
-    def getUSerStatsResponse(self, stats):
-        response = {
-                    "requestType":"getUserStats",
-                    "userId":"",
-                    "gamesPlayed":"",
-                    "gamesWon":"",
-                    "gamesResigned":"",
-                    "score":"",
-                    "longest_win_streak":""
-        }
-        response["userId"] = stats[0]
-        response["gamesPlayed"] = stats[1]
-        response["gamesWon"] = stats[2]
-        response["gamesResigned"] = stats[3]
-        response["score"] = stats[4]
-        response["longest_win_streak"] = stats[5]
-        self.responseObj = json.dumps(response)
-
-    def getFriendsListResponse(self, friendsList):
-        response = {
-                    "requestType":"getFriendsList",
-                    "list":""
-        }
-        response["list"] = friendsList
-        self.responseObj = json.dumps(response)
-
-
-    def acceptFriendReqResponse(self,status):
-        response = {
-                    "requestType":"validateFriendRequest",
-                    "status":""
-        }
-        response["status"] = status
-        self.responseObj = json.dumps(response)
-
-    def sendFriendReqResponse(self,status,reason='null'):
-        response = {
-                    "requestType":"sendFriendRequest",
-                    "status":"",
-                    "reason":""
-        }
-        response["status"] = status
-        response["reason"] = reason
+        response["game_token"] = gameToken
         self.responseObj = json.dumps(response)

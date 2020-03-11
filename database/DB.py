@@ -119,6 +119,8 @@ class DB:
 
     def getSignonToken(self, username):
         result = self.userDBFetch(self.builder.getSignonToken(username))
+        result = result[0][0]
+        print("savedToken: " + result)
         return result
 
     def acceptGame(self, gameToken):

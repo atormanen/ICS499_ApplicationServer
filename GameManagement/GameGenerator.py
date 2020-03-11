@@ -24,7 +24,7 @@ class GameGenerator:
 
     def validateToken(self, username, signonToken):
         savedToken = self.db.getSignonToken(username)
-        savedToken = savedToken[0][0]
+        print("signonToken: " + signonToken)
         if(savedToken == signonToken):
             return True
         return False

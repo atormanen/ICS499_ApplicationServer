@@ -23,12 +23,20 @@ class Responder:
         connectionSocket.send(status.encode())
 
     def sendResponse(self, msgItem):
-        msgItem.connectionSocket.send(msgItem.responseObj.encode())
+        try:
+            msgItem.connectionSocket.send(msgItem.responseObj.encode())
+        except ConnectionResetError as e:
+            #This is expected
+            print("ERROR: Connection reset error")
 
     def sendAcceptedResponse(self, msgItemPOne, msgItemPTwo):
-        ip = msgItemPOne.ipAddress
-        port = msgItemPOne.port
-        msgItemPTwo.connectionSocket.send(msgItemPTwo.responseObj.encode())
+        try:
+            ip = msgItemPOne.ipAddress
+            port = msgItemPOne.port
+            msgItemPTwo.connectionSocket.send(msgItemPTwo.responseObj.encode())
+        except ConnectionResetError as e:
+            #This is expected
+            print("ERROR: Connection reset error")
         #sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         #sock.connect((ip,self.clientPort))
         #sock.send(msgItemPTwo.responseObj.encode())

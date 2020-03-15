@@ -34,7 +34,7 @@ class DB:
                 mydb.close()
             return result
 
-    def _userDBFetch(self, statement):
+    def userDBFetch(self, statement):
        try:
            result = ''
            mydb = mysql.connector.connect(user=self.user, password=self.password,

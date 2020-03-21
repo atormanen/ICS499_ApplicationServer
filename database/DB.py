@@ -127,7 +127,7 @@ class DB:
 
     #Return 0 if false, 1 if true
     def validateGameExists(self, gameToken):
-        result = self.dbFetch(self.builder.validateGameExists(gameToken))
+        result = self._dbFetch(self.builder.validateGameExists(gameToken))
         print(result)
         return result
 

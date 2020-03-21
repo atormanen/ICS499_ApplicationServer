@@ -15,5 +15,7 @@ class ValidateRequest:
             return False
         elif parsedData["requestType"] == "CheckForGame":
             return False
+        elif parsedData["requestType"] = "RequestGame":
+            return False
         else:
             return True

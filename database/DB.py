@@ -125,6 +125,12 @@ class DB:
         result = self.userDBFetch(self.builder.validateUserExists(username))
         return result
 
+    #Return 0 if false, 1 if true
+    def validateGameExists(self, gameToken):
+        result = self.dbFetch(self.builder.validateGameExists(gameToken))
+        print(result)
+        return result
+
     def getTokenCreationTime(self,username):
         result = self.userDBFetch(self.builder.getTokenCreationTime(username))
         return result

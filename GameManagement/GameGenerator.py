@@ -53,6 +53,10 @@ class GameGenerator:
                             pOneIp, pOnePort)
         reqItem.createGameRespNotAccepted(playerOne, gameToken)
 
+    def waitForPlayer(self, gameToken):
+        while(self.db.validateGameExists(gameToken) == 0):
+            time.sleep(2)
+
     def createRandomGame(self, parsedData, reqItem):
         playerOne = parsedData["username"]
         playerOneSignonToken = parsedData["signon_token"]
@@ -71,11 +75,14 @@ class GameGenerator:
             gameToken = self.token.getToken()
             game = Game(gameToken, parsedData, pOneIp, pOnePort)
             self.gameQueue.put(game)
+
         else:
             game = self.gameQueue.get()
             game.addPlayerTwo(playerOne, pOneIp)
+            self.db.createRandomGame(game)
 
-        self.db.createRandomGame(game)
+        self.waitForPlayer(gameToken)
+
         reqItem.createRandomGameResp(game)
 
     def acceptGame(self, parsedData, reqItem):

@@ -38,6 +38,12 @@ class MysqlDB:
         #print(querry)
         return querry
 
+    def validateGameExists(self,gameToken):
+        querry = "SELECT EXISTS(SELECT game_token FROM game WHERE game_token = '" +\
+            gameToken + "');"
+        #print(querry)
+        return querry
+
     def getSignonToken(self, username):
         querry = "SELECT signon_token FROM user WHERE username='" + username + "';"
         return querry

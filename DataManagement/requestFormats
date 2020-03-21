@@ -97,6 +97,7 @@ RequestGame
 RequestGameResp
 {
 "requestType":"RequestGame",
+"game_token":";alskdf"
 "player_one":"ATormanen",
 "player_two":"billy",
 "player_one_color":"black",

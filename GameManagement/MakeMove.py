@@ -3,23 +3,29 @@ class MakeMove:
     def __init__(self, mysqlDB):
         self.db = mysqlDB
 
+    def validateGame(self, username):
+        #validtate game exists and is playable
+        return False
+
     def validateUsername(self, username):
         if(self.db.validateUserExists(username)):
             return True
         return False
 
-    def createAccount(self, parsedData):
-		#check if username exists
-        #return false if username alread exists
-        result = self.db.validateUsernameAvailable(parsedData["username"])
-        #call mysqlDB to create CreateAccount
-        if result == 0:
-            self.db.createUser(parsedData)
-            return True
-        else:
-            return False
-        #if account createion succussful return true otherwise False
+    def updateMove(self, parsedData):
+        #get move string
 
-    def getUserStats(self, parsedData, reqItem):
-        stats = self.db.getUserStats(parsedData["username"])
-        reqItem.getUSerStatsResponse(stats[0])
+        #add move to move string
+
+        #update move string with new move string
+
+        #update lastMove timestamp
+
+		return False
+
+    def getMove(self, parsedData, reqItem):
+        #get move string
+
+        #get lastMove timestamp
+
+        rerurn False

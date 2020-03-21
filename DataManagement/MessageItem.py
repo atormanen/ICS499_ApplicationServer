@@ -45,3 +45,23 @@ class MessageItem:
         response["username"] = playerOne
         response["game_token"] = gameToken
         self.responseObj = json.dumps(response)
+
+    def createRandomGameResp(self, game):
+        response = {
+                    "requestType":"RequestGame",
+                    "player_one":"",
+                    "player_two":"",
+                    "player_one_color":"",
+                    "player_two_color":"",
+                    "player_one_ip":"",
+                    "player_one_port":"",
+                    "player_two_ip":""
+        }
+        response["player_one"] = game.player_one
+        response["player_two"] = game.player_two
+        response["player_one_color"] = game.player_one_color
+        response["player_two_color"] = game.player_two_color
+        response["player_one_ip"] = game.player_one_ip
+        response["player_one_port"] = game.player_one_port
+        response["player_two_ip"] = game.player_two_ip
+        self.responseObj = json.dumps(response)

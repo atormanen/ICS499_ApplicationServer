@@ -1,4 +1,6 @@
 from GameManagement.Tokens import Tokens
+from GameManagement.Game import Game
+import multiprocessing
 import time
 
 class GameGenerator:
@@ -6,6 +8,7 @@ class GameGenerator:
     def __init__(self, mysqlDB):
         self.db = mysqlDB
         self.token = Tokens()
+        self.gameQueue = multiprocessing.Queue()
 
     def validateUsername(self, username):
         userExits = self.db.validateUserExists(username)
@@ -49,6 +52,31 @@ class GameGenerator:
         self.db.createGame(gameToken, playerOne, playerOneSignonToken, playerTwo,\
                             pOneIp, pOnePort)
         reqItem.createGameRespNotAccepted(playerOne, gameToken)
+
+    def createRandomGame(self, parsedData, reqItem):
+        playerOne = parsedData["username"]
+        playerOneSignonToken = parsedData["signon_token"]
+
+        if(self.validateUsername(playerOne) == False):
+            return False
+        if(self.validateToken(playerOne, playerOneSignonToken) == False):
+            return False
+        if(self.tokenUpToDate(playerOne) == False):
+            return False
+
+        pOneIp = reqItem.ipAddress
+        pOnePort = reqItem.port
+
+        if(self.gameQueue.empty()):
+            gameToken = self.token.getToken()
+            newGame = Game(gameToken, parsedData, pOneIp, pOnePort)
+            self.gameQueue.put(newGame)
+        else:
+            game = self.gameQueue.get()
+            game.addPlayerTwo(playerOne, pOneIp)
+
+        self.db.createRandomGame(game)
+        reqItem.createRandomGameResp(game)
 
     def acceptGame(self, parsedData, reqItem):
         playerOne = parsedData["player_one"]

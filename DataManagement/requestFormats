@@ -29,6 +29,13 @@ CreateGame Response - server to both clients
   "game_token":"laksdjf;laksjdf;lkasjdf"
 }
 
+Join game
+{
+  "requestType":"JoinGame",
+  "player_one":"ATormanen",
+  "game_token":"laksdjf;laksjdf;lkasjdf"
+}
+
 ********************************************************
 {
  "requestType":"move_available",
@@ -75,5 +82,25 @@ CheckForGames
 {
 "requestType":"CheckForGame",
 "username":"ATormanen",
-"signon_token:"tokenstuff"
+"signon_token":"tokenstuff"
+}
+
+********************************************************
+
+RequestGame
+{
+"requestType":"RequestGame",
+"username":"ATormanen",
+"signon_token":"tokenstuff"
+}
+
+RequestGameResp
+{
+"requestType":"RequestGame",
+"player_one":"ATormanen",
+"player_two":"billy",
+"player_one_color":"black",
+"player_two_color":"white",
+"player_one_ip":"192.168.1.128",
+"player_one_port":"4983"
 }

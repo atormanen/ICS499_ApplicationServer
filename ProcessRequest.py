@@ -45,8 +45,9 @@ class ProcessRequest:
         elif parsedData["requestType"] == "CheckForGame":
             self.gameGenerator.checkForGame(parsedData, reqItem)
             self.responder.sendResponse(reqItem)
-        elif parsedData["requestType"] == "GameRequest":
-            return True
+        elif parsedData["requestType"] == "RequestGame":
+            self.gameGenerator.createRandomGame(parsedData, reqItem)
+            self.responder.sendResponse(reqItem)
         else:
             self.responder.sendBadRequest(reqItem.connectionSocket)
 

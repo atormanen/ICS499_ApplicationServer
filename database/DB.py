@@ -107,7 +107,18 @@ class DB:
         self.dbInsert(self.builder.createPlayer(nextId, pOneId, pOneIp4, "", \
                 pOnePort, playerOneSignonToken))
 
-
+    def createRandomGame(self, game):
+        pOneId = self.userDBFetch(self.builder.getUserId(game.player_one))
+        pOneId = pOneId[0][0]
+        pTwoId = self.userDBFetch(self.builder.getUserId(game.player_two))
+        pTwoId = pTwoId[0][0]
+        nextId = self.dbFetch(self.builder.getLastGameId())
+        nextId = nextId[0][0] + 1;
+        self.dbInsert(self.builder.createGame(nextId, game.gameToken, pOneId, pTwoId))
+        self.dbInsert(self.builder.createPlayer(nextId, pOneId, game.player_one_ip, "", \
+                game.player_one_port, ""))
+        self.dbInsert(self.builder.createPlayer(nextId, pTwoId, game.player_two_ip, "", \
+                "", ""))
 
     #Return 0 if false, 1 if true
     def validateUserExists(self, username):

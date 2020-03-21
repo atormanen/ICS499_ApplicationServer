@@ -69,8 +69,8 @@ class GameGenerator:
 
         if(self.gameQueue.empty()):
             gameToken = self.token.getToken()
-            newGame = Game(gameToken, parsedData, pOneIp, pOnePort)
-            self.gameQueue.put(newGame)
+            game = Game(gameToken, parsedData, pOneIp, pOnePort)
+            self.gameQueue.put(game)
         else:
             game = self.gameQueue.get()
             game.addPlayerTwo(playerOne, pOneIp)

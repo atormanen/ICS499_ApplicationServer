@@ -5,10 +5,11 @@ import time
 
 class GameGenerator:
 
-    def __init__(self, mysqlDB):
+    def __init__(self, mysqlDB, gameQueue):
         self.db = mysqlDB
         self.token = Tokens()
-        self.gameQueue = multiprocessing.Queue()
+        self.gameQueue = gameQueue
+
 
     def validateUsername(self, username):
         userExits = self.db.validateUserExists(username)

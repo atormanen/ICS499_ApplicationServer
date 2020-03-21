@@ -15,11 +15,12 @@ class Controller:
     #requestQueue is shared queue among all processes
     def __init__(self):
         self.requestQueue = multiprocessing.Queue()
+        self.gameQueue = multiprocessing.Queue()
         self.listener = Listener(self.requestQueue)
 
 
     def createRequestProcessor(self):
-        req = ProcessRequest(self.requestQueue)
+        req = ProcessRequest(self.requestQueue, self.gameQueue)
         req.processRequests()
 
     def createRequestProcessors(self):

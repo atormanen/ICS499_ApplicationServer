@@ -13,13 +13,14 @@ class ProcessRequest:
     #PrecessReqeust is set up to be a seperate process in the OS and
     #will hold the shared request queue object. It will pull requests
     #from the queue as they are inserted from the listener
-    def __init__(self, requestQueue):
+    def __init__(self, requestQueue, gameQueue):
         reader = 'chessgamedb.cxwhpucd0m6k.us-east-2.rds.amazonaws.com'
         writer = 'chessgamedb.cxwhpucd0m6k.us-east-2.rds.amazonaws.com'
         self.database = DB('admin','ICS4992020', reader, writer,'gamedb')
         #self.database = DB('app','123','192.168.1.106','gamedb')
         self.requestQueue = requestQueue
-        self.gameGenerator = GameGenerator(self.database)
+        self.gameQueue = gameQueue
+        self.gameGenerator = GameGenerator(self.database, self.gameQueue)
         self.reqValidation = ValidateRequest()
         self.responder = Responder()
 

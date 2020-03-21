@@ -82,7 +82,7 @@ class Listener:
             self.reqCount = self.reqCount + 1
             try:
                 connectionSocket, addr = self.serverSocket.accept()
-                print(addr[0])
+                #print(addr[0])
                 thread = Thread(target=self.processRequest,args=(connectionSocket, addr,))
                 thread.start()
                 #is thread.join nececary?

@@ -14,7 +14,7 @@ class DB:
         self.writer = writer
         self.database = database
 
-    def _dbInsert(self, statement):
+    def dbInsert(self, statement):
         try:
             mydb = mysql.connector.connect(user=self.user, password=self.password,
                                   host=self.writer,
@@ -54,7 +54,7 @@ class DB:
                mydb.close()
            return result
 
-    def _dbFetch(self, statement):
+    def dbFetch(self, statement):
         try:
             result = ''
             mydb = mysql.connector.connect(user=self.user, password=self.password,
@@ -74,7 +74,7 @@ class DB:
                 mydb.close()
             return result
 
-    def _dbUpdate(self, statement):
+    def dbUpdate(self, statement):
         try:
             mydb = mysql.connector.connect(user=self.user, password=self.password,
                                   host=self.writer,
@@ -112,7 +112,7 @@ class DB:
         pOneId = pOneId[0][0]
         pTwoId = self.userDBFetch(self.builder.getUserId(game.player_two))
         pTwoId = pTwoId[0][0]
-        nextId = self._dbFetch(self.builder.getLastGameId())
+        nextId = self.dbFetch(self.builder.getLastGameId())
         nextId = nextId[0][0] + 1;
         self.dbInsert(self.builder.createGame(nextId, game.gameToken, pOneId, pTwoId))
         self.dbInsert(self.builder.createPlayer(nextId, pOneId, game.player_one_ip, "", \
@@ -128,7 +128,7 @@ class DB:
 
     #Return 0 if false, 1 if true
     def validateGameExists(self, gameToken):
-        result = self._dbFetch(self.builder.validateGameExists(gameToken))
+        result = self.dbFetch(self.builder.validateGameExists(gameToken))
         result = result[0][0]
         print(result)
         return result

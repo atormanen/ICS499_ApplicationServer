@@ -76,6 +76,7 @@ class GameGenerator:
             print(gameToken)
             game = Game(gameToken, parsedData, pOneIp, pOnePort)
             self.gameQueue.put(game)
+            print(self.gameQueue.empty())
 
         else:
             game = self.gameQueue.get()

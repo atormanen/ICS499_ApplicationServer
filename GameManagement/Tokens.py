@@ -10,7 +10,7 @@ class Tokens:
 
     def generateToken(self):
         token = ''.join(random.SystemRandom().choice(string.ascii_uppercase +\
-                        string.digits) for _ in range(150))
+                        string.digits) for _ in range(30))
         return token
 
     def getTokenCreationTime(self):

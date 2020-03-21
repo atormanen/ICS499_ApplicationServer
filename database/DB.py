@@ -123,11 +123,13 @@ class DB:
     #Return 0 if false, 1 if true
     def validateUserExists(self, username):
         result = self.userDBFetch(self.builder.validateUserExists(username))
+        #result = result[0][0]
         return result
 
     #Return 0 if false, 1 if true
     def validateGameExists(self, gameToken):
         result = self._dbFetch(self.builder.validateGameExists(gameToken))
+        result = result[0][0]
         print(result)
         return result
 

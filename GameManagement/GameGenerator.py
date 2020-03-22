@@ -79,7 +79,7 @@ class GameGenerator:
             self.gameQueue.put(game)
             print(self.gameQueue.empty())
             self.waitForPlayer(gameToken)
-            newGame = self.db.getGame()
+            newGame = self.db.getGame(gameToken)
             print(newGame)
             print(newGame[0])
             print(newGame[1])

@@ -16,7 +16,7 @@ class MysqlDB:
     def createPlayer(self, gameId, playerId, username, pieceColor, ip4, ip6,\
                       port, signon_token):
         statement = "INSERT INTO player VALUES(" + str(gameId) + "," + str(playerId)\
-        + ",'" + username + "','" + pieceColor + "'," + ip4 +"','" + ip6 + "',"\
+        + ",'" + username + "','" + pieceColor + "','" + ip4 +"','" + ip6 + "',"\
          + str(port) + ",'" + signon_token + "');"
         print(statement)
         return statement

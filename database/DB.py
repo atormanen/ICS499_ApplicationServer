@@ -188,7 +188,7 @@ class DB:
         self.dbInsert(self.builder.createPlayer(gameId, userId, ip4, "", \
                 port, signonToken))
 
-    def getGame(gameToken):
+    def getGame(self, gameToken):
         gameId = self.getGameId(gameToken)
         game = self.dbFetch(self.builder.getGame(gameId))
         return game

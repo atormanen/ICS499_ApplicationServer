@@ -23,7 +23,7 @@ class MysqlDB:
 
     def getGame(self, gameId):
         statement = "select * from game inner join player on game.game_id =\
-            player.game_id where game.game_id =" + gameId + ";"
+            player.game_id where game.game_id =" + str(gameId) + ";"
         print(statement)
         return statement
 

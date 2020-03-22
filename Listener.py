@@ -66,6 +66,15 @@ class Listener:
                 rcvd_msg = ''
                 bufferExceeded = True
         # print("TEST ",self.reqCount,"  ",full_msg)
+
+        try:
+            #print("TEST ",self.reqCount,"  ",full_msg[2::])
+            if not (full_msg[0] == "{"):
+                full_msg = full_msg[2::]
+        except (IndexError):
+            #print("error")
+            return
+
         try:
             parsedData = json.loads(full_msg)
         except (json.decoder.JSONDecodeError):

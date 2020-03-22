@@ -81,7 +81,7 @@ class GameGenerator:
             self.waitForPlayer(gameToken)
         else:
             game = self.gameQueue.get()
-            game.addPlayerTwo(playerOne, pOneIp)
+            game.addPlayerTwo(playerOne,playerOneSignonToken, pOneIp)
             self.db.createRandomGame(game)
 
         reqItem.createRandomGameResp(game)

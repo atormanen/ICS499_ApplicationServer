@@ -14,10 +14,11 @@ class Game:
         self.player_two_port = ''
 
 
-    def addPlayerTwo(self, username, signonToken, pTwoIp):
+    def addPlayerTwo(self, username, signonToken, pTwoIp, pOnePort):
         self.player_two = username
         self.player_two_signon_token = signonToken
         self.player_two_ip = pTwoIp
+        self.player_two_port = pOnePort
         self.player_one_color = 'black'
         self.player_two_color = 'white'
 

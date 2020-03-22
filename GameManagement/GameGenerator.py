@@ -79,6 +79,8 @@ class GameGenerator:
             self.gameQueue.put(game)
             print(self.gameQueue.empty())
             self.waitForPlayer(gameToken)
+            newGame = self.db.getGame()
+            print(newGame)
         else:
             game = self.gameQueue.get()
             game.addPlayerTwo(playerOne,playerOneSignonToken, pOneIp, pOnePort)

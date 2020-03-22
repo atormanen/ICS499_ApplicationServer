@@ -21,8 +21,11 @@ class MysqlDB:
         print(statement)
         return statement
 
-    def getGame(self):
-        statement = "SELECT "
+    def getGame(self, gameId):
+        statement = "select * from game inner join player on game.game_id =\
+            player.game_id where game.game_id =" + gameId + ";"
+        print(statement)
+        return statement
 
     def getLastGameId(self):
         return "SELECT MAX(game_id) FROM game;"

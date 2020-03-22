@@ -13,11 +13,16 @@ class MysqlDB:
         #print(statement)
         return statement
 
-    def createPlayer(self, gameId, playerId, ip4, ip6, port, signon_token):
-        statement = "INSERT INTO player VALUES(" + str(gameId) + "," + str(playerId) +\
-        ",'" + ip4 +"','" + ip6 + "'," + str(port) + ",'" + signon_token + "');"
-        #print(statement)
+    def createPlayer(self, gameId, playerId, username, pieceColor, ip4, ip6,\
+                      port, signon_token):
+        statement = "INSERT INTO player VALUES(" + str(gameId) + "," + str(playerId)\
+        + ",'" + username + "','" + pieceColor + "'," + ip4 +"','" + ip6 + "',"\
+         + str(port) + ",'" + signon_token + "');"
+        print(statement)
         return statement
+
+    def getGame(self):
+        statement = "SELECT "
 
     def getLastGameId(self):
         return "SELECT MAX(game_id) FROM game;"

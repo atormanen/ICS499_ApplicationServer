@@ -79,13 +79,10 @@ class GameGenerator:
             self.gameQueue.put(game)
             print(self.gameQueue.empty())
             self.waitForPlayer(gameToken)
-            game.reset()
         else:
             game = self.gameQueue.get()
             game.addPlayerTwo(playerOne, pOneIp)
             self.db.createRandomGame(game)
-
-
 
         reqItem.createRandomGameResp(game)
 

@@ -115,10 +115,15 @@ class DB:
         nextId = self.dbFetch(self.builder.getLastGameId())
         nextId = nextId[0][0] + 1;
         self.dbInsert(self.builder.createGame(nextId, game.gameToken, pOneId, pTwoId))
-        self.dbInsert(self.builder.createPlayer(nextId, pOneId, game.player_one_ip, "", \
-                game.player_one_port, ""))
-        self.dbInsert(self.builder.createPlayer(nextId, pTwoId, game.player_two_ip, "", \
-                "", ""))
+
+        self.dbInsert(self.builder.createPlayer(nextId, pOneId, game.player_one, \
+                game.player_one_color, game.player_one_ip, "", \
+                game.player_one_port, game.player_one_signon_token))
+
+        self.dbInsert(self.builder.createPlayer(nextId, pTwoId, game.player_two, \
+                game.player_two_color, game.player_two_ip, "", \
+                game.player_two_port, game.player_two_signon_token))
+
 
     #Return 0 if false, 1 if true
     def validateUserExists(self, username):

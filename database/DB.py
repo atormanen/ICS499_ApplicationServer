@@ -24,9 +24,10 @@ class DB:
             cursor.execute(statement)
             mydb.commit()
             result = True
+            print(result)
         except mysql.connector.Error as error:
             ## TODO: Log to error log
-            #print("Insert errror")
+            print("Insert errror")
             result = False
         finally:
             if(mydb.is_connected()):

@@ -80,10 +80,6 @@ class GameGenerator:
             print(self.gameQueue.empty())
             self.waitForPlayer(gameToken)
             newGame = self.db.getGame(gameToken)
-            print(newGame)
-            print(newGame[0])
-            print(newGame[1])
-            print(newGame[1][7])
             game.addPlayerTwo(newGame[1][7],newGame[1][12], newGame[1][9], newGame[1][11])
         else:
             game = self.gameQueue.get()

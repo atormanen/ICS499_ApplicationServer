@@ -66,7 +66,7 @@ class GameGenerator:
     def createRandomGame(self, parsedData, reqItem):
         playerOne = parsedData["username"]
         playerOneSignonToken = parsedData["signon_token"]
-
+        print(playerOne)
         if(self.validateUsername(playerOne) == False):
             return False
         if(self.validateToken(playerOne, playerOneSignonToken) == False):
@@ -79,7 +79,9 @@ class GameGenerator:
 
         #Check for open games in game GameCollection
         #If no open games, create a game and wait for a player to join
+        print("Acquiring lock")
         self.gameCollection.lock.acquire()
+        print("Lock acquired")
         if(self.gameCollection.openGameAvailable()):
             self.gameCollection.addSecondPlayer(playerOne, playerOneSignonToken,\
                                 pOneIp, pOnePort, reqItem.connectionSocket)

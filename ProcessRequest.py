@@ -61,7 +61,7 @@ class ProcessRequest:
     #arrives.
     def processRequests(self):
         while True:
-            print("blocking on req item")
+            #print("blocking on req item")
             requestItem = self.requestQueue.get()
             #Decrypt parsedData
             self.proccesRequestType(requestItem)

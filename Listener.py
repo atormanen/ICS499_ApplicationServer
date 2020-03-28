@@ -74,7 +74,7 @@ class Listener:
         except (IndexError):
             #print("error")
             return
-        print("TEST ",self.reqCount,"  ",full_msg)
+        #print("TEST ",self.reqCount,"  ",full_msg)
         try:
             parsedData = json.loads(full_msg)
         except (json.decoder.JSONDecodeError):
@@ -91,7 +91,7 @@ class Listener:
             #print(counter)
             self.reqCount = self.reqCount + 1
             try:
-                print("waiting for connection")
+                #print("waiting for connection")
                 connectionSocket, addr = self.serverSocket.accept()
                 #print(addr[0])
                 thread = Thread(target=self.processRequest,args=(connectionSocket, addr,))

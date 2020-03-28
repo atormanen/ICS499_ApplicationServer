@@ -63,10 +63,9 @@ MakeMove
   "username":"ATormanen",
   "signon_token:"tokenstuff",
   "game_token":"alskdjf;laksjdg;laksjdf",
-  "move_type":"standard_move",
-  "piece_origin":"coordinate",
-  "piece_destination":"coordinate",
-  "piece_type":"bishop"
+  "move ": {
+   json from joshua
+}
 }
 
 MakeMove response

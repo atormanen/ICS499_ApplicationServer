@@ -111,8 +111,6 @@ class DB:
     def createRandomGame(self, game):
         pOneId = self.userDBFetch(self.builder.getUserId(game.player_one))
         pOneId = pOneId[0][0]
-        pTwoId = self.userDBFetch(self.builder.getUserId(game.player_two))
-        pTwoId = pTwoId[0][0]
         nextId = self.dbFetch(self.builder.getLastGameId())
         nextId = nextId[0][0] + 1;
         self.dbInsert(self.builder.createGame(nextId, game.gameToken, pOneId, pTwoId))
@@ -121,9 +119,18 @@ class DB:
                 game.player_one_color, game.player_one_ip, "", \
                 game.player_one_port, game.player_one_signon_token))
 
+
+
+    def completeRandomGame(self, game):
+        pTwoId = self.userDBFetch(self.builder.getUserId(game.player_two))
+        pTwoId = pTwoId[0][0]
         self.dbInsert(self.builder.createPlayer(nextId, pTwoId, game.player_two, \
                 game.player_two_color, game.player_two_ip, "", \
                 game.player_two_port, game.player_two_signon_token))
+
+    def searchForGame(self):
+        result = self.dbFetch(self.builder.getOpenRandomGame())
+        return result
 
 
     #Return 0 if false, 1 if true

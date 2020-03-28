@@ -13,6 +13,11 @@ class MysqlDB:
         #print(statement)
         return statement
 
+    def getOpenRandomGame(self):
+        statement = " select * from game inner join player on game.game_id \
+                = player.game_id where game.game_complete = 0 limit 1;"
+        return statement
+
     def createPlayer(self, gameId, playerId, username, pieceColor, ip4, ip6,\
                       port, signon_token):
         statement = "INSERT INTO player VALUES(" + str(gameId) + "," + str(playerId)\

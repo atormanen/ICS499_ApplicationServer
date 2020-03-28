@@ -1,15 +1,16 @@
 from GameManagement.Tokens import Tokens
 from GameManagement.Game import Game
 import multiprocessing
+
 import time
 
 class GameGenerator:
 
-    def __init__(self, mysqlDB, gameQueue):
+    def __init__(self, mysqlDB, gameQueue, gameCollection):
         self.db = mysqlDB
         self.token = Tokens()
         self.gameQueue = gameQueue
-
+        self.gameCollection = gameCollection
 
     def validateUsername(self, username):
         userExits = self.db.validateUserExists(username)
@@ -55,8 +56,12 @@ class GameGenerator:
         reqItem.createGameRespNotAccepted(playerOne, gameToken)
 
     def waitForPlayer(self, gameToken):
-        while(self.db.validateGameExists(gameToken) == 0):
+        while(self.gameCollection.getGame == False):
             time.sleep(2)
+
+    def waitForGame(self):
+        game = self.db.searchForGame()
+        return game
 
     def createRandomGame(self, parsedData, reqItem):
         playerOne = parsedData["username"]
@@ -72,21 +77,35 @@ class GameGenerator:
         pOneIp = reqItem.ipAddress
         pOnePort = reqItem.port
 
-        if(self.gameQueue.empty()):
-            gameToken = self.token.getToken()
-            print(gameToken)
-            game = Game(gameToken, parsedData, pOneIp, pOnePort)
-            self.gameQueue.put(game)
-            print(self.gameQueue.empty())
-            self.waitForPlayer(gameToken)
-            newGame = self.db.getGame(gameToken)
-            game.addPlayerTwo(newGame[1][7],newGame[1][12], newGame[1][9], newGame[1][11])
+        #Check for open games in game GameCollection
+        #If no open games, create a game and wait for a player to join
+        self.gameCollection.lock.acquire()
+        if(self.gameCollection.openGameAvailable()):
+            self.gameCollection.addSecondPlayer(playerOne, playerOneSignonToken,\
+                                pOneIp, pOnePort, reqItem.connectionSocket)
+            self.gameCollection.lock.release()
+            #newGame = self.db.getGame(gameToken)
+            #ame.addPlayerTwo(newGame[1][7],newGame[1][12], newGame[1][9], newGame[1][11])
         else:
-            game = self.gameQueue.get()
-            game.addPlayerTwo(playerOne,playerOneSignonToken, pOneIp, pOnePort)
-            self.db.createRandomGame(game)
+            gameToken = self.token.getToken()
+            game = Game(gameToken, parsedData, pOneIp, pOnePort, reqItem.connectionSocket)
+            self.gameCollection.addOpenGame(game)
+            #self.db.createRandomGame(game)
+            self.gameCollection.lock.release()
+            self.waitForPlayer(gameToken)
 
         reqItem.createRandomGameResp(game)
+
+    def createRandomGameTest(self, parsedData, reqItem):
+        playerOne = parsedData["username"]
+        playerOneSignonToken = parsedData["signon_token"]
+        pOneIp = reqItem.ipAddress
+        pOnePort = reqItem.port
+
+        gameToken = self.token.getToken()
+        game = Game(gameToken, parsedData, pOneIp, pOnePort, reqItem.connectionSocket)
+        self.gameCollection.addOpenGame(game)
+        self.gameCollection.getGame(gameToken)
 
     def acceptGame(self, parsedData, reqItem):
         playerOne = parsedData["player_one"]

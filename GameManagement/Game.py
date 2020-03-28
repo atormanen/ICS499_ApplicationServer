@@ -1,6 +1,6 @@
 class Game:
 
-    def __init__(self, gameToken, parsedData, pOneIp, pOnePort):
+    def __init__(self, gameToken, parsedData, pOneIp, pOnePort, socket):
         self.gameToken = gameToken
         self.player_one = parsedData["username"]
         self.player_one_signon_token = parsedData["signon_token"]
@@ -12,28 +12,21 @@ class Game:
         self.player_two_ip = ''
         self.player_one_port = pOnePort
         self.player_two_port = ''
+        self.playerOneSocket = socket
+        self.playerTwoSocket = ''
 
 
-    def addPlayerTwo(self, username, signonToken, pTwoIp, pOnePort):
+    def addPlayerTwo(self, username, signonToken, pTwoIp, pOnePort, socket):
         self.player_two = username
         self.player_two_signon_token = signonToken
         self.player_two_ip = pTwoIp
         self.player_two_port = pOnePort
         self.player_one_color = 'black'
         self.player_two_color = 'white'
+        self.playerTwoSocket = socket
 
-    def createAccount(self, parsedData):
-		#check if username exists
-        #return false if username alread exists
-        result = self.db.validateUsernameAvailable(parsedData["username"])
-        #call mysqlDB to create CreateAccount
-        if result == 0:
-            self.db.createUser(parsedData)
-            return True
-        else:
-            return False
-        #if account createion succussful return true otherwise False
-
-    def getUserStats(self, parsedData, reqItem):
-        stats = self.db.getUserStats(parsedData["username"])
-        reqItem.getUSerStatsResponse(stats[0])
+    def makeMove(self, requester, jsonObj):
+        if(requester == player_one):
+            playerTwoSocket.send(jsonObj.encode())
+        elif(requester == player_two):
+            playerOneSocket.send(jsonObj.encode())

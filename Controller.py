@@ -6,6 +6,7 @@ from threading import Thread
 from ProcessRequest import ProcessRequest
 import os
 import queue
+from GameManagement.GameCollection import GameCollection
 
 #Controller will initilaize all the objects and processes needed
 #for the applications. It will sping up a few request request processors
@@ -16,11 +17,12 @@ class Controller:
     def __init__(self):
         self.requestQueue = multiprocessing.Queue()
         self.gameQueue = multiprocessing.Queue()
+        self.gameCollection = GameCollection()
         self.listener = Listener(self.requestQueue)
 
 
     def createRequestProcessor(self):
-        req = ProcessRequest(self.requestQueue, self.gameQueue)
+        req = ProcessRequest(self.requestQueue, self.gameQueue, self.gameCollection)
         req.processRequests()
 
     def createRequestProcessors(self):

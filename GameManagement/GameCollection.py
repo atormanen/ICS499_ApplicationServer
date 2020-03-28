@@ -10,6 +10,7 @@ class GameCollection:
 
 
     def openGameAvailable(self):
+        print("Acquiring lock")
         self.lock.acquire()
         if(len(self.openGameQueue) > 0):
             self.lock.release()

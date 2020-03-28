@@ -56,7 +56,7 @@ class GameGenerator:
         reqItem.createGameRespNotAccepted(playerOne, gameToken)
 
     def waitForPlayer(self, gameToken):
-        print(self.gameCollection.getGame)
+        print(self.gameCollection.getGame.gameToken)
         while(self.gameCollection.getGame == False):
             time.sleep(2)
 

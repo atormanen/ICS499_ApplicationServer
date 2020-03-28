@@ -19,7 +19,10 @@ class GameCollection:
             return False
 
     def addOpenGame(self, game):
+        print("adding open game")
+        print("Acquiring lock")
         self.lock.acquire()
+        print("Lock acquired")
         #self.gameDict[game.gameToken] = game
         self.openGameQueue.append(game)
         print(len(self.openGameQueue))

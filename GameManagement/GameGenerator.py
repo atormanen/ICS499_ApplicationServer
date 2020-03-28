@@ -90,6 +90,7 @@ class GameGenerator:
             #ame.addPlayerTwo(newGame[1][7],newGame[1][12], newGame[1][9], newGame[1][11])
         else:
             gameToken = self.token.getToken()
+            print("Game token: " + gameToken)
             game = Game(gameToken, parsedData, pOneIp, pOnePort, reqItem.connectionSocket)
             self.gameCollection.addOpenGame(game)
             #self.db.createRandomGame(game)

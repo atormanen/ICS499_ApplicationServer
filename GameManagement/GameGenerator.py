@@ -95,7 +95,10 @@ class GameGenerator:
             self.gameCollection.addOpenGame(game)
             #self.db.createRandomGame(game)
             self.gameCollection.lock.release()
+            print("Lock released")
+            print("Waiting for second player")
             self.waitForPlayer(gameToken)
+            print("Second player received")
 
         reqItem.createRandomGameResp(game)
 

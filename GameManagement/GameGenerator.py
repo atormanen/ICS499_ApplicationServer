@@ -1,6 +1,7 @@
 from GameManagement.Tokens import Tokens
 from GameManagement.Game import Game
 import multiprocessing
+from threading import Thread
 
 import time
 
@@ -56,9 +57,12 @@ class GameGenerator:
         reqItem.createGameRespNotAccepted(playerOne, gameToken)
 
     def waitForPlayer(self, gameToken):
-        print(self.gameCollection.getGame.gameToken)
-        while(self.gameCollection.getGame == False):
+
+        while(self.gameCollection.getGame(gameToken) == False):
+
             time.sleep(2)
+        print(self.gameCollection.getGame(gameToken).gameToken)
+        print("Second player received")
 
     def waitForGame(self):
         game = self.db.searchForGame()
@@ -67,6 +71,7 @@ class GameGenerator:
     def createRandomGame(self, parsedData, reqItem):
         playerOne = parsedData["username"]
         playerOneSignonToken = parsedData["signon_token"]
+        #gaemToken = parsedData["game_token"]
         print(playerOne)
         if(self.validateUsername(playerOne) == False):
             return False
@@ -83,12 +88,15 @@ class GameGenerator:
         print("Acquiring lock")
         self.gameCollection.lock.acquire()
         print("Lock acquired")
+        print(self.gameCollection.openGameAvailable())
+        print("Length of open game queue: " + str(len(self.gameCollection.openGameQueue)))
         if(self.gameCollection.openGameAvailable()):
-            self.gameCollection.addSecondPlayer(playerOne, playerOneSignonToken,\
+            game = self.gameCollection.addSecondPlayer(playerOne, playerOneSignonToken,\
                                 pOneIp, pOnePort, reqItem.connectionSocket)
             self.gameCollection.lock.release()
             #newGame = self.db.getGame(gameToken)
             #ame.addPlayerTwo(newGame[1][7],newGame[1][12], newGame[1][9], newGame[1][11])
+            game.sendGameResposne()
         else:
             gameToken = self.token.getToken()
             print("Game token: " + gameToken)
@@ -98,10 +106,9 @@ class GameGenerator:
             self.gameCollection.lock.release()
             print("Lock released")
             print("Waiting for second player")
-            self.waitForPlayer(gameToken)
-            print("Second player received")
 
-        reqItem.createRandomGameResp(game)
+
+
 
     def createRandomGameTest(self, parsedData, reqItem):
         playerOne = parsedData["username"]

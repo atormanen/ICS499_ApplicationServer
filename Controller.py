@@ -1,6 +1,7 @@
 from Listener import Listener
 from database.DB import DB
-from multiprocessing import Process
+from multiprocessing import Process, Manager
+from multiprocessing.managers import BaseManager
 import multiprocessing
 from threading import Thread
 from ProcessRequest import ProcessRequest
@@ -17,8 +18,10 @@ class Controller:
     def __init__(self):
         self.requestQueue = multiprocessing.Queue()
         self.gameQueue = multiprocessing.Queue()
+        #self.gameCollectionQueue = multiprocessing.Queue()
         self.gameCollection = GameCollection()
         self.listener = Listener(self.requestQueue)
+
 
 
     def createRequestProcessor(self):
@@ -27,7 +30,7 @@ class Controller:
 
     def createRequestProcessors(self):
         processes = []
-        for i in range(os.cpu_count()):
+        for i in range(1):
             #print('Createing processes %d' % i)
             processes.append(Process(target=self.createRequestProcessor))
         for i in processes:

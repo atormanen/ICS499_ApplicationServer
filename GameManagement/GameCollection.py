@@ -11,6 +11,7 @@ class GameCollection:
 
     def openGameAvailable(self):
         if(len(self.openGameQueue) > 0):
+            print("Open game available")
             return True
         else:
             return False
@@ -19,6 +20,7 @@ class GameCollection:
         #self.gameDict[game.gameToken] = game
         self.openGameQueue.append(game)
         print(len(self.openGameQueue))
+        print(id(self.openGameQueue))
         return True
 
     def addSecondPlayer(self, player, signonToken, playerIp, playerPort, socket):
@@ -26,6 +28,7 @@ class GameCollection:
         #username, signonToken, pTwoIp, pOnePort, socket
         game.addPlayerTwo(player, signonToken, playerIp, playerPort, socket)
         self.gameDict[game.gameToken] = game
+        return game
 
     def getGame(self, gameToken):
         try:
@@ -37,6 +40,7 @@ class GameCollection:
 
     def makeMove(self, parsedData):
         jsonObj = parsedData["move"]
+        print(parsedData["move"])
         game = self.getGame(parsedData["game_token"])
         requester = parsedData["username"]
         game.makeMove(requester, jsonObj)

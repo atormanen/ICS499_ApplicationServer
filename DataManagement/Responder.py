@@ -29,6 +29,13 @@ class Responder:
             #This is expected
             print("ERROR: Connection reset error")
 
+    def sendRandomGameResponse(self, msgItem):
+        try:
+            msgItem.connectionSocket.send(msgItem.responseObj.encode())
+        except ConnectionResetError as e:
+            #This is expected
+            print("ERROR: Connection reset error")
+
     def sendAcceptedResponse(self, msgItemPOne, msgItemPTwo):
         try:
             ip = msgItemPOne.ipAddress

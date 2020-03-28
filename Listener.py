@@ -40,7 +40,7 @@ class Listener:
 
     def sendBadRequest(self,connectionSocket):
         #print("Error-bad request")
-        msg = "{'ERROR':'BAD REQUEST'}"
+        msg = "{'ERROoR':'BAD REQUEST'}"
         connectionSocket.send(msg.encode())
 
     def processRequest(self,connectionSocket, addr):
@@ -65,7 +65,7 @@ class Listener:
             elif len(rcvd_msg) == self.bufferSize:
                 rcvd_msg = ''
                 bufferExceeded = True
-        # print("TEST ",self.reqCount,"  ",full_msg)
+
 
         try:
             #print("TEST ",self.reqCount,"  ",full_msg[2::])
@@ -74,10 +74,11 @@ class Listener:
         except (IndexError):
             #print("error")
             return
-
+        print("TEST ",self.reqCount,"  ",full_msg)
         try:
             parsedData = json.loads(full_msg)
         except (json.decoder.JSONDecodeError):
+            print("unable to load json")
             self.sendBadRequest(connectionSocket)
             #print("Badd req from listener")
             return
@@ -90,6 +91,7 @@ class Listener:
             #print(counter)
             self.reqCount = self.reqCount + 1
             try:
+                print("waiting for connection")
                 connectionSocket, addr = self.serverSocket.accept()
                 #print(addr[0])
                 thread = Thread(target=self.processRequest,args=(connectionSocket, addr,))

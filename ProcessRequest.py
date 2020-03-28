@@ -18,7 +18,7 @@ class ProcessRequest:
         reader = 'chessgamedb.cxwhpucd0m6k.us-east-2.rds.amazonaws.com'
         writer = 'chessgamedb.cxwhpucd0m6k.us-east-2.rds.amazonaws.com'
         self.database = DB('admin','ICS4992020', reader, writer,'gamedb')
-        #self.database = DB('app','123','192.168.1.106','gamedb')
+        #self.database = DB('app','123','192.168.1.106', '192.168.1.106','gamedb')
         self.requestQueue = requestQueue
         self.gameQueue = gameQueue
         self.reqValidation = ValidateRequest()
@@ -43,6 +43,7 @@ class ProcessRequest:
             pOneMsgItem = MessageItem(None,addr,None)
             self.responder.sendAcceptedResponse(pOneMsgItem, reqItem)
         elif parsedData["requestType"] == "MakeMove":
+            print("MakeMove")
             #Find game in game GameCollection... call make move in game
             self.gameCollection.makeMove(parsedData)
             return True
@@ -51,7 +52,7 @@ class ProcessRequest:
             self.responder.sendResponse(reqItem)
         elif parsedData["requestType"] == "RequestGame":
             self.gameGenerator.createRandomGame(parsedData, reqItem)
-            self.responder.sendResponse(reqItem)
+            self.responder.sendRandomGameResponse(reqItem)
         else:
             self.responder.sendBadRequest(reqItem.connectionSocket)
 
@@ -60,6 +61,7 @@ class ProcessRequest:
     #arrives.
     def processRequests(self):
         while True:
+            print("blocking on req item")
             requestItem = self.requestQueue.get()
             #Decrypt parsedData
             self.proccesRequestType(requestItem)

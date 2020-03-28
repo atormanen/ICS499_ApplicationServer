@@ -10,24 +10,15 @@ class GameCollection:
 
 
     def openGameAvailable(self):
-        print("Acquiring lock")
-        self.lock.acquire()
         if(len(self.openGameQueue) > 0):
-            self.lock.release()
             return True
         else:
-            self.lock.release()
             return False
 
     def addOpenGame(self, game):
-        print("adding open game")
-        print("Acquiring lock")
-        self.lock.acquire()
-        print("Lock acquired")
         #self.gameDict[game.gameToken] = game
         self.openGameQueue.append(game)
         print(len(self.openGameQueue))
-        self.lock.release()
         return True
 
     def addSecondPlayer(self, player, signonToken, playerIp, playerPort, socket):
@@ -45,9 +36,7 @@ class GameCollection:
             return False
 
     def makeMove(self, parsedData):
-        self.lock.acquire()
         jsonObj = parsedData["move"]
         game = self.getGame(parsedData["game_token"])
         requester = parsedData["username"]
         game.makeMove(requester, jsonObj)
-        self.lock.release()

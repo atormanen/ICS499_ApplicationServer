@@ -69,6 +69,7 @@ class GameGenerator:
         return game
 
     def createRandomGame(self, parsedData, reqItem):
+        print(parsedData["requestType"])
         playerOne = parsedData["username"]
         playerOneSignonToken = parsedData["signon_token"]
         #gaemToken = parsedData["game_token"]

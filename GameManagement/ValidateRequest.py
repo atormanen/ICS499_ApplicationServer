@@ -7,15 +7,18 @@ class ValidateRequest:
         self.num = 0
 
     def isBadRequest(self,parsedData):
-        if parsedData["requestType"] == "MakeMove":
-            return False
-        elif parsedData["requestType"] == "CreateGame":
-            return False
-        elif parsedData["requestType"] == "AcceptGame":
-            return False
-        elif parsedData["requestType"] == "CheckForGame":
-            return False
-        elif parsedData["requestType"] == "RequestGame":
-            return False
-        else:
-            return True
+        try:
+            if parsedData["requestType"] == "MakeMove":
+                return False
+            elif parsedData["requestType"] == "CreateGame":
+                return False
+            elif parsedData["requestType"] == "AcceptGame":
+                return False
+            elif parsedData["requestType"] == "CheckForGame":
+                return False
+            elif parsedData["requestType"] == "RequestGame":
+                return False
+            else:
+                return True
+        except KeyError:
+            print("KeyError")

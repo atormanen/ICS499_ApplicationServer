@@ -31,10 +31,10 @@ class Game:
     def makeMove(self, requester, jsonObj):
         print("Making move for players")
         if(requester == self.player_one):
-            self.playerTwoSocket.send(jsonObj.encode("utf-8"))
+            self.playerTwoSocket.send(str(jsonObj).encode("utf-8"))
             print("Sent to player Two: " + jsonObj)
         elif(requester == self.player_two):
-            self.playerOneSocket.send(jsonObj.encode("utf-8"))
+            self.playerOneSocket.send(str(jsonObj).encode("utf-8"))
             print("Sent to player One: " + jsonObj)
 
     def createRandomGameResp(self):

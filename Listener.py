@@ -56,7 +56,10 @@ class Listener:
                     #Expecting a timeout
                     break
             else:
-                rcvd_msg = connectionSocket.recv(self.bufferSize).decode()
+                try:
+                    rcvd_msg = connectionSocket.recv(self.bufferSize).decode()
+                except UnicodeDecodeError:
+                    print("UnicodeDecodeError")
             full_msg += rcvd_msg
             if(len(rcvd_msg) == 0):
                 break

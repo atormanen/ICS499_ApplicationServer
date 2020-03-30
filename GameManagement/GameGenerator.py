@@ -75,6 +75,7 @@ class GameGenerator:
             playerOneSignonToken = parsedData["signon_token"]
         except KeyError:
             print("KeyError")
+            return False
         #gaemToken = parsedData["game_token"]
         print(playerOne)
         if(self.validateUsername(playerOne) == False):

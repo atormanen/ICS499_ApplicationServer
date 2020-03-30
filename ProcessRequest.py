@@ -56,7 +56,7 @@ class ProcessRequest:
             else:
                 self.responder.sendBadRequest(reqItem.connectionSocket)
         except KeyError:
-            print("Key error")
+            print("Process Request - Key error")
 
 
     #The process thread will block on requestQueue.get() until something

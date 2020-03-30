@@ -69,9 +69,12 @@ class GameGenerator:
         return game
 
     def createRandomGame(self, parsedData, reqItem):
-        print(parsedData["requestType"])
-        playerOne = parsedData["username"]
-        playerOneSignonToken = parsedData["signon_token"]
+        try:
+            print(parsedData["requestType"])
+            playerOne = parsedData["username"]
+            playerOneSignonToken = parsedData["signon_token"]
+        except KeyError:
+            print("KeyError")
         #gaemToken = parsedData["game_token"]
         print(playerOne)
         if(self.validateUsername(playerOne) == False):

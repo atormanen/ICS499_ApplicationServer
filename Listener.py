@@ -75,7 +75,7 @@ class Listener:
         try:
             #print("TEST ",self.reqCount,"  ",full_msg[2::])
             if not (full_msg[0] == "{"):
-                full_msg = full_msg[1::]
+                full_msg = full_msg[2::]
         except (IndexError):
             #print("error")
             return

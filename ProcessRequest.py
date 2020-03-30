@@ -33,28 +33,30 @@ class ProcessRequest:
             return
 
         parsedData = reqItem.parsedData
-
-        if parsedData["requestType"] == "CreateGame":
-            self.gameGenerator.createGame(parsedData, reqItem)
-            self.responder.sendResponse(reqItem)
-        elif parsedData["requestType"] == "AcceptGame":
-            self.gameGenerator.acceptGame(parsedData, reqItem)
-            addr = self.database.getSocket(parsedData["player_one"])
-            pOneMsgItem = MessageItem(None,addr,None)
-            self.responder.sendAcceptedResponse(pOneMsgItem, reqItem)
-        elif parsedData["requestType"] == "MakeMove":
-            print("MakeMove!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-            #Find game in game GameCollection... call make move in game
-            self.gameCollection.makeMove(parsedData)
-            return True
-        elif parsedData["requestType"] == "CheckForGame":
-            self.gameGenerator.checkForGame(parsedData, reqItem)
-            self.responder.sendResponse(reqItem)
-        elif parsedData["requestType"] == "RequestGame":
-            self.gameGenerator.createRandomGame(parsedData, reqItem)
-            self.responder.sendRandomGameResponse(reqItem)
-        else:
-            self.responder.sendBadRequest(reqItem.connectionSocket)
+        try:
+            if parsedData["requestType"] == "CreateGame":
+                self.gameGenerator.createGame(parsedData, reqItem)
+                self.responder.sendResponse(reqItem)
+            elif parsedData["requestType"] == "AcceptGame":
+                self.gameGenerator.acceptGame(parsedData, reqItem)
+                addr = self.database.getSocket(parsedData["player_one"])
+                pOneMsgItem = MessageItem(None,addr,None)
+                self.responder.sendAcceptedResponse(pOneMsgItem, reqItem)
+            elif parsedData["requestType"] == "MakeMove":
+                print("MakeMove!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+                #Find game in game GameCollection... call make move in game
+                self.gameCollection.makeMove(parsedData)
+                return True
+            elif parsedData["requestType"] == "CheckForGame":
+                self.gameGenerator.checkForGame(parsedData, reqItem)
+                self.responder.sendResponse(reqItem)
+            elif parsedData["requestType"] == "RequestGame":
+                self.gameGenerator.createRandomGame(parsedData, reqItem)
+                self.responder.sendRandomGameResponse(reqItem)
+            else:
+                self.responder.sendBadRequest(reqItem.connectionSocket)
+        except KeyError:
+            print("Key error")
 
 
     #The process thread will block on requestQueue.get() until something

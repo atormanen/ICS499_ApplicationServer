@@ -29,6 +29,7 @@ class Game:
         self.playerTwoSocket = socket
 
     def makeMove(self, requester, jsonObj):
+        print("Making move for players")
         if(requester == self.player_one):
             self.playerTwoSocket.send(jsonObj.encode())
             print("Sent to player Two: " + jsonObj)

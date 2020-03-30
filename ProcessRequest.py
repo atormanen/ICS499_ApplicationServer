@@ -43,7 +43,7 @@ class ProcessRequest:
             pOneMsgItem = MessageItem(None,addr,None)
             self.responder.sendAcceptedResponse(pOneMsgItem, reqItem)
         elif parsedData["requestType"] == "MakeMove":
-            print("MakeMove")
+            print("MakeMove!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
             #Find game in game GameCollection... call make move in game
             self.gameCollection.makeMove(parsedData)
             return True

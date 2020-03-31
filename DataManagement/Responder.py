@@ -13,7 +13,7 @@ class Responder:
     def sendBadRequest(self,connectionSocket):
         msg = "{'ERROR':'BAD REQUEST'}"
         connectionSocket.send(msg.encode('utf-8'))
-        #connectionSocket.close()
+        connectionSocket.close()
 
     def sendRequestedData(self,connectionSocket,reqestedData):
         connectionSocket.send(requestedData.encode())

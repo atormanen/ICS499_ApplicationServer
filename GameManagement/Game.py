@@ -19,11 +19,11 @@ class Game:
         self.responseObj = ''
 
 
-    def addPlayerTwo(self, username, signonToken, pTwoIp, pOnePort, socket):
+    def addPlayerTwo(self, username, signonToken, pTwoIp, pTwoPort, socket):
         self.player_two = username
         self.player_two_signon_token = signonToken
         self.player_two_ip = pTwoIp
-        self.player_two_port = pOnePort
+        self.player_two_port = pTwoPort
         self.player_one_color = 'black'
         self.player_two_color = 'white'
         self.playerTwoSocket = socket
@@ -64,5 +64,7 @@ class Game:
 
     def sendGameResposne(self):
         self.createRandomGameResp()
-        self.playerOneSocket.send(self.responseObj.encode())
-        self.playerTwoSocket.send(self.responseObj.encode())
+        self.playerOneSocket.send(self.responseObj.encode("utf-8"))
+        self.playerTwoSocket.send(self.responseObj.encode("utf-8"))
+        print(self.player_one + "    " + str(self.playerOneSocket))
+        print(self.player_two + "    " + str(self.playerTwoSocket))

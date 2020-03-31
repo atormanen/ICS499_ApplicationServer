@@ -73,7 +73,7 @@ class Listener:
 
 
         try:
-            print("TEST ",self.reqCount,"  ",full_msg[1::])
+            #print("TEST ",self.reqCount,"  ",full_msg[1::])
             flag = True
             while(flag):
                 if not (full_msg[0] == "{"):

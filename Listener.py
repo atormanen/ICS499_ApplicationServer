@@ -83,7 +83,7 @@ class Listener:
         except (IndexError):
             #print("error")
             return
-        print("TEST ",self.reqCount,"  ",full_msg)
+        #print("TEST ",self.reqCount,"  ",full_msg)
         try:
             parsedData = json.loads(full_msg)
         except (json.decoder.JSONDecodeError):

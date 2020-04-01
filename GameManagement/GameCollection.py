@@ -23,10 +23,10 @@ class GameCollection:
         print(id(self.openGameQueue))
         return True
 
-    def addSecondPlayer(self, player, signonToken, playerIp, playerPort):
+    def addSecondPlayer(self, player, signonToken, playerIp, playerPort, socket):
         game = self.openGameQueue.pop(0)
         #username, signonToken, pTwoIp, pOnePort, socket
-        game.addPlayerTwo(player, signonToken, playerIp, playerPort)
+        game.addPlayerTwo(player, signonToken, playerIp, playerPort, socket)
         self.gameDict[game.gameToken] = game
         return game
 

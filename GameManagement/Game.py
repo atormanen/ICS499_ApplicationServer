@@ -2,7 +2,7 @@ import json
 
 class Game:
 
-    def __init__(self, gameToken, parsedData, pOneIp, pOnePort):
+    def __init__(self, gameToken, parsedData, pOneIp, pOnePort, socket):
         self.gameToken = gameToken
         self.player_one = parsedData["username"]
         self.player_one_signon_token = parsedData["signon_token"]
@@ -16,16 +16,19 @@ class Game:
         self.player_two_port = ''
         self.playerOneSocket = ''
         self.playerTwoSocket = ''
+        self.playerOneSocketInitial = socket
+        self.playerTwoSocketInitial = ''
         self.responseObj = ''
 
 
-    def addPlayerTwo(self, username, signonToken, pTwoIp, pTwoPort):
+    def addPlayerTwo(self, username, signonToken, pTwoIp, pTwoPort, socket):
         self.player_two = username
         self.player_two_signon_token = signonToken
         self.player_two_ip = pTwoIp
         self.player_two_port = pTwoPort
         self.player_one_color = 'black'
         self.player_two_color = 'white'
+        self.playerTwoSocketInitial = socket
 
     def makeMove(self, requester, jsonObj, socket):
         print("Making move for players")
@@ -68,7 +71,7 @@ class Game:
 
     def sendGameResposne(self):
         self.createRandomGameResp()
-        self.playerOneSocket.send(self.responseObj.encode("utf-8"))
-        self.playerTwoSocket.send(self.responseObj.encode("utf-8"))
+        self.playerOneSocketInitial.send(self.responseObj.encode("utf-8"))
+        self.playerTwoSocketInitial.send(self.responseObj.encode("utf-8"))
         print(self.player_one + "    " + str(self.playerOneSocket))
         print(self.player_two + "    " + str(self.playerTwoSocket))

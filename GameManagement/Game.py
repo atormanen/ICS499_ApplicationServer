@@ -60,6 +60,7 @@ class Game:
         response["player_one_ip"] = self.player_one_ip
         response["player_one_port"] = self.player_one_port
         response["player_two_ip"] = self.player_two_ip
+        response["player_two_port"] = self.player_two_port
         self.responseObj = json.dumps(response)
 
     def sendGameResposne(self):

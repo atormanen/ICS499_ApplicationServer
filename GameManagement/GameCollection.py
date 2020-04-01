@@ -39,8 +39,13 @@ class GameCollection:
             return False
 
     def makeMove(self, parsedData, reqItem):
-        jsonObj = parsedData["move"]
-        print(parsedData["move"])
+        rint(parsedData["move"])
         game = self.getGame(parsedData["game_token"])
         requester = parsedData["username"]
+        try:
+            jsonObj = parsedData["move"]
+        except KeyError:
+            game.addPlayerTwoSocket(reqItem.connectionSocket)
+            return
+
         game.makeMove(requester, jsonObj, reqItem.connectionSocket)

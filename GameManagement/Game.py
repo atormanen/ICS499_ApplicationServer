@@ -31,6 +31,7 @@ class Game:
         self.playerTwoSocketInitial = socket
 
     def addPlayerTwoSocket(self, socket):
+        print("player two socket: " + str(socket))
         self.playerTwoSocket = socket;
 
     def makeMove(self, requester, jsonObj, socket):

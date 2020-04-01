@@ -48,4 +48,5 @@ class GameCollection:
             game.addPlayerTwoSocket(reqItem.connectionSocket)
             return
 
+        print("did not return")
         game.makeMove(requester, jsonObj, reqItem.connectionSocket)

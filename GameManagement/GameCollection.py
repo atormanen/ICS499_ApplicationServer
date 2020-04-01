@@ -45,8 +45,12 @@ class GameCollection:
 
         jsonObj = parsedData["move"]
 
-        if(jsonObj == "na"):
+        if(jsonObj == "white"):
             print("addPlayerTwoSocket")
+            game.addPlayerOneSocket(reqItem.connectionSocket)
+            return
+        elif(jsonObj == "black"):
+            print("addPlayerOneSocket")
             game.addPlayerOneSocket(reqItem.connectionSocket)
             return
 

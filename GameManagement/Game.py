@@ -33,9 +33,14 @@ class Game:
         self.playerTwoSocketInitial = socket
 
     def addPlayerOneSocket(self, socket):
-        print("player two socket: " + str(socket))
+        print("player one socket: " + str(socket))
         self.playerOneSocket = socket;
         self.playerOneSocketInitialFlag = 1
+
+    def addPlayerTwoSocket(self, socket):
+        print("player two socket: " + str(socket))
+        self.playerTwoSocket = socket;
+        self.playerTwoSocketInitialFlag = 1
 
     def makeMove(self, requester, jsonObj, socket):
         print("Making move for players")

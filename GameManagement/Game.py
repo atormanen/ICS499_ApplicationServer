@@ -41,6 +41,8 @@ class Game:
         if(requester == self.player_one):
             if(self.playerTwoSocketInitialFlag == 0):
                 self.playerTwoSocket = socket
+                self.playerTwoSocketInitialFlag = 1
+                return
             self.playerTwoSocket.send(str(jsonObj).encode("utf-8"))
             print("Sent to player Two: (" + self.player_two + ")" + str(jsonObj))
             print(str(self.playerOneSocket))
@@ -49,6 +51,8 @@ class Game:
         elif(requester == self.player_two):
             if( self.playerOneSocketInitialFlag == 0):
                 self.playerOneSocket = socket
+                self.playerTwoSocketInitialFlag = 1
+                return
             self.playerOneSocket.send(str(jsonObj).encode("utf-8"))
             print("Player" + self.player_two +" sent to"+  self.player_one + ": " + str(jsonObj))
             print(str(self.playerOneSocket))

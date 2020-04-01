@@ -47,7 +47,7 @@ class GameCollection:
 
         if(jsonObj == "white"):
             print("addPlayerTwoSocket")
-            game.addPlayerOneSocket(reqItem.connectionSocket)
+            game.addPlayerTwoSocket(reqItem.connectionSocket)
             return
         elif(jsonObj == "black"):
             print("addPlayerOneSocket")

@@ -97,7 +97,7 @@ class GameGenerator:
         print("Length of open game queue: " + str(len(self.gameCollection.openGameQueue)))
         if(self.gameCollection.openGameAvailable()):
             game = self.gameCollection.addSecondPlayer(playerOne, playerOneSignonToken,\
-                                pOneIp, pOnePort, reqItem.connectionSocket)
+                                pOneIp, pOnePort)
             self.gameCollection.lock.release()
             #newGame = self.db.getGame(gameToken)
             #ame.addPlayerTwo(newGame[1][7],newGame[1][12], newGame[1][9], newGame[1][11])

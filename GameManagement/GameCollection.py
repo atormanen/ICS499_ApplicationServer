@@ -39,7 +39,7 @@ class GameCollection:
             return False
 
     def makeMove(self, parsedData, reqItem):
-        rint(parsedData["move"])
+        print(parsedData["move"])
         game = self.getGame(parsedData["game_token"])
         requester = parsedData["username"]
         try:

@@ -45,6 +45,7 @@ class GameCollection:
         try:
             jsonObj = parsedData["move"]
         except KeyError:
+            print("addPlayerTwoSocket")
             game.addPlayerTwoSocket(reqItem.connectionSocket)
             return
 

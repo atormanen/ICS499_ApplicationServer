@@ -23,10 +23,10 @@ class GameCollection:
         print(id(self.openGameQueue))
         return True
 
-    def addSecondPlayer(self, player, signonToken, playerIp, playerPort, socket):
+    def addSecondPlayer(self, player, signonToken, playerIp, playerPort):
         game = self.openGameQueue.pop(0)
         #username, signonToken, pTwoIp, pOnePort, socket
-        game.addPlayerTwo(player, signonToken, playerIp, playerPort, socket)
+        game.addPlayerTwo(player, signonToken, playerIp, playerPort)
         self.gameDict[game.gameToken] = game
         return game
 
@@ -42,5 +42,5 @@ class GameCollection:
         jsonObj = parsedData["move"]
         print(parsedData["move"])
         game = self.getGame(parsedData["game_token"])
-        requester = parsedData["username"]       
+        requester = parsedData["username"]
         game.makeMove(requester, jsonObj, reqItem.connectionSocket)

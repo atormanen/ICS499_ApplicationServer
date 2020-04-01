@@ -105,7 +105,7 @@ class GameGenerator:
         else:
             gameToken = self.token.getToken()
             print("Game token: " + gameToken)
-            game = Game(gameToken, parsedData, pOneIp, pOnePort, reqItem.connectionSocket)
+            game = Game(gameToken, parsedData, pOneIp, pOnePort)
             self.gameCollection.addOpenGame(game)
             #self.db.createRandomGame(game)
             self.gameCollection.lock.release()

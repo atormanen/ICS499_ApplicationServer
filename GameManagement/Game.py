@@ -40,8 +40,8 @@ class Game:
     def makeMove(self, requester, jsonObj, socket):
         print("Making move for players")
         if(requester == self.player_one):
-            if(self.playerTwoSocketInitialFlag == 0):
-                self.playerTwoSocket = socket
+            if( self.playerOneSocketInitialFlag == 0):
+                self.playerOneSocket = socket
                 self.playerTwoSocketInitialFlag = 1
             self.playerTwoSocket.send(str(jsonObj).encode("utf-8"))
             print("Sent to player Two: (" + self.player_two + ")" + str(jsonObj))
@@ -49,8 +49,9 @@ class Game:
             print(str(self.playerTwoSocket))
 
         elif(requester == self.player_two):
-            if( self.playerOneSocketInitialFlag == 0):
-                self.playerOneSocket = socket
+
+            if(self.playerTwoSocketInitialFlag == 0):
+                self.playerTwoSocket = socket
                 self.playerTwoSocketInitialFlag = 1
             self.playerOneSocket.send(str(jsonObj).encode("utf-8"))
             print("Player" + self.player_two +" sent to"+  self.player_one + ": " + str(jsonObj))

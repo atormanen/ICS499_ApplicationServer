@@ -40,13 +40,16 @@ class Game:
                 self.playerTwoSocket = socket
             self.playerTwoSocket.send(str(jsonObj).encode("utf-8"))
             print("Sent to player Two: (" + self.player_two + ")" + str(jsonObj))
+            print(str(self.playerOneSocket))
+            print(str(self.playerTwoSocket))
 
         elif(requester == self.player_two):
             if(self.playerOneSocket == ''):
                 self.playerOneSocket = socket
             self.playerOneSocket.send(str(jsonObj).encode("utf-8"))
             print("Player" + self.player_two +" sent to"+  self.player_one + ": " + str(jsonObj))
-
+            print(str(self.playerOneSocket))
+            print(str(self.playerTwoSocket))
 
     def createRandomGameResp(self):
         response = {

@@ -102,7 +102,6 @@ class GameGenerator:
             #newGame = self.db.getGame(gameToken)
             #ame.addPlayerTwo(newGame[1][7],newGame[1][12], newGame[1][9], newGame[1][11])
             game.sendGameResposne()
-            self.gameCollection.lock.release()
         else:
             gameToken = self.token.getToken()
             print("Game token: " + gameToken)

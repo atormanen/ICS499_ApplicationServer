@@ -52,7 +52,7 @@ class ProcessRequest:
                 self.responder.sendResponse(reqItem)
             elif parsedData["requestType"] == "RequestGame":
                 self.gameGenerator.createRandomGame(parsedData, reqItem)
-                #self.responder.sendRandomGameResponse(reqItem)
+                self.responder.sendRandomGameResponse(reqItem)
             else:
                 self.responder.sendBadRequest(reqItem.connectionSocket)
         except KeyError:
@@ -65,5 +65,6 @@ class ProcessRequest:
         while True:
             #print("blocking on req item")
             requestItem = self.requestQueue.get()
+            print("Processing request")
             #Decrypt parsedData
             self.proccesRequestType(requestItem)

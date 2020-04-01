@@ -45,7 +45,7 @@ class GameCollection:
 
         jsonObj = parsedData["move"]
 
-        if(jsonObj == "na")
+        if(jsonObj == "na"):
             print("addPlayerTwoSocket")
             game.addPlayerTwoSocket(reqItem.connectionSocket)
             return

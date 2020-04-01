@@ -32,10 +32,10 @@ class Game:
         self.player_two_color = 'white'
         self.playerTwoSocketInitial = socket
 
-    def addPlayerTwoSocket(self, socket):
+    def addPlayerOneSocket(self, socket):
         print("player two socket: " + str(socket))
-        self.playerTwoSocket = socket;
-        self.playerTwoSocketInitialFlag = 1
+        self.playerOneSocket = socket;
+        self.playerOneSocketInitialFlag = 1
 
     def makeMove(self, requester, jsonObj, socket):
         print("Making move for players")
@@ -49,7 +49,6 @@ class Game:
             print(str(self.playerTwoSocket))
 
         elif(requester == self.player_two):
-
             if(self.playerTwoSocketInitialFlag == 0):
                 self.playerTwoSocket = socket
                 self.playerTwoSocketInitialFlag = 1

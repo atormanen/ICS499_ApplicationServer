@@ -33,17 +33,19 @@ class Game:
     def makeMove(self, requester, jsonObj, socket):
         print("Making move for players")
         if(requester == self.player_one):
-            self.playerTwoSocket.send(str(jsonObj).encode("utf-8"))
-            print("Sent to player Two: (" + self.player_two + ")" + str(jsonObj))
             if(self.playerTwoSocket == ''):
                 self.playerTwoSocket = socket
+            self.playerTwoSocket.send(str(jsonObj).encode("utf-8"))
+            print("Sent to player Two: (" + self.player_two + ")" + str(jsonObj))
+
         elif(requester == self.player_two):
+            if(self.playerOneSocket == ''):
+                self.playerOneSocket = socket
             self.playerOneSocket.send(str(jsonObj).encode("utf-8"))
             print("Player" + self.player_two +" sent to"+  self.player_one + ": " + str(jsonObj))
             print(self.player_one + "    " + str(self.playerOneSocket))
             print(self.player_two + "    " + str(self.playerTwoSocket))
-            if(self.playerOneSocket == ''):
-                self.playerOneSocket = socket
+
 
 
     def createRandomGameResp(self):

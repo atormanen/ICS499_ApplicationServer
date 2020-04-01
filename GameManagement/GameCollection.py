@@ -42,12 +42,14 @@ class GameCollection:
         print(parsedData["move"])
         game = self.getGame(parsedData["game_token"])
         requester = parsedData["username"]
-        try:
-            jsonObj = parsedData["move"]
-        except KeyError:
+
+        jsonObj = parsedData["move"]
+
+        if(jsonObj == "na")
             print("addPlayerTwoSocket")
             game.addPlayerTwoSocket(reqItem.connectionSocket)
             return
+
 
         print("did not return")
         game.makeMove(requester, jsonObj, reqItem.connectionSocket)

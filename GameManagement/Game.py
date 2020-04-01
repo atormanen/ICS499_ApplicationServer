@@ -18,6 +18,8 @@ class Game:
         self.playerTwoSocket = ''
         self.playerOneSocketInitial = socket
         self.playerTwoSocketInitial = ''
+        self.playerOneSocketInitialFlag = 0
+        self.playerTwoSocketInitialFlag = 0
         self.responseObj = ''
 
 
@@ -37,7 +39,7 @@ class Game:
     def makeMove(self, requester, jsonObj, socket):
         print("Making move for players")
         if(requester == self.player_one):
-            if(self.playerTwoSocket == ''):
+            if(self.playerTwoSocketInitialFlag == 0):
                 self.playerTwoSocket = socket
             self.playerTwoSocket.send(str(jsonObj).encode("utf-8"))
             print("Sent to player Two: (" + self.player_two + ")" + str(jsonObj))
@@ -45,7 +47,7 @@ class Game:
             print(str(self.playerTwoSocket))
 
         elif(requester == self.player_two):
-            if(self.playerOneSocket == ''):
+            if( self.playerOneSocketInitialFlag == 0):
                 self.playerOneSocket = socket
             self.playerOneSocket.send(str(jsonObj).encode("utf-8"))
             print("Player" + self.player_two +" sent to"+  self.player_one + ": " + str(jsonObj))

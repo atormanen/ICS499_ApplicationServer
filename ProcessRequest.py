@@ -45,7 +45,7 @@ class ProcessRequest:
             elif parsedData["requestType"] == "MakeMove":
                 print("MakeMove!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
                 #Find game in game GameCollection... call make move in game
-                self.gameCollection.makeMove(parsedData)
+                self.gameCollection.makeMove(parsedData, reqItem)
                 return True
             elif parsedData["requestType"] == "CheckForGame":
                 self.gameGenerator.checkForGame(parsedData, reqItem)

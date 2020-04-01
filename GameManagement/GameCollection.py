@@ -38,9 +38,9 @@ class GameCollection:
             print("KeyError")
             return False
 
-    def makeMove(self, parsedData):
+    def makeMove(self, parsedData, reqItem):
         jsonObj = parsedData["move"]
         print(parsedData["move"])
         game = self.getGame(parsedData["game_token"])
-        requester = parsedData["username"]
-        game.makeMove(requester, jsonObj)
+        requester = parsedData["username"]       
+        game.makeMove(requester, jsonObj, reqItem.connectionSocket)

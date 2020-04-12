@@ -21,6 +21,7 @@ class GameCollection:
         while(True):
             #print("checking sockets")
             for game in self.gameDict:
+                print(self.gameDict)
                 try:
                     print("Chekcing socket for player one")
                     game.playerOneSocket.settimeout(1)

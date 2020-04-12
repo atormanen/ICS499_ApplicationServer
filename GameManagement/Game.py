@@ -85,3 +85,5 @@ class Game:
         self.playerTwoSocketInitial.send(self.responseObj.encode("utf-8"))
         print(self.player_one + "    " + str(self.playerOneSocket))
         print(self.player_two + "    " + str(self.playerTwoSocket))
+        self.playerOneSocketInitial.close()
+        self.playerTwoSocketInitial.close()

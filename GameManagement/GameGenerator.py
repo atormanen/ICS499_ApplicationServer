@@ -99,6 +99,7 @@ class GameGenerator:
             game = self.gameCollection.addSecondPlayer(playerOne, playerOneSignonToken,\
                                 pOneIp, pOnePort, reqItem.connectionSocket)
             self.gameCollection.lock.release()
+            print("Lock released")
             #newGame = self.db.getGame(gameToken)
             #ame.addPlayerTwo(newGame[1][7],newGame[1][12], newGame[1][9], newGame[1][11])
             game.sendGameResposne()

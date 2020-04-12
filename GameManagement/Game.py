@@ -58,7 +58,7 @@ class Game:
         print("Making move for players")
         if(requester == self.player_one):
             self.playerTwoSocket.send(str(jsonObj).encode("utf-8"))
-           print("Player " + self.player_one +" (black) sent to "+  self.player_two + ": " + str(jsonObj))
+            print("Player " + self.player_one +" (black) sent to "+  self.player_two + ": " + str(jsonObj))
             print(str(self.playerOneSocket))
             print(str(self.playerTwoSocket))
 

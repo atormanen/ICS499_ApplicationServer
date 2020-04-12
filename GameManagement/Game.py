@@ -43,14 +43,14 @@ class Game:
         print("player one socket: " + str(socket))
         self.playerOneSocket = socket;
         self.playerOneSocketInitialFlag = 1
-        thread = Thread(target=self.listen(),args=(self.playerOneSocket,))
+        thread = Thread(target=self.listen,args=(self.playerOneSocket,))
         thread.start()
 
     def addPlayerTwoSocket(self, socket):
         print("player two socket: " + str(socket))
         self.playerTwoSocket = socket;
         self.playerTwoSocketInitialFlag = 1
-        thread = Thread(target=self.listen(),args=(self.playerTwoSocket,))
+        thread = Thread(target=self.listen,args=(self.playerTwoSocket,))
         thread.start()
 
 

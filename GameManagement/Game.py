@@ -1,9 +1,10 @@
 import json
-
+from threading import Thread
 
 class Game:
 
-    def __init__(self, gameToken, parsedData, pOneIp, pOnePort, socket):
+    def __init__(self, gameToken, parsedData, pOneIp, pOnePort, socket, listener):
+        self.listener = listener
         self.gameToken = gameToken
         self.player_one = parsedData["username"]
         self.player_one_signon_token = parsedData["signon_token"]
@@ -23,6 +24,11 @@ class Game:
         self.playerTwoSocketInitialFlag = 0
         self.responseObj = ''
 
+    def listen(self, socket):
+        while(True):
+            #msg = socket.recv(1024)
+            self.listener.processRequest(socket,(playerIp,playerPort))
+
 
     def addPlayerTwo(self, username, signonToken, pTwoIp, pTwoPort, socket):
         self.player_two = username
@@ -37,11 +43,16 @@ class Game:
         print("player one socket: " + str(socket))
         self.playerOneSocket = socket;
         self.playerOneSocketInitialFlag = 1
+        thread = Thread(target=self.listen(),args=(self.playerOneSocket,))
+        thread.start()
 
     def addPlayerTwoSocket(self, socket):
         print("player two socket: " + str(socket))
         self.playerTwoSocket = socket;
         self.playerTwoSocketInitialFlag = 1
+        thread = Thread(target=self.listen(),args=(self.playerTwoSocket,))
+        thread.start()
+
 
     def makeMove(self, requester, jsonObj, socket):
         print("Making move for players")

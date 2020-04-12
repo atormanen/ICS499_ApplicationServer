@@ -22,6 +22,7 @@ class GameCollection:
             #print("checking sockets")
             for game in self.gameDict:
                 try:
+                    print("Chekcing socket for player one")
                     game.playerOneSocket.settimeout(1)
                     rcvd_msg = game.playerOneSocket.recv(1024)
                     rcvd_msg.decode()
@@ -29,6 +30,7 @@ class GameCollection:
                 except socket.timeout:
                     print("socket timeout")
                 try:
+                    print("Chekcing socket for player two")
                     game.playerTwoSocket.settimeout(1)
                     game.playerTwoSocket.recv(1024)
                     rcvd_msg.decode()

@@ -2,7 +2,8 @@ import multiprocessing
 
 class GameCollection:
 
-    def __init__(self):
+    def __init__(self, listener):
+        self.listener = listener
         self.gameDict = dict()
         self.openGameQueue = []
         self.moveQueue = []

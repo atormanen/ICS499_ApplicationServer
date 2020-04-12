@@ -19,8 +19,9 @@ class Controller:
         self.requestQueue = multiprocessing.Queue()
         self.gameQueue = multiprocessing.Queue()
         #self.gameCollectionQueue = multiprocessing.Queue()
-        self.gameCollection = GameCollection()
+
         self.listener = Listener(self.requestQueue)
+        self.gameCollection = GameCollection(self.listener)
 
 
 

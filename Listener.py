@@ -108,7 +108,7 @@ class Listener:
                 #is thread.join nececary?
                 #thread.join()
             except IOError:
-                #print('IOError')
+                print('IOError')
                 connectionSocket.close()
 
     def createListener(self):

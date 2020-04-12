@@ -7,7 +7,20 @@ class GameCollection:
         self.openGameQueue = []
         self.moveQueue = []
         self.lock = multiprocessing.Lock()
+        self.socketChecker()
 
+
+    def socketChecker(self):
+        thread = Thread(target=self.checkSockets)
+        thread.start()
+
+    def checkSockets(self):
+        for game in gameDict:
+            try:
+                game.playerOneSocket.settimeout(1)
+                game.playerOneSocket.recv(1024)
+            except socket.timeout:
+                print("socket timeout")
 
     def openGameAvailable(self):
         if(len(self.openGameQueue) > 0):

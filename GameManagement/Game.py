@@ -27,7 +27,7 @@ class Game:
     def listen(self, socket):
         while(True):
             #msg = socket.recv(1024)
-            self.listener.processRequest(socket,(playerIp,playerPort))
+            self.listener.processRequest(socket,(self.player_one_ip,self.player_two_port))
 
 
     def addPlayerTwo(self, username, signonToken, pTwoIp, pTwoPort, socket):

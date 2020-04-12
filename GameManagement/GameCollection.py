@@ -15,12 +15,22 @@ class GameCollection:
         thread.start()
 
     def checkSockets(self):
-        for game in gameDict:
-            try:
-                game.playerOneSocket.settimeout(1)
-                game.playerOneSocket.recv(1024)
-            except socket.timeout:
-                print("socket timeout")
+        while(True):
+            for game in gameDict:
+                try:
+                    game.playerOneSocket.settimeout(1)
+                    rcvd_msg = game.playerOneSocket.recv(1024)
+                    rcvd_msg.decode()
+                    listener.processRequest(game.playerOneSocket, game.player_one_ip)
+                except socket.timeout:
+                    print("socket timeout")
+                try:
+                    game.playerTwoSocket.settimeout(1)
+                    game.playerTwoSocket.recv(1024)
+                    rcvd_msg.decode()
+                    listener.processRequest(game.playerTwoSocket, game.player_two_ip)
+                except socket.timeout:
+                    print("socket timeout")
 
     def openGameAvailable(self):
         if(len(self.openGameQueue) > 0):

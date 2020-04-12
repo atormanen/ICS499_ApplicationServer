@@ -1,4 +1,5 @@
 import multiprocessing
+from threading import Thread
 
 class GameCollection:
 
@@ -17,7 +18,7 @@ class GameCollection:
 
     def checkSockets(self):
         while(True):
-            for game in gameDict:
+            for game in self.gameDict:
                 try:
                     game.playerOneSocket.settimeout(1)
                     rcvd_msg = game.playerOneSocket.recv(1024)

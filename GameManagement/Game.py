@@ -1,5 +1,6 @@
 import json
 
+
 class Game:
 
     def __init__(self, gameToken, parsedData, pOneIp, pOnePort, socket):

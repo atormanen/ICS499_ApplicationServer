@@ -19,7 +19,7 @@ class GameCollection:
 
     def checkSockets(self):
         while(True):
-            print("checking sockets")
+            #print("checking sockets")
             for game in self.gameDict:
                 try:
                     game.playerOneSocket.settimeout(1)

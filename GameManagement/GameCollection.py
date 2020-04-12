@@ -14,6 +14,7 @@ class GameCollection:
 
     def socketChecker(self):
         thread = Thread(target=self.checkSockets)
+        print("Starting socket checker")
         thread.start()
 
     def checkSockets(self):

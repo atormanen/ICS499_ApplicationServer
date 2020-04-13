@@ -3,7 +3,8 @@ from threading import Thread
 
 class Game:
 
-    def __init__(self, gameToken, parsedData, pOneIp, pOnePort, socket, listener):
+    def __init__(self, gameToken, parsedData, pOneIp, pOnePort, socket, listener, db):
+        self.db = db
         self.listener = listener
         self.gameToken = gameToken
         self.player_one = parsedData["username"]
@@ -30,6 +31,8 @@ class Game:
             self.listener.processRequest(socket,(self.player_one_ip,self.player_two_port))
 
 
+
+
     def addPlayerTwo(self, username, signonToken, pTwoIp, pTwoPort, socket):
         self.player_two = username
         self.player_two_signon_token = signonToken
@@ -42,31 +45,23 @@ class Game:
     def addPlayerOneSocket(self, socket):
         print("player one socket: " + str(socket))
         self.playerOneSocket = socket;
+        self.playerOneSocket.setblocking(0)
         self.playerOneSocketInitialFlag = 1
-        thread = Thread(target=self.listen,args=(self.playerOneSocket,))
-        thread.start()
+
 
     def addPlayerTwoSocket(self, socket):
         print("player two socket: " + str(socket))
         self.playerTwoSocket = socket;
+        self.playerTwoSocket.setblocking(0)
         self.playerTwoSocketInitialFlag = 1
-        thread = Thread(target=self.listen,args=(self.playerTwoSocket,))
-        thread.start()
 
 
     def makeMove(self, requester, jsonObj, socket):
-        print("Making move for players")
+        ## TODO: Check jsonObj for end of game
         if(requester == self.player_one):
             self.playerTwoSocket.send(str(jsonObj).encode("utf-8"))
-            print("Player " + self.player_one +" (black) sent to "+  self.player_two + ": " + str(jsonObj))
-            print(str(self.playerOneSocket))
-            print(str(self.playerTwoSocket))
-
         elif(requester == self.player_two):
             self.playerOneSocket.send(str(jsonObj).encode("utf-8"))
-            print("Player " + self.player_two +" (white) sent to "+  self.player_one + ": " + str(jsonObj))
-            print(str(self.playerOneSocket))
-            print(str(self.playerTwoSocket))
 
     def createRandomGameResp(self):
         response = {

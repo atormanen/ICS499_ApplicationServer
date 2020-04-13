@@ -90,29 +90,20 @@ class GameGenerator:
 
         #Check for open games in game GameCollection
         #If no open games, create a game and wait for a player to join
-        print("Acquiring lock")
         self.gameCollection.lock.acquire()
-        print("Lock acquired")
         print(self.gameCollection.openGameAvailable())
-        print("Length of open game queue: " + str(len(self.gameCollection.openGameQueue)))
         if(self.gameCollection.openGameAvailable()):
             game = self.gameCollection.addSecondPlayer(playerOne, playerOneSignonToken,\
                                 pOneIp, pOnePort, reqItem.connectionSocket)
             self.gameCollection.lock.release()
-            print("Lock released")
-            #newGame = self.db.getGame(gameToken)
-            #ame.addPlayerTwo(newGame[1][7],newGame[1][12], newGame[1][9], newGame[1][11])
             game.sendGameResposne()
         else:
             gameToken = self.token.getToken()
-            print("Game token: " + gameToken)
-            game = Game(gameToken, parsedData, pOneIp, pOnePort, reqItem.connectionSocket, self.gameCollection.listener)
+            game = Game(gameToken, parsedData, pOneIp, pOnePort,\
+                reqItem.connectionSocket, self.gameCollection.listener, self.db)
             self.gameCollection.addOpenGame(game)
             #self.db.createRandomGame(game)
             self.gameCollection.lock.release()
-            print("Lock released")
-            print("Waiting for second player")
-
 
 
 

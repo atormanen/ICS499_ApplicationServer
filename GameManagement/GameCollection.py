@@ -17,27 +17,13 @@ class GameCollection:
         print("Starting socket checker")
         thread.start()
 
+    #This method is not used
     def checkSockets(self):
         while(True):
             #print("checking sockets")
             for game in self.gameDict:
-                print(self.gameDict)
-                try:
-                    print("Chekcing socket for player one")
-                    game.playerOneSocket.settimeout(1)
-                    rcvd_msg = game.playerOneSocket.recv(1024)
-                    rcvd_msg.decode()
-                    listener.processRequest(game.playerOneSocket, game.player_one_ip)
-                except socket.timeout:
-                    print("socket timeout")
-                try:
-                    print("Chekcing socket for player two")
-                    game.playerTwoSocket.settimeout(1)
-                    game.playerTwoSocket.recv(1024)
-                    rcvd_msg.decode()
-                    listener.processRequest(game.playerTwoSocket, game.player_two_ip)
-                except socket.timeout:
-                    print("socket timeout")
+                self.listener.processRequest(game.playerOneSocket,(game.player_one_ip,game.player_two_port))
+                self.listener.processRequest(game.playerOneSocket,(game.player_one_ip,game.player_two_port))
 
     def openGameAvailable(self):
         if(len(self.openGameQueue) > 0):
@@ -45,12 +31,21 @@ class GameCollection:
             return True
         else:
             return False
+    def checkIfAlreadyInGame(self, game):
+        for games in self.gameDict:
+            if(game.player_one == games.player_one):
+                return True
+            elif(game.player_two == games.player_two):
+                return True
+        for gaems in self.openGameQueue:
+            if(game.player_one == games.player_one):
+                return True
+            elif(game.player_two == games.player_two):
+                return True
+        return False
 
     def addOpenGame(self, game):
-        #self.gameDict[game.gameToken] = game
         self.openGameQueue.append(game)
-        print(len(self.openGameQueue))
-        print(id(self.openGameQueue))
         return True
 
     def addSecondPlayer(self, player, signonToken, playerIp, playerPort, socket):
@@ -67,6 +62,10 @@ class GameCollection:
         except KeyError:
             print("KeyError")
             return False
+
+    def removeGame(self, game):
+        removedResult = self.gameDict.pop(game.gameToken)
+        return removedResult
 
     def makeMove(self, parsedData, reqItem):
         print(parsedData["move"])

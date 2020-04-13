@@ -47,13 +47,17 @@ class Game:
         self.playerOneSocket = socket;
         self.playerOneSocket.setblocking(0)
         self.playerOneSocketInitialFlag = 1
-
+        thread = Thread(target=self.listen,args=(self.playerOneSocket,))
+        thread.start()
 
     def addPlayerTwoSocket(self, socket):
         print("player two socket: " + str(socket))
         self.playerTwoSocket = socket;
         self.playerTwoSocket.setblocking(0)
         self.playerTwoSocketInitialFlag = 1
+        ## TODO: find a different way to handle multpiple sockets
+        thread = Thread(target=self.listen,args=(self.playerTwoSocket,))
+        thread.start()
 
 
     def makeMove(self, requester, jsonObj, socket):

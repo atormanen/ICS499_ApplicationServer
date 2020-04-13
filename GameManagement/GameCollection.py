@@ -22,6 +22,7 @@ class GameCollection:
         while(True):
             #print("checking sockets")
             for game in self.gameDict:
+                print("Chekcing sockets")
                 self.listener.processRequest(game.playerOneSocket,(game.player_one_ip,game.player_two_port))
                 self.listener.processRequest(game.playerOneSocket,(game.player_one_ip,game.player_two_port))
 

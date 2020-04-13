@@ -21,7 +21,7 @@ class GameCollection:
     def checkSockets(self):
         while(True):
             #print("checking sockets")
-            for game in self.gameDict:
+            for key, value in self.gameDict.items():
                 print("Chekcing sockets")
                 self.listener.processRequest(game.playerOneSocket,(game.player_one_ip,game.player_two_port))
                 self.listener.processRequest(game.playerOneSocket,(game.player_one_ip,game.player_two_port))

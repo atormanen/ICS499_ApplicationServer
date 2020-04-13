@@ -75,6 +75,9 @@ class GameCollection:
         print(parsedData)
         jsonObj = parsedData["move"]
 
+        #If this is end of game signal, save game stats in db and send end
+        #game to both players
+
 
         #Weird way to tell which socket is associated with which player
         #Only runs on initial startup of game

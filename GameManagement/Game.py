@@ -61,7 +61,7 @@ class Game:
 
 
     def makeMove(self, requester, jsonObj, socket):
-        ## TODO: Check jsonObj for end of game
+        
         if(requester == self.player_one):
             self.playerTwoSocket.send(str(jsonObj).encode("utf-8"))
         elif(requester == self.player_two):

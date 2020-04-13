@@ -69,12 +69,15 @@ class GameCollection:
         return removedResult
 
     def makeMove(self, parsedData, reqItem):
-        print(parsedData["move"])
+        ## TODO: Check jsonObj for end of game
         game = self.getGame(parsedData["game_token"])
         requester = parsedData["username"]
-
+        print(parsedData)
         jsonObj = parsedData["move"]
 
+
+        #Weird way to tell which socket is associated with which player
+        #Only runs on initial startup of game
         if(jsonObj == "white"):
             print("addPlayerTwoSocket")
             game.addPlayerTwoSocket(reqItem.connectionSocket)
@@ -84,6 +87,4 @@ class GameCollection:
             game.addPlayerOneSocket(reqItem.connectionSocket)
             return
 
-
-        print("did not return")
         game.makeMove(requester, jsonObj, reqItem.connectionSocket)

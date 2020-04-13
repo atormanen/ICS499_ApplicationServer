@@ -91,7 +91,11 @@ class GameGenerator:
         #Check for open games in game GameCollection
         #If no open games, create a game and wait for a player to join
         self.gameCollection.lock.acquire()
-        print(self.gameCollection.openGameAvailable())
+        
+        if(self.gameCollection.checkIfAlreadyInGame()):
+            self.gameCollection.lock.release()
+            return False
+
         if(self.gameCollection.openGameAvailable()):
             game = self.gameCollection.addSecondPlayer(playerOne, playerOneSignonToken,\
                                 pOneIp, pOnePort, reqItem.connectionSocket)

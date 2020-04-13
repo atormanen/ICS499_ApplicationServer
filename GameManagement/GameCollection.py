@@ -32,16 +32,17 @@ class GameCollection:
             return True
         else:
             return False
-    def checkIfAlreadyInGame(self, game):
+
+    def checkIfAlreadyInGame(self, username):
         for games in self.gameDict:
-            if(game.player_one == games.player_one):
+            if(username == games.player_one):
                 return True
-            elif(game.player_two == games.player_two):
+            elif(username == games.player_two):
                 return True
-        for gaems in self.openGameQueue:
-            if(game.player_one == games.player_one):
+        for games in self.openGameQueue:
+            if(username == games.player_one):
                 return True
-            elif(game.player_two == games.player_two):
+            elif(username == games.player_two):
                 return True
         return False
 

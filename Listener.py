@@ -63,6 +63,7 @@ class Listener:
                     break
 
             full_msg += rcvd_msg
+            print(full_msg)
             if(len(rcvd_msg) == 0):
                 break
             elif len(rcvd_msg) < self.bufferSize:

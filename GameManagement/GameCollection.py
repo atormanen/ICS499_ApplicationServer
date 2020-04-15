@@ -9,7 +9,7 @@ class GameCollection:
         self.openGameQueue = []
         self.moveQueue = []
         self.lock = multiprocessing.Lock()
-        self.socketChecker()
+        #self.socketChecker()
 
 
     def socketChecker(self):

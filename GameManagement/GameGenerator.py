@@ -91,8 +91,8 @@ class GameGenerator:
         #Check for open games in game GameCollection
         #If no open games, create a game and wait for a player to join
         self.gameCollection.lock.acquire()
-        
-        if(self.gameCollection.checkIfAlreadyInGame()):
+
+        if(self.gameCollection.checkIfAlreadyInGame(playerOne)):
             self.gameCollection.lock.release()
             return False
 

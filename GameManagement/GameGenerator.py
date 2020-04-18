@@ -95,6 +95,7 @@ class GameGenerator:
         if(self.gameCollection.checkIfAlreadyInGame(playerOne)):
             self.gameCollection.lock.release()
             print("User already in game")
+            reqItem.createRandomGameRespFailure(playerOne, "failure", "User already in game")
             return False
 
         if(self.gameCollection.openGameAvailable()):

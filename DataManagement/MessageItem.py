@@ -67,3 +67,17 @@ class MessageItem:
         response["player_one_port"] = game.player_one_port
         response["player_two_ip"] = game.player_two_ip
         self.responseObj = json.dumps(response)
+
+        def createRandomGameRespFailure(self, username, status, reason):
+            response = {
+                        "requestType":"RequestGame",
+                        "player_one":"",
+                        "status":"",
+                        "reason":""
+            }
+            response["game_token"] = game.gameToken
+            response["player_one"] = game.player_one
+            response["status"] = status
+            response["reason"] = reason
+
+            self.responseObj = json.dumps(response)

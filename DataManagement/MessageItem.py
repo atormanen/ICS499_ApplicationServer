@@ -49,6 +49,7 @@ class MessageItem:
     def createRandomGameResp(self, game):
         response = {
                     "requestType":"RequestGame",
+                    "status":"success",
                     "game_token":"",
                     "player_one":"",
                     "player_two":"",

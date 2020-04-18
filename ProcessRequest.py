@@ -52,7 +52,7 @@ class ProcessRequest:
                 self.responder.sendResponse(reqItem)
             elif parsedData["requestType"] == "RequestGame":
                 result = self.gameGenerator.createRandomGame(parsedData, reqItem)
-                if(result = False):
+                if(result == False):
                     self.responder.sendRandomGameResponse(reqItem)
             else:
                 self.responder.sendBadRequest(reqItem.connectionSocket)

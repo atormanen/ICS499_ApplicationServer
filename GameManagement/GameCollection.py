@@ -34,6 +34,7 @@ class GameCollection:
             return False
 
     def checkIfAlreadyInGame(self, username):
+        print("Inside check games")
         for key, games in self.gameDict.items():
             print("Key: " + key + "     Value: " + games.gameToken)
             if(username == games.player_one):

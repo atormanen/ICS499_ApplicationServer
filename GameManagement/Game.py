@@ -71,6 +71,7 @@ class Game:
     def createRandomGameResp(self):
         response = {
                     "requestType":"RequestGame",
+                    "status": "success",
                     "game_token":"",
                     "player_one":"",
                     "player_two":"",

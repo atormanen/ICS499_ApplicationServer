@@ -48,8 +48,8 @@ class Game:
         self.playerOneSocket.setblocking(0)
         self.playerOneSocketInitialFlag = 1
         ## TODO: find a different way to handle multpiple sockets
-        #thread = Thread(target=self.listen,args=(self.playerOneSocket,))
-        #thread.start()
+        thread = Thread(target=self.listen,args=(self.playerOneSocket,))
+        thread.start()
 
     def addPlayerTwoSocket(self, socket):
         print("player two socket: " + str(socket))
@@ -57,8 +57,8 @@ class Game:
         self.playerTwoSocket.setblocking(0)
         self.playerTwoSocketInitialFlag = 1
         ## TODO: find a different way to handle multpiple sockets
-        #thread = Thread(target=self.listen,args=(self.playerTwoSocket,))
-        #thread.start()
+        thread = Thread(target=self.listen,args=(self.playerTwoSocket,))
+        thread.start()
 
 
     def makeMove(self, requester, jsonObj, socket):

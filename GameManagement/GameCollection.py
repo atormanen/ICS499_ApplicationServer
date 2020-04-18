@@ -22,7 +22,7 @@ class GameCollection:
                 self.listener.processRequest(value.playerOneSocket,(value.player_one_ip,value.player_two_port))
 
 
-    def socketChecker(self):
+    def startSocketChecker(self):
         thread = Thread(target=self.checkSockets)
         print("Starting socket checker")
         thread.start()

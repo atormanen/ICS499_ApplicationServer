@@ -77,7 +77,6 @@ class MessageItem:
             "status": "",
             "reason": ""
         }
-        response["game_token"] = game.gameToken
         response["player_one"] = game.player_one
         response["status"] = status
         response["reason"] = reason

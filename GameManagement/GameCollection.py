@@ -42,6 +42,7 @@ class GameCollection:
             elif(username == games.player_two):
                 return True
         for games in self.openGameQueue:
+            print("Value: " + games.player_one)
             if(username == games.player_one):
                 return True
             elif(username == games.player_two):

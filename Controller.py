@@ -22,6 +22,7 @@ class Controller:
 
         self.listener = Listener(self.requestQueue)
         self.gameCollection = GameCollection(self.listener)
+        self.gameCollection.startSocketChecker()
 
 
 

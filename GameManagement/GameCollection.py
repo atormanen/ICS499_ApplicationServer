@@ -11,20 +11,21 @@ class GameCollection:
         self.lock = multiprocessing.Lock()
         #self.socketChecker()
 
-
-    def socketChecker(self):
-        thread = Thread(target=self.checkSockets)
-        print("Starting socket checker")
-        thread.start()
-
     #This method is not used
     def checkSockets(self):
         while(True):
             #print("checking sockets")
             for key, value in self.gameDict.items():
                 print("Chekcing sockets")
+                print("Key: " + key + "     Value: " + value.gameToken)
                 self.listener.processRequest(value.playerOneSocket,(value.player_one_ip,value.player_two_port))
                 self.listener.processRequest(value.playerOneSocket,(value.player_one_ip,value.player_two_port))
+
+
+    def socketChecker(self):
+        thread = Thread(target=self.checkSockets)
+        print("Starting socket checker")
+        thread.start()
 
     def openGameAvailable(self):
         if(len(self.openGameQueue) > 0):

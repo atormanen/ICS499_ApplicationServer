@@ -88,7 +88,7 @@ class GameCollection:
             if(jsonObj['winningColor'] ==  'WHITE'):
                 #Send victory to WHITE and defeat to BLACK
                 print(jsonObj['winningColor'])
-            elif(jsonObj['winningColor'] ==  'BLACK');
+            elif(jsonObj['winningColor'] ==  'BLACK'):
             #Send victory to BLACK and defeat to WHITE
                 print(jsonObj['winningColor'])
 

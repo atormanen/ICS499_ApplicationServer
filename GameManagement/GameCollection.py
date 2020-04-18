@@ -79,9 +79,18 @@ class GameCollection:
         requester = parsedData["username"]
         print(parsedData)
         jsonObj = parsedData["move"]
+        print(jsonObj)
 
         #If this is end of game signal, save game stats in db and send end
         #game to both players
+        if not(jsonObj['matchResult'] == None):
+            print("matchResult != None")
+            if(jsonObj['winningColor'] ==  'WHITE'):
+                #Send victory to WHITE and defeat to BLACK
+                print(jsonObj['winningColor'])
+            elif(jsonObj['winningColor'] ==  'BLACK');
+            #Send victory to BLACK and defeat to WHITE
+                print(jsonObj['winningColor'])
 
 
         #Weird way to tell which socket is associated with which player

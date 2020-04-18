@@ -34,7 +34,8 @@ class GameCollection:
             return False
 
     def checkIfAlreadyInGame(self, username):
-        for games in self.gameDict.items():
+        for key, games in self.gameDict.items():
+            print("Key: " + key + "     Value: " + games.gameToken)
             if(username == games.player_one):
                 return True
             elif(username == games.player_two):

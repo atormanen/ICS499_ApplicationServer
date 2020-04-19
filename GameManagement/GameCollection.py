@@ -86,12 +86,15 @@ class GameCollection:
         try:
             if not(jsonObj["matchResult"] == None):
                 print("matchResult" != None)
-                if(jsonObj["winningColor"] ==  'WHITE'):
+                if(jsonObj["matchResult"]["winningColor"]["name"] ==  'WHITE'):
                     #Send victory to WHITE and defeat to BLACK
-                    print(jsonObj["winningColor"])
-                elif(jsonObj["winningColor"] ==  'BLACK'):
-                #Send victory to BLACK and defeat to WHITE
-                    print(jsonObj["winningColor"])
+                    type = jsonObj["matchResult"]["type"]["name"]
+                elif(jsonObj["matchResult"]["winningColor"]["name"] ==  'BLACK'):
+                    #Send victory to BLACK and defeat to WHITE
+                    type = jsonObj["matchResult"]["type"]["name"]
+
+            game.lastMove = True
+            removeGame(game)
         except TypeError:
             print("Type error")
 

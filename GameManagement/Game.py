@@ -24,6 +24,7 @@ class Game:
         self.playerOneSocketInitialFlag = 0
         self.playerTwoSocketInitialFlag = 0
         self.responseObj = ''
+        self.lastMove = False
 
     def listen(self, socket):
         while(True):
@@ -62,11 +63,17 @@ class Game:
 
 
     def makeMove(self, requester, jsonObj, socket):
-
         if(requester == self.player_one):
             self.playerTwoSocket.send(str(jsonObj).encode("utf-8"))
+            if(self.lastMove):
+                self.playerTwoSocket.close()
+                print("closed player one socket")
         elif(requester == self.player_two):
             self.playerOneSocket.send(str(jsonObj).encode("utf-8"))
+            if(self.lastMove):
+                self.playerOneSocket.close()
+                print("closed player one socket")
+
 
     def createRandomGameResp(self):
         response = {

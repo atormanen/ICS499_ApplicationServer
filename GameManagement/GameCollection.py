@@ -93,8 +93,8 @@ class GameCollection:
                     #Send victory to BLACK and defeat to WHITE
                     type = jsonObj["matchResult"]["type"]["name"]
 
-            game.lastMove = True
-            removeGame(game)
+                game.lastMove = True
+                self.removeGame(game)
         except TypeError:
             print("Type error")
 

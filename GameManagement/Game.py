@@ -31,8 +31,18 @@ class Game:
             #msg = socket.recv(1024) test
             self.listener.processRequest(socket,(self.player_one_ip,self.player_two_port))
 
-
-
+    def checkIfStillAlive(self, username):
+        if(username == self.player_one):
+            try:
+                self.playerOneSocket.send("socket test")
+            except:
+                return False
+        else if(username == self.player_two):
+            try:
+                self.playerTwoSocket.send("socket test")
+            except:
+                return False
+        return True
 
     def addPlayerTwo(self, username, signonToken, pTwoIp, pTwoPort, socket):
         self.player_two = username

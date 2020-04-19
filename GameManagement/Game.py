@@ -37,7 +37,7 @@ class Game:
                 self.playerOneSocket.send("socket test")
             except:
                 return False
-        else if(username == self.player_two):
+        elif(username == self.player_two):
             try:
                 self.playerTwoSocket.send("socket test")
             except:

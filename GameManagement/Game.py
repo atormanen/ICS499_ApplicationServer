@@ -41,6 +41,7 @@ class Game:
             try:
                 self.playerTwoSocket.send("socket test")
             except:
+                print("Socket not available, returning false")
                 return False
         return True
 

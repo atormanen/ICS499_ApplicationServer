@@ -52,6 +52,7 @@ class GameCollection:
             print("Value: " + games.player_one)
             if(username == games.player_one):
                 if(games.checkIfStillAlive(username)):
+                    print("socket not available")
                     self.removeGame(games)
                 return True
             elif(username == games.player_two):

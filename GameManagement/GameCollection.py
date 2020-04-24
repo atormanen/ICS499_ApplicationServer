@@ -103,8 +103,12 @@ class GameCollection:
                 elif(jsonObj["matchResult"]["winningColor"]["name"] ==  'BLACK'):
                     #Send victory to BLACK and defeat to WHITE
                     type = jsonObj["matchResult"]["type"]["name"]
+                elif(jsonObj["matchResult"]["winningColor"]["name"] ==  None):
+                    #Draw
+                    type = jsonObj["matchResult"]["type"]["name"]
 
                 game.lastMove = True
+                game.makeMove(requester, jsonObj, reqItem.connectionSocket)
                 self.removeGame(game)
         except TypeError:
             print("Type error")

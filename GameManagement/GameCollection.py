@@ -109,9 +109,10 @@ class GameCollection:
                     type = jsonObj["matchResult"]["type"]["name"]
 
                 game.lastMove = True
-                #game.makeMove(requester, jsonObj, game.playerOneSocket)
-                #game.makeMove(requester, jsonObj, reqItem.playerTwoSocket)
+                game.makeMove(requester, jsonObj, game.playerOneSocket)
+                game.makeMove(requester, jsonObj, reqItem.playerTwoSocket)
                 self.removeGame(game)
+                return False
         except TypeError:
             print("Type error")
 
@@ -126,5 +127,5 @@ class GameCollection:
             print("addPlayerOneSocket")
             game.addPlayerOneSocket(reqItem.connectionSocket)
             return
-        jsonObj = parsedData["move"]
+
         game.makeMove(requester, jsonObj, reqItem.connectionSocket)

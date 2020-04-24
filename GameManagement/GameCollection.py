@@ -89,7 +89,7 @@ class GameCollection:
         game = self.getGame(parsedData["game_token"])
         requester = parsedData["username"]
         print(parsedData)
-        jsonObj = parsedData["move"]
+        jsonObj = parsedData["type"]
         print(jsonObj)
 
         #If this is end of game signal, save game stats in db and send end
@@ -124,5 +124,5 @@ class GameCollection:
             print("addPlayerOneSocket")
             game.addPlayerOneSocket(reqItem.connectionSocket)
             return
-
+        jsonObj = parsedData["move"]
         game.makeMove(requester, jsonObj, reqItem.connectionSocket)

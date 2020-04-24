@@ -89,7 +89,8 @@ class GameCollection:
         game = self.getGame(parsedData["game_token"])
         requester = parsedData["username"]
         print(parsedData)
-        jsonObj = parsedData["type"]
+        
+        jsonObj = parsedData["requestType"]
         print(jsonObj)
 
         #If this is end of game signal, save game stats in db and send end
@@ -108,7 +109,8 @@ class GameCollection:
                     type = jsonObj["matchResult"]["type"]["name"]
 
                 game.lastMove = True
-                game.makeMove(requester, jsonObj, reqItem.connectionSocket)
+                game.makeMove(requester, jsonObj, game.playerOneSocket)
+                game.makeMove(requester, jsonObj, reqItem.playerTwoSocket)
                 self.removeGame(game)
         except TypeError:
             print("Type error")

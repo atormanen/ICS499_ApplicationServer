@@ -199,3 +199,8 @@ class DB:
         gameId = self.getGameId(gameToken)
         game = self.dbFetch(self.builder.getGame(gameId))
         return game
+
+    def getAvatar(self, username):
+        avatarInt = self.userDBFetch(self.builder.getAvatar(username))
+        avatarInt = avatarInt[][]
+        return avatarInt

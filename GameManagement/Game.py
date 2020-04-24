@@ -13,6 +13,8 @@ class Game:
         self.player_two_signon_token = ''
         self.player_one_color = ''
         self.player_two_color = ''
+        self.player_one_avatar = ''
+        self.player_two_avatar = ''
         self.player_one_ip = pOneIp
         self.player_two_ip = ''
         self.player_one_port = pOnePort
@@ -53,6 +55,9 @@ class Game:
         self.player_one_color = 'black'
         self.player_two_color = 'white'
         self.playerTwoSocketInitial = socket
+
+        self.player_one_avatar = self.db.getAvatar(self.player_one)
+        self.player_two_avatar = self.db.getAvatar(self.player_two)
 
     def addPlayerOneSocket(self, socket):
         print("player one socket: " + str(socket))
@@ -108,6 +113,8 @@ class Game:
         response["player_one_port"] = self.player_one_port
         response["player_two_ip"] = self.player_two_ip
         response["player_two_port"] = self.player_two_port
+        response["player_one_avatar"] = self.player_one_avatar
+        response["player_two_avatar"] = self.player_two_avatar
         self.responseObj = json.dumps(response)
 
     def sendGameResposne(self):

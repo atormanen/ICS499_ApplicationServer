@@ -104,6 +104,8 @@ RequestGameResp
 "player_two_color":"white",
 "player_one_ip":"192.168.1.128",
 "player_one_port":"4983"
+"player_one_avatar":1,
+"player_two_avatar",1
 }
 
 RequestGameRespFalure

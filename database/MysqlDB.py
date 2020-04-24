@@ -84,3 +84,7 @@ class MysqlDB:
     def getGameId(self, token):
         querry = "SELECT game_id FROM game WHERE game_token = '" + token + "';"
         return querry
+
+    def getAvatar(self, username):
+        querry = "SELECT avatar FROM user WHERE username = '" + username + "';"
+        return querry

@@ -110,7 +110,7 @@ class GameCollection:
 
                 game.lastMove = True
                 game.makeMove(requester, jsonObj, game.playerOneSocket)
-                game.makeMove(requester, jsonObj, reqItem.playerTwoSocket)
+                game.makeMove(requester, jsonObj, game.playerTwoSocket)
                 self.removeGame(game)
                 return False
         except TypeError:

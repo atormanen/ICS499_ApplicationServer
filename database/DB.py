@@ -202,5 +202,5 @@ class DB:
 
     def getAvatar(self, username):
         avatarInt = self.userDBFetch(self.builder.getAvatar(username))
-        avatarInt = avatarInt[][]
+        avatarInt = avatarInt[0][0]
         return avatarInt

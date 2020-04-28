@@ -30,7 +30,7 @@ class Game:
         self.gameClosedFlag = False
 
     def listen(self, socket):
-        while(True):
+        while(self.lastMove == False):
             #msg = socket.recv(1024) test
             self.listener.processRequest(socket,(self.player_one_ip,self.player_two_port))
 

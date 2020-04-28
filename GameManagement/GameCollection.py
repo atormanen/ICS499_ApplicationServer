@@ -111,7 +111,9 @@ class GameCollection:
                 game.lastMove = True
                 game.makeMove(requester, jsonObj, game.playerOneSocket)
                 game.makeMove(requester, jsonObj, game.playerTwoSocket)
-                self.removeGame(game)
+                if(game.lastMove == True):
+                    self.removeGame(game)
+                game.gameClosedFlag = True
                 return False
         except TypeError:
             print("Type error")

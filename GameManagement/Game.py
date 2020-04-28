@@ -27,6 +27,7 @@ class Game:
         self.playerTwoSocketInitialFlag = 0
         self.responseObj = ''
         self.lastMove = False
+        self.gameClosedFlag = False
 
     def listen(self, socket):
         while(True):

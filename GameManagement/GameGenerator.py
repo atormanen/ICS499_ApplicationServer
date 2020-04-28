@@ -56,6 +56,23 @@ class GameGenerator:
                             pOneIp, pOnePort)
         reqItem.createGameRespNotAccepted(playerOne, gameToken)
 
+        pOneIp = reqItem.ipAddress
+        pOnePort = reqItem.port
+
+        #Check for open games in game GameCollection
+        #If no open games, create a game and wait for a player to join
+        self.gameCollection.lock.acquire()
+
+        if(self.gameCollection.checkIfAlreadyInGame(playerOne)):
+            self.gameCollection.lock.release()
+            print("User already in game")
+            reqItem.createRandomGameRespFailure(playerOne, "failure", "User already in game")
+            return False
+
+        game = Game(gameToken, parsedData, pOneIp, pOnePort,\
+            reqItem.connectionSocket, self.gameCollection.listener, self.db)
+        self.gameCollection.lock.release()
+
     def waitForPlayer(self, gameToken):
 
         while(self.gameCollection.getGame(gameToken) == False):
@@ -112,7 +129,6 @@ class GameGenerator:
             self.gameCollection.lock.release()
 
 
-
     def createRandomGameTest(self, parsedData, reqItem):
         playerOne = parsedData["username"]
         playerOneSignonToken = parsedData["signon_token"]
@@ -139,12 +155,17 @@ class GameGenerator:
         if(self.tokenUpToDate(playerOne) == False):
             return False
 
+        pOneIp = reqItem.ipAddress
+        pOnePort = reqItem.port
+
         self.db.acceptGame(gameToken)
         self.db.updateSocket(playerTwo, reqItem.ipAddress, reqItem.port)
         gameId = self.db.getGameId(gameToken)
         self.db.createPlayer(gameId, playerTwo, reqItem.ipAddress, reqItem.port,\
             gameToken)
-        reqItem.acceptGame(playerOne, playerTwo, gameToken)
+        game = self.gameCollection.addSecondPlayer(playerTwo, playerTwoSignonToken,\
+                            pOneIp, pOnePort, reqItem.connectionSocket)
+        #game.sendGameResposne()
 
     def checkForGame(self, parsedData, reqItem):
         username = parsedData["username"]

@@ -113,6 +113,10 @@ class GameCollection:
                 game.makeMove(requester, jsonObj, game.playerTwoSocket)
                 if(game.lastMove == True):
                     self.removeGame(game)
+                    game.playerTwoSocket.close()
+                    game.playerOneSocket.close()
+                    print("closed player one socket")
+                    print("closed player one socket")
                 game.gameClosedFlag = True
                 return False
         except TypeError:

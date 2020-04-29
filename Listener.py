@@ -51,7 +51,7 @@ class Listener:
             if bufferExceeded:
                 try:
                     connectionSocket.settimeout(3)
-                    rcvd_msg = connectionSocket.recv(self.bufferSize).decode("utf-8","ignore")
+                    rcvd_msg = connectionSocket.recv(self.bufferSize).decode("utf-8","replace")
                 except socket.timeout as err:
                     #Expecting a timeout
                     break
@@ -59,7 +59,7 @@ class Listener:
                     break
             else:
                 try:
-                    rcvd_msg = connectionSocket.recv(self.bufferSize).decode("utf-8", "ignore")
+                    rcvd_msg = connectionSocket.recv(self.bufferSize).decode("utf-8", "replace")
                 except UnicodeDecodeError:
                     print("UnicodeDecodeError")
                     break

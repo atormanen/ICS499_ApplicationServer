@@ -9,7 +9,7 @@ class MysqlDB:
 
     def createGame(self, gameId, gameToken, playerOneId, playerTwoId):
         statement = "INSERT INTO game VALUES("+ str(gameId)+ ",'" + gameToken + "',"\
-        + str(playerOneId) + "," + str(playerTwoId) + "," + "0);"
+        + str(playerOneId) + "," + str(playerTwoId) + "," + "0,0);"
         print(statement)
         return statement
 

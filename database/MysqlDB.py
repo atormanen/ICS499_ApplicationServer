@@ -10,7 +10,7 @@ class MysqlDB:
     def createGame(self, gameId, gameToken, playerOneId, playerTwoId):
         statement = "INSERT INTO game VALUES("+ str(gameId)+ ",'" + gameToken + "',"\
         + str(playerOneId) + "," + str(playerTwoId) + "," + "0);"
-        #print(statement)
+        print(statement)
         return statement
 
     def getOpenRandomGame(self):

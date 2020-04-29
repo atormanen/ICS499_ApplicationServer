@@ -31,7 +31,7 @@ class ProcessRequest:
         if self.reqValidation.isBadRequest(reqItem.parsedData):
             self.responder.sendBadRequest(reqItem.connectionSocket)
             return
-
+        print(reqItem)
         parsedData = reqItem.parsedData
         try:
             if parsedData["requestType"] == "CreateGame":

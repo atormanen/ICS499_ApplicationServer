@@ -103,7 +103,7 @@ class DB:
         pTwoId = pTwoId[0][0]
         tokenCreation = self.getTokenCreationTime(playerOne)
         nextId = self.dbFetch(self.builder.getLastGameId())
-        print("nextId: " + nextId[0][0])
+        print("nextId: " + str(nextId[0][0]))
         if nextId is None:
             nextId = 1
         else:

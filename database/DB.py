@@ -103,8 +103,10 @@ class DB:
         pTwoId = pTwoId[0][0]
         tokenCreation = self.getTokenCreationTime(playerOne)
         nextId = self.dbFetch(self.builder.getLastGameId())
-        #nextId = nextId[0][0] + 1;
-        nextId = 0
+        if(nextId == None):
+            nextId = 1
+        else:
+            nextId = nextId[0][0] + 1;
         self.dbInsert(self.builder.createGame(nextId, gameToken, pOneId, pTwoId))
         self.dbInsert(self.builder.createPlayer(nextId, pOneId, pOneIp4, "", \
                 pOnePort, playerOneSignonToken))

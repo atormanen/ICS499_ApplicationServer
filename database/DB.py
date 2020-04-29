@@ -108,9 +108,10 @@ class DB:
             nextId = 1
         else:
             nextId = nextId[0][0] + 1;
-        self.dbInsert(self.builder.createGame(nextId, gameToken, pOneId, pTwoId))
         self.dbInsert(self.builder.createPlayer(nextId, pOneId, playerOne, "White", pOneIp4, "", \
                 pOnePort, playerOneSignonToken))
+        self.dbInsert(self.builder.createGame(nextId, gameToken, pOneId, pTwoId))
+
 
     def createRandomGame(self, game):
         pOneId = self.userDBFetch(self.builder.getUserId(game.player_one))

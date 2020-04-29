@@ -109,7 +109,7 @@ class DB:
         else:
             nextId = nextId[0][0] + 1;
         self.dbInsert(self.builder.createGame(nextId, gameToken, pOneId, pTwoId))
-        self.dbInsert(self.builder.createPlayer(nextId, pOneId, pOneIp4, "", \
+        self.dbInsert(self.builder.createPlayer(nextId, pOneId, playerOne, "White", pOneIp4, "", \
                 pOnePort, playerOneSignonToken))
 
     def createRandomGame(self, game):

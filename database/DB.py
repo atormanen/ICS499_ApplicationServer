@@ -104,7 +104,7 @@ class DB:
         tokenCreation = self.getTokenCreationTime(playerOne)
         nextId = self.dbFetch(self.builder.getLastGameId())
         print("nextId: " + str(nextId[0][0]))
-        if nextId is None:
+        if nextId[0][0] is None:
             nextId = 1
         else:
             nextId = nextId[0][0] + 1;

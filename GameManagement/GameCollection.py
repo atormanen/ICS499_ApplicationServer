@@ -106,17 +106,17 @@ class GameCollection:
                     #Send victory to WHITE and defeat to BLACK
                     self.db.addGameWon(game.player_one)
                     if(jsonObj["matchResult"]["type"]["name"] == 'RESIGNATION'):
-                        self.db.addGameResigned(game.player_two)
+                        self.db.addGameResigned(game.player_one)
                     else:
-                        self.db.addGameLost(game.player_two)
+                        self.db.addGameLost(game.player_one)
                     type = jsonObj["matchResult"]["type"]["name"]
                 elif(jsonObj["matchResult"]["winningColor"]["name"] ==  'BLACK'):
                     #Send victory to BLACK and defeat to WHITE
                     self.db.addGameWon(game.player_two)
                     if(jsonObj["matchResult"]["type"]["name"] == 'RESIGNATION'):
-                        self.db.addGameResigned(game.player_one)
+                        self.db.addGameResigned(game.player_two)
                     else:
-                        self.db.addGameLost(game.player_one)
+                        self.db.addGameLost(game.player_two)
                     type = jsonObj["matchResult"]["type"]["name"]
                 elif(jsonObj["matchResult"]["winningColor"]["name"] ==  None):
                     #Draw

@@ -82,3 +82,28 @@ class MessageItem:
         response["reason"] = reason
 
         self.responseObj = json.dumps(response)
+
+    def getGameListResponse(self, gameList, request = "getGameList"):
+        gameDict = {
+                    "game0":"games"
+        }
+
+        i = 0
+        for item in gameList:
+            game = {
+                    "game":""
+            }
+            game["game"] = item[1]
+
+            gameStr = "game" + str(i)
+            gameDict[gameStr] = user
+            i = i + 1
+        response = {
+                    "requestType":"getGameList",
+                    "count":"",
+                    "games":""
+        }
+        response["requestType"] = request
+        response["count"] = len(friendsList)
+        response["friends"] = str(friendDict)
+        self.responseObj = json.dumps(response)

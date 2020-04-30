@@ -55,6 +55,26 @@ class DB:
                mydb.close()
            return result
 
+    def userDBUpdate(self, statement):
+        try:
+            mydb = mysql.connector.connect(user=self.user, password=self.password,
+                                  host=self.writer,
+                                  database='userdb',
+                                  auth_plugin='mysql_native_password')
+            cursor = mydb.cursor()
+            cursor.execute(statement)
+            mydb.commit()
+            result = True
+        except mysql.connector.Error as error:
+            ## TODO: Log error to Log
+            #print("Error updating data to db")
+            result = False
+        finally:
+            if(mydb.is_connected()):
+                cursor.close()
+                mydb.close()
+            return result
+
     def dbFetch(self, statement):
         try:
             result = ''
@@ -210,3 +230,18 @@ class DB:
         avatarInt = self.userDBFetch(self.builder.getAvatar(username))
         avatarInt = avatarInt[0][0]
         return avatarInt
+
+    def addGameWon(self, username):
+        userId = self.userDBFetch(self.builder.getUserId(username))
+        userId = userId[0][0]
+        self.userDBUpdate(self.builder.addGameWon(userId))
+
+    def addGameLost(self, username):
+        userId = self.userDBFetch(self.builder.getUserId(username))
+        userId = userId[0][0]
+        self.userDBUpdate(self.builder.addGameLost(userId))
+
+    def addGameLost(self, username):
+        userId = self.userDBFetch(self.builder.getUserId(username))
+        userId = userId[0][0]
+        self.userDBUpdate(self.builder.addGameResigned(userId))

@@ -9,6 +9,7 @@ class GameCollection:
         self.openGameQueue = []
         self.moveQueue = []
         self.lock = multiprocessing.Lock()
+        self.db = ""
         #self.socketChecker()
 
     #This method is not used
@@ -26,6 +27,9 @@ class GameCollection:
         thread = Thread(target=self.checkSockets)
         print("Starting socket checker")
         thread.start()
+
+    def setDatabase(self, database):
+        self.db = database
 
     def openGameAvailable(self):
         if(len(self.openGameQueue) > 0):
@@ -100,9 +104,19 @@ class GameCollection:
                 print("matchResult" != None)
                 if(jsonObj["matchResult"]["winningColor"]["name"] ==  'WHITE'):
                     #Send victory to WHITE and defeat to BLACK
+                    self.db.addGameWon(game.player_one)
+                    if(jsonObj["matchResult"]["type"]["name"] == 'RESIGNATION'):
+                        self.db.addGameResigned(game.player_two)
+                    else:
+                        self.db.addGameLost(game.player_two)
                     type = jsonObj["matchResult"]["type"]["name"]
                 elif(jsonObj["matchResult"]["winningColor"]["name"] ==  'BLACK'):
                     #Send victory to BLACK and defeat to WHITE
+                    self.db.addGameWon(game.player_two)
+                    if(jsonObj["matchResult"]["type"]["name"] == 'RESIGNATION'):
+                        self.db.addGameResigned(game.player_one)
+                    else:
+                        self.db.addGameLost(game.player_one)
                     type = jsonObj["matchResult"]["type"]["name"]
                 elif(jsonObj["matchResult"]["winningColor"]["name"] ==  None):
                     #Draw
@@ -117,6 +131,7 @@ class GameCollection:
                     game.playerOneSocket.close()
                     print("closed player one socket")
                     print("closed player one socket")
+
                 game.gameClosedFlag = True
                 return False
         except TypeError:

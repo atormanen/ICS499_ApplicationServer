@@ -24,7 +24,7 @@ class ProcessRequest:
         self.reqValidation = ValidateRequest()
         self.responder = Responder()
         self.gameCollection = gameCollection
-        self.gameCollection.setDatabase(database)
+        self.gameCollection.setDatabase(self.database)
         self.gameGenerator = GameGenerator(self.database, self.gameQueue, self.gameCollection)
 
     ## TODO: find a better way to process these requests types.

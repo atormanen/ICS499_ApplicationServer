@@ -241,7 +241,7 @@ class DB:
         userId = userId[0][0]
         self.userDBUpdate(self.builder.addGameLost(userId))
 
-    def addGameLost(self, username):
+    def addGameResigned(self, username):
         userId = self.userDBFetch(self.builder.getUserId(username))
         userId = userId[0][0]
         self.userDBUpdate(self.builder.addGameResigned(userId))

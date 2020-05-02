@@ -89,6 +89,28 @@ class GameCollection:
             print("KeyError")
             return False
 
+    def getGame(self, username):
+        for key, games in self.gameDict.items():
+            #print("Key: " + key + "     Value: " + games.gameToken)
+            if(username == games.player_one):
+                return games
+            elif(username == games.player_two):
+                return games
+
+        for games in self.openGameQueue:
+            print("Value: " + games.player_one)
+            if(username == games.player_one):
+                return games
+            elif(username == games.player_two):
+                return games
+        return False
+        try:
+            print("GameCollection getGame: " + self.gameDict[gameToken].gameToken)
+            return self.gameDict[gameToken]
+        except KeyError:
+            print("KeyError")
+            return False
+
     def removeGame(self, game):
         print("removing game: " + game.gameToken)
         removedResult = self.gameDict.pop(game.gameToken)

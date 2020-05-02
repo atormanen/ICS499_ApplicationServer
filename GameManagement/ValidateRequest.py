@@ -18,6 +18,8 @@ class ValidateRequest:
                 return False
             elif parsedData["requestType"] == "RequestGame":
                 return False
+            elif parsedData["requestType"] == "RequestGameCanceled":
+                return False
             else:
                 return True
         except KeyError:

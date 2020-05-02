@@ -85,6 +85,19 @@ class GameGenerator:
         game = self.db.searchForGame()
         return game
 
+    def requestGameCanceled(parsedData, reqItem):
+        try:
+            username = parsedData["username"]
+            signonToken = parsedData["signon_token"]
+        except KeyError:
+            print("KeyError")
+            return False
+        if(self.gameCollection.checkIfAlreadyInGame(username)):
+            game = self.gameCollection.getGame(username)
+            self.gameCollection.removeGame(game)
+            print("game removed")
+
+
     def createRandomGame(self, parsedData, reqItem):
         try:
             print(parsedData["requestType"])

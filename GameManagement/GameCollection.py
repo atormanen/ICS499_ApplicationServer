@@ -57,13 +57,13 @@ class GameCollection:
             if(username == games.player_one):
                 if not(games.checkIfStillAlive(username)):
                     print("socket not available")
-                    self.openGameQueue.pop(games)
+                    self.openGameQueue.remove(games)
                     return False
                 return True
             elif(username == games.player_two):
                 if not(games.checkIfStillAlive(username)):
                     print("socket not available")
-                    self.openGameQueue.pop(games)
+                    self.openGameQueue.remove(games)
                     return False
                 return True
         return False

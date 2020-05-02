@@ -125,7 +125,7 @@ class GameCollection:
 
 
                 elif(jsonObj["matchResult"]["type"]["name"] ==  'AGREED_UPON_DRAW'):
-                    #Draw
+                    #Draw 
                     print("DRAW*************************")
                     self.db.addGamePlayed(game.player_one)
                     self.db.addGamePlayed(game.player_two)

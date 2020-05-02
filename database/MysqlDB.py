@@ -90,7 +90,9 @@ class MysqlDB:
         return querry
 
     def addGamePlayed(self, userId):
-        querry = "UPDATE user_statistics SET games_played = games_played + 1 WHERE user_id = " + str(userId) + ";"
+        querry = "UPDATE user_statistics SET games_played = games_played + 1\
+        WHERE user_id = " + str(userId) + ";"
+        print(querry)
         return querry
 
     def addGameWon(self, userId):

@@ -57,7 +57,7 @@ class GameCollection:
             if(username == games.player_one):
                 if not(games.checkIfStillAlive(username)):
                     print("socket not available")
-                    openGameQueue.pop(games)
+                    self.openGameQueue.pop(games)
                     return False
                 return True
             elif(username == games.player_two):

@@ -120,6 +120,7 @@ class GameCollection:
                     type = jsonObj["matchResult"]["type"]["name"]
                 else:
                     #Draw
+                    print("DRAW*************************")
                     self.db.addGamePlayed(game.player_one)
                     self.db.addGamePlayed(game.player_two)
 

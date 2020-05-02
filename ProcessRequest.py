@@ -56,9 +56,8 @@ class ProcessRequest:
                 if(result == False):
                     self.responder.sendRandomGameResponse(reqItem)
             elif parsedData["requestType"] == "RequestGameCanceled":
-                result = self.gameGenerator.requestGameCanceled(parsedData, reqItem)
-                if(result == False):
-                    self.responder.sendRandomGameResponse(reqItem)
+                self.gameGenerator.requestGameCanceled(parsedData, reqItem)
+                self.responder.sendResponse(reqItem)
             else:
                 self.responder.sendBadRequest(reqItem.connectionSocket)
         except KeyError:

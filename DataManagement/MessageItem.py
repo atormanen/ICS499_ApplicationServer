@@ -83,6 +83,18 @@ class MessageItem:
 
         self.responseObj = json.dumps(response)
 
+    def cancelRandomGameResp(self, username, status):
+        response = {
+            "requestType": "RequestGame",
+            "player_one": "",
+            "status": ""
+        }
+        response["player_one"] = username
+        response["status"] = status
+        response["reason"] = reason
+
+        self.responseObj = json.dumps(response)
+
     def getGameListResponse(self, gameList, request = "getGameList"):
         gameDict = {
                     "game0":"games"

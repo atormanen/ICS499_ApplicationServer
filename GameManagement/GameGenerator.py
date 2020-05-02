@@ -96,6 +96,9 @@ class GameGenerator:
             game = self.gameCollection.getGame(username)
             self.gameCollection.removeGame(game)
             print("game removed")
+            reqItem.cancelRandomGameResp(username , "success")
+        else:
+            reqItem.cancelRandomGameResp(username , "failure")
 
 
     def createRandomGame(self, parsedData, reqItem):

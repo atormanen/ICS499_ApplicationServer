@@ -106,6 +106,7 @@ class GameCollection:
                 print("match winningColor name  " + jsonObj["matchResult"]["winningColor"]["name"])
 
                 if(jsonObj["matchResult"]["type"]["name"] == 'RESIGNATION'):
+                    print("Resignation*************************")
                     if(jsonObj["matchResult"]["winningColor"]["name"] ==  'WHITE'):
                         #Send victory to WHITE and defeat to BLACK
                         self.db.addGameWon(game.player_two)
@@ -125,7 +126,7 @@ class GameCollection:
 
 
                 elif(jsonObj["matchResult"]["type"]["name"] ==  'AGREED_UPON_DRAW'):
-                    #Draw 
+                    #Draw
                     print("DRAW*************************")
                     self.db.addGamePlayed(game.player_one)
                     self.db.addGamePlayed(game.player_two)

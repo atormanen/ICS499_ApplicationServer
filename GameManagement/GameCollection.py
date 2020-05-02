@@ -88,9 +88,9 @@ class GameCollection:
             return False
 
     def removeGame(self, game):
-        print("game: " + game.gameToken + " has been removed: " + removedResult)
+        print("removing game: " + game.gameToken)
         removedResult = self.gameDict.pop(game.gameToken)
-
+        print("game: " + game.gameToken + " has been removed: " + removedResult)
         return removedResult
 
     def makeMove(self, parsedData, reqItem):

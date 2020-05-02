@@ -89,6 +89,10 @@ class MysqlDB:
         querry = "SELECT avatar FROM user WHERE username = '" + username + "';"
         return querry
 
+    def addGamePlayed(self, userId):
+        querry = "UPDATE user_statistics SET games_played = games_played + 1 WHERE user_id = " + str(userId) + ";"
+        return querry
+
     def addGameWon(self, userId):
         querry = "UPDATE user_statistics set games_won = games_won + 1, games_played = games_played + 1" +\
                     " WHERE user_id = " + str(userId) + ";"

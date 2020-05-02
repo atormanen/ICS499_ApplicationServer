@@ -118,9 +118,10 @@ class GameCollection:
                     else:
                         self.db.addGameLost(game.player_two)
                     type = jsonObj["matchResult"]["type"]["name"]
-                elif(jsonObj["matchResult"]["winningColor"]["name"] ==  None):
+                else:
                     #Draw
-                    type = jsonObj["matchResult"]["type"]["name"]
+                    self.db.addGamePlayed(game.player_one)
+                    self.db.addGamePlayed(game.player_two)
 
                 game.lastMove = True
                 game.makeMove(requester, jsonObj, game.playerOneSocket)

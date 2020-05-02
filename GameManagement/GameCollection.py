@@ -103,6 +103,7 @@ class GameCollection:
             if not(jsonObj["matchResult"] == None):
                 print("matchResult" != None)
                 print("matchResult type name: " + jsonObj["matchResult"]["type"]["name"])
+                print("match winningColor name  " + jsonObj["matchResult"]["winningColor"]["name"])
                 if(jsonObj["matchResult"]["winningColor"]["name"] ==  'WHITE'):
                     #Send victory to WHITE and defeat to BLACK
                     self.db.addGameWon(game.player_two)

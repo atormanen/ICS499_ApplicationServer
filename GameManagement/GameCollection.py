@@ -44,23 +44,23 @@ class GameCollection:
             print("Key: " + key + "     Value: " + games.gameToken)
 
             if(username == games.player_one):
-                if(games.checkIfStillAlive(username)):
+                if not(games.checkIfStillAlive(username)):
                     self.removeGame(games)
                 return True
             elif(username == games.player_two):
-                if(games.checkIfStillAlive(username)):
+                if not(games.checkIfStillAlive(username)):
                     self.removeGame(games)
                 return True
 
         for games in self.openGameQueue:
             print("Value: " + games.player_one)
             if(username == games.player_one):
-                if(games.checkIfStillAlive(username)):
+                if not(games.checkIfStillAlive(username)):
                     print("socket not available")
                     self.removeGame(games)
                 return True
             elif(username == games.player_two):
-                if(games.checkIfStillAlive(username)):
+                if not(games.checkIfStillAlive(username)):
                     self.removeGame(games)
                 return True
         return False

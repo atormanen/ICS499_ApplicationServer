@@ -37,8 +37,9 @@ class Game:
     def checkIfStillAlive(self, username):
         if(username == self.player_one):
             try:
-                print("Socket not available, returning false")
+
                 self.playerOneSocket.send("socket test")
+                print("Socket not available, returning false")
             except:
                 return False
         elif(username == self.player_two):

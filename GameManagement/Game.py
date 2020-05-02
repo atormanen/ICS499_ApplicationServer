@@ -38,9 +38,7 @@ class Game:
         print("Checking if socket is still alive")
         if(username == self.player_one):
             try:
-
                 self.playerOneSocket.send("socket test")
-                print("Socket not available, returning false")
             except:
                 print("socket is dead")
                 return False

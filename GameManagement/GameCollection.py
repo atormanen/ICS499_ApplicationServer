@@ -58,11 +58,13 @@ class GameCollection:
                 if not(games.checkIfStillAlive(username)):
                     print("socket not available")
                     self.removeGame(games)
+                    return False
                 return True
             elif(username == games.player_two):
                 if not(games.checkIfStillAlive(username)):
                     print("socket not available")
                     self.removeGame(games)
+                    return False
                 return True
         return False
 
@@ -86,8 +88,9 @@ class GameCollection:
             return False
 
     def removeGame(self, game):
+        print("game: " + game.gameToken + " has been removed: " + removedResult)
         removedResult = self.gameDict.pop(game.gameToken)
-        print("game with player " + game.player_one + " has been removed: " + removedResult)
+
         return removedResult
 
     def makeMove(self, parsedData, reqItem):

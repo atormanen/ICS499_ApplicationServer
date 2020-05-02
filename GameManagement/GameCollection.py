@@ -101,10 +101,6 @@ class GameCollection:
         #game to both players
         try:
             if not(jsonObj["matchResult"] == None):
-                print("matchResult" != None)
-                print("matchResult type name: " + jsonObj["matchResult"]["type"]["name"])
-                print("match winningColor name  " + jsonObj["matchResult"]["winningColor"]["name"])
-
                 if(jsonObj["matchResult"]["type"]["name"] == 'RESIGNATION'):
                     print("Resignation*************************")
                     if(jsonObj["matchResult"]["winningColor"]["name"] ==  'WHITE'):

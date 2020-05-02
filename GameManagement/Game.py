@@ -35,18 +35,20 @@ class Game:
             self.listener.processRequest(socket,(self.player_one_ip,self.player_two_port))
 
     def checkIfStillAlive(self, username):
+        print("Checking if socket is still alive")
         if(username == self.player_one):
             try:
 
                 self.playerOneSocket.send("socket test")
                 print("Socket not available, returning false")
             except:
+                print("socket is dead")
                 return False
         elif(username == self.player_two):
             try:
                 self.playerTwoSocket.send("socket test")
             except:
-                print("Socket not available, returning false")
+                print("socket is dead")
                 return False
         return True
 

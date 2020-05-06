@@ -14,6 +14,7 @@ class GameGenerator:
         self.gameCollection = gameCollection
 
     def validateUsername(self, username):
+        print("validateing username:", username)
         userExits = self.db.validateUserExists(username)
         if(userExits[0][0] == 1):
             #print("user exists")
@@ -21,6 +22,7 @@ class GameGenerator:
         return False
 
     def tokenUpToDate(self, username):
+        print("checking if token is up to date:", username)
         tokenExpiration = self.db.getTokenCreationTime(username)
         currentTime = time.time()
         timeDiference = currentTime - tokenExpiration[0][0]
@@ -29,6 +31,7 @@ class GameGenerator:
         return True
 
     def validateToken(self, username, signonToken):
+        print("validating token:", username)
         savedToken = self.db.getSignonToken(username)
         #print("signonToken: " + signonToken)
         if(savedToken == signonToken):
@@ -38,15 +41,20 @@ class GameGenerator:
     def createGame(self, parsedData, reqItem):
         playerOne = parsedData["player_one"]
         playerTwo = parsedData["player_two"]
+        print("creating game: ", playerOne + ",", playerTwo)
         playerOneSignonToken = parsedData["signon_token"]
 
         if(self.validateUsername(playerOne) == False):
+            print(playerOne, "was an invalid username")
             return False
         if(self.validateUsername(playerTwo) == False):
+            print(playerTwo, "was an invalid username")
             return False
         if(self.validateToken(playerOne, playerOneSignonToken) == False):
+            print(playerOne, "had an invalid token")
             return False
         if(self.tokenUpToDate(playerOne) == False):
+            print(playerOne, "had an out of date token")
             return False
 
         pOneIp = reqItem.ipAddress
@@ -65,7 +73,7 @@ class GameGenerator:
 
         if(self.gameCollection.checkIfAlreadyInGame(playerOne)):
             self.gameCollection.lock.release()
-            print("User already in game")
+            print(playerOne, "already in game")
             reqItem.createRandomGameRespFailure(playerOne, "failure", "User already in game")
             return False
 
@@ -74,6 +82,7 @@ class GameGenerator:
         self.gameCollection.lock.release()
 
     def waitForPlayer(self, gameToken):
+        print("waiting for second player")
 
         while(self.gameCollection.getGame(gameToken) == False):
 
@@ -82,10 +91,12 @@ class GameGenerator:
         print("Second player received")
 
     def waitForGame(self):
+        print("waiting for game")
         game = self.db.searchForGame()
         return game
 
     def requestGameCanceled(parsedData, reqItem):
+        print("canceling game request")
         try:
             username = parsedData["username"]
             signonToken = parsedData["signon_token"]
@@ -102,6 +113,7 @@ class GameGenerator:
 
 
     def createRandomGame(self, parsedData, reqItem):
+        print("creating random game")
         try:
             print(parsedData["requestType"])
             playerOne = parsedData["username"]
@@ -132,11 +144,13 @@ class GameGenerator:
             return False
 
         if(self.gameCollection.openGameAvailable()):
+            print("An open game is availiable")
             game = self.gameCollection.addSecondPlayer(playerOne, playerOneSignonToken,\
                                 pOneIp, pOnePort, reqItem.connectionSocket)
             self.gameCollection.lock.release()
             game.sendGameResposne()
         else:
+            print("An open game is not availiable")
             gameToken = self.token.getToken()
             game = Game(gameToken, parsedData, pOneIp, pOnePort,\
                 reqItem.connectionSocket, self.gameCollection.listener, self.db)
@@ -157,6 +171,7 @@ class GameGenerator:
         self.gameCollection.getGame(gameToken)
 
     def acceptGame(self, parsedData, reqItem):
+        print("accepting game")
         playerOne = parsedData["player_one"]
         playerTwo = parsedData["player_two"]
         playerTwoSignonToken = parsedData["signon_token"]
@@ -184,13 +199,17 @@ class GameGenerator:
         #game.sendGameResposne()
 
     def checkForGame(self, parsedData, reqItem):
+        print("checking for game")
         username = parsedData["username"]
         playerOneSignonToken = parsedData["signon_token"]
         if(self.validateUsername(username) == False):
+            print(username, "was an invalid username")
             return False
         if(self.validateToken(username, playerOneSignonToken) == False):
+            print(username, "had an invalid token")
             return False
         if(self.tokenUpToDate(username) == False):
+            print(username, "had an out of date token")
             return False
 
         token = self.db.checkForGame(username)

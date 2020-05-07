@@ -149,14 +149,14 @@ class GameGenerator:
 
         #Check for open games in game GameCollection
         #If no open games, create a game and wait for a player to join
-        Counter
-        print("waiting for lock")
+
+        print("waiting for lock", self.counter)
         self.gameCollection.lock.acquire()
-        print("got lock")
+        print("got lock", self.counter)
 
         if(self.gameCollection.checkIfAlreadyInGame(playerOne)):
             self.gameCollection.lock.release()
-            print("User already in game")
+            print(playerOne, "already in game")
             reqItem.createRandomGameRespFailure(playerOne, "failure", "User already in game")
             return False
 

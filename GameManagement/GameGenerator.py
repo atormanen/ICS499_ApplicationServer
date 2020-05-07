@@ -10,8 +10,14 @@ class GameGenerator:
     staticCounter = 0
 
     def __init__(self, mysqlDB, gameQueue, gameCollection):
-        self.counter = staticCounter
-        staticCounter = staticCounter + 1
+
+        try:
+            self.counter = staticCounter
+            staticCounter = staticCounter + 1
+        except NameError:
+            staticCounter = 0
+            self.counter = staticCounter
+            staticCounter = staticCounter + 1
         self.db = mysqlDB
         self.token = Tokens()
         self.gameQueue = gameQueue

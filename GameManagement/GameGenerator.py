@@ -7,7 +7,7 @@ import time
 
 class GameGenerator:
 
-    staticCounter = 0;
+    staticCounter = 0
 
     def __init__(self, mysqlDB, gameQueue, gameCollection):
         self.counter = staticCounter

@@ -7,11 +7,17 @@ import time
 
 class GameGenerator:
 
-    staticCounter = 0;
+    staticCounter = 0
 
     def __init__(self, mysqlDB, gameQueue, gameCollection):
-        self.counter = staticCounter
-        staticCounter = staticCounter + 1
+
+        try:
+            self.counter = staticCounter
+            staticCounter = staticCounter + 1
+        except NameError:
+            staticCounter = 0
+            self.counter = staticCounter
+            staticCounter = staticCounter + 1
         self.db = mysqlDB
         self.token = Tokens()
         self.gameQueue = gameQueue
@@ -143,14 +149,14 @@ class GameGenerator:
 
         #Check for open games in game GameCollection
         #If no open games, create a game and wait for a player to join
-        Counter
-        print("waiting for lock")
+
+        print("waiting for lock", self.counter)
         self.gameCollection.lock.acquire()
-        print("got lock")
+        print("got lock", self.counter)
 
         if(self.gameCollection.checkIfAlreadyInGame(playerOne)):
             self.gameCollection.lock.release()
-            print("User already in game")
+            print(playerOne, "already in game")
             reqItem.createRandomGameRespFailure(playerOne, "failure", "User already in game")
             return False
 

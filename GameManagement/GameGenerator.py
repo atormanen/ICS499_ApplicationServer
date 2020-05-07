@@ -7,7 +7,11 @@ import time
 
 class GameGenerator:
 
+    staticCounter = 0;
+
     def __init__(self, mysqlDB, gameQueue, gameCollection):
+        self.counter = staticCounter
+        staticCounter = staticCounter + 1
         self.db = mysqlDB
         self.token = Tokens()
         self.gameQueue = gameQueue
@@ -124,18 +128,25 @@ class GameGenerator:
         #gaemToken = parsedData["game_token"]
         print(playerOne)
         if(self.validateUsername(playerOne) == False):
+            print(playerOne, "username was invalid")
             return False
         if(self.validateToken(playerOne, playerOneSignonToken) == False):
+            print(playerOne, "signon Token was invalid")
             return False
         if(self.tokenUpToDate(playerOne) == False):
+            print(playerOne, "signon Token was out of date")
             return False
 
+        print("setting ipaddress and port for", playerOne)
         pOneIp = reqItem.ipAddress
         pOnePort = reqItem.port
 
         #Check for open games in game GameCollection
         #If no open games, create a game and wait for a player to join
+        Counter
+        print("waiting for lock")
         self.gameCollection.lock.acquire()
+        print("got lock")
 
         if(self.gameCollection.checkIfAlreadyInGame(playerOne)):
             self.gameCollection.lock.release()

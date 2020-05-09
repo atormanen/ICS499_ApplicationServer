@@ -81,7 +81,7 @@ class GameCollection:
         self.gameDict[game.gameToken] = game
         return game
 
-    def getGame(self, gameToken):
+    def getGameFromToken(self, gameToken):
         try:
             print("GameCollection getGame: " + self.gameDict[gameToken].gameToken)
             return self.gameDict[gameToken]
@@ -119,7 +119,7 @@ class GameCollection:
 
     def makeMove(self, parsedData, reqItem):
         ## TODO: Check jsonObj for end of game
-        game = self.getGame(parsedData["game_token"])
+        game = self.getGameFromToken(parsedData["game_token"])
         requester = parsedData["username"]
         print(parsedData)
 

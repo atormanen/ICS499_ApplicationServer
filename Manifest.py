@@ -15,7 +15,7 @@ class Manifest:
         #Name of the game database to connect too
         self.game_database_name = 'gamedb'
         #Name of the user database to connect too
-        self.game_database_name = 'userdb'
+        self.user_database_name = 'userdb'
         #Name of the reader endpoint
         self.database_reader = 'chessgamedb.cxwhpucd0m6k.us-east-2.rds.amazonaws.com'
         #name of the writer endpoint

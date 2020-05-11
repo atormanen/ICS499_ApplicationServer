@@ -1,5 +1,6 @@
 import mysql.connector
 from database.MysqlDB import MysqlDB
+from Manifest import Manifest
 #from queryBuilder import queryBuilder
 
 #MysqlDB is a class used to implement common database queries programaticly. It
@@ -7,6 +8,7 @@ from database.MysqlDB import MysqlDB
 class DB:
 
     def __init__(self, user, password, reader, writer, database):
+        self.manifest = Manifest()
         self.builder = MysqlDB()
         self.user = user
         self.password = password
@@ -40,7 +42,7 @@ class DB:
            result = ''
            mydb = mysql.connector.connect(user=self.user, password=self.password,
                                  host=self.reader,
-                                 database='userdb',
+                                 database=self.manifest.user_database_name,
                                  auth_plugin='mysql_native_password')
            cursor = mydb.cursor()
            cursor.execute(statement)

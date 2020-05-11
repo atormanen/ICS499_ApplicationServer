@@ -6,6 +6,7 @@ import json
 from ProcessRequest import *
 from multiprocessing import Process
 from DataManagement.MessageItem import MessageItem
+from Manifest import Manifest
 
 #Class listener is used to listen on a servers ip address and port portNumber
 #12345 for incoming requests.
@@ -15,8 +16,9 @@ class Listener:
     def __init__(self, requestQueue):
         self.requestQueue = requestQueue
         self.serverSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.bufferSize = 1024
-        self.portNumber = 12345
+        self.manifest = Manifest()
+        self.bufferSize = self.manifest.listener_buffer_size
+        self.portNumber = self.manifest.port_number
         self.serverIp = ''
         self.reqCount = 0
 

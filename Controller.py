@@ -8,6 +8,7 @@ from ProcessRequest import ProcessRequest
 import os
 import queue
 from GameManagement.GameCollection import GameCollection
+from Manifest import Manifest
 
 #Controller will initilaize all the objects and processes needed
 #for the applications. It will sping up a few request request processors
@@ -16,6 +17,7 @@ class Controller:
 
     #requestQueue is shared queue among all processes
     def __init__(self):
+        self.manifest = Manifest()
         self.requestQueue = multiprocessing.Queue()
         self.gameQueue = multiprocessing.Queue()
         #self.gameCollectionQueue = multiprocessing.Queue()
@@ -25,15 +27,13 @@ class Controller:
         #self.gameCollection.startSocketChecker()
 
 
-
     def createRequestProcessor(self):
         req = ProcessRequest(self.requestQueue, self.gameQueue, self.gameCollection)
         req.processRequests()
 
     def createRequestProcessors(self):
         processes = []
-        for i in range(1):
-            #print('Createing processes %d' % i)
+        for i in range(self.manifest.number_of_request_processors):
             processes.append(Process(target=self.createRequestProcessor))
         for i in processes:
             i.start()

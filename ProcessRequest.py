@@ -6,6 +6,7 @@ from GameManagement.GameCollection import GameCollection
 import os
 from GameManagement.GameGenerator import GameGenerator
 from GameManagement.ValidateRequest import ValidateRequest
+from Manifest import Manifest
 #from GameManagement.Tokens import Tokens
 
 
@@ -15,9 +16,13 @@ class ProcessRequest:
     #will hold the shared request queue object. It will pull requests
     #from the queue as they are inserted from the listener
     def __init__(self, requestQueue, gameQueue, gameCollection):
-        reader = 'chessgamedb.cxwhpucd0m6k.us-east-2.rds.amazonaws.com'
-        writer = 'chessgamedb.cxwhpucd0m6k.us-east-2.rds.amazonaws.com'
-        self.database = DB('admin','ICS4992020', reader, writer,'gamedb')
+        self.manifest = Manifest()
+        reader = self.manifest.database_reader
+        writer = self.manifest.database_writer
+        username = self.manifest.database_username
+        password = self.manifest.database_password
+        gameDatabase = self.manifest.game_database_name
+        self.database = DB(username,password,reader,writer,gameDatabase)
         #self.database = DB('app','123','192.168.1.106', '192.168.1.106','gamedb')
         self.requestQueue = requestQueue
         self.gameQueue = gameQueue

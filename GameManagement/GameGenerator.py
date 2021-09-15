@@ -135,12 +135,15 @@ class GameGenerator:
         print(playerOne)
         if(self.validateUsername(playerOne) == False):
             print(playerOne, "username was invalid")
+            reqItem.createRandomGameRespFailure(playerOne, "failure", "failed validation")
             return False
         if(self.validateToken(playerOne, playerOneSignonToken) == False):
             print(playerOne, "signon Token was invalid")
+            reqItem.createRandomGameRespFailure(playerOne, "failure", "failed validation")
             return False
         if(self.tokenUpToDate(playerOne) == False):
             print(playerOne, "signon Token was out of date")
+            reqItem.createRandomGameRespFailure(playerOne, "failure", "expired token")
             return False
 
         print("setting ipaddress and port for", playerOne)

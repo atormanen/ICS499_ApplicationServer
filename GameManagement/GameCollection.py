@@ -46,11 +46,15 @@ class GameCollection:
             if(username == games.player_one):
                 if not(games.checkIfStillAlive(username)):
                     self.removeGame(games)
-                return True
+                    return False
+                else:
+                    return True
             elif(username == games.player_two):
                 if not(games.checkIfStillAlive(username)):
                     self.removeGame(games)
-                return True
+                    return False
+                else:
+                    return True
 
         for games in self.openGameQueue:
             print("Value: " + games.player_one)

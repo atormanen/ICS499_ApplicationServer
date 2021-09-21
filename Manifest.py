@@ -9,17 +9,17 @@ class Manifest:
         self.listener_buffer_size = 1024
 
         #Username to connect to the database
-        self.database_username = 'admin'
+        self.database_username = 'jarchess'
         #Password used to connect to the database
-        self.database_password = 'ICS4992020'
+        self.database_password = 'TzGuxyBhYVyCTyu4PrWG'
         #Name of the game database to connect too
         self.game_database_name = 'gamedb'
         #Name of the user database to connect too
         self.user_database_name = 'userdb'
         #Name of the reader endpoint
-        self.database_reader = 'chessgamedb.cxwhpucd0m6k.us-east-2.rds.amazonaws.com'
+        self.database_reader = '10.0.2.144'
         #name of the writer endpoint
-        self.database_writer = 'chessgamedb.cxwhpucd0m6k.us-east-2.rds.amazonaws.com'
+        self.database_writer = '10.0.2.144'
 
         #Set the number of request processor processes that will be available
         #to work requests as they come in.

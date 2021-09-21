@@ -11,13 +11,9 @@ class GameGenerator:
 
     def __init__(self, mysqlDB, gameQueue, gameCollection):
 
-        try:
-            self.counter = staticCounter
-            staticCounter = staticCounter + 1
-        except NameError:
-            staticCounter = 0
-            self.counter = staticCounter
-            staticCounter = staticCounter + 1
+        self.counter = GameGenerator.staticCounter
+        GameGenerator.staticCounter = GameGenerator.staticCounter + 1
+
         self.db = mysqlDB
         self.token = Tokens()
         self.gameQueue = gameQueue
@@ -105,7 +101,7 @@ class GameGenerator:
         game = self.db.searchForGame()
         return game
 
-    def requestGameCanceled(parsedData, reqItem):
+    def requestGameCanceled(self, parsedData, reqItem):
         print("canceling game request")
         try:
             username = parsedData["username"]

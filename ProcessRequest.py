@@ -48,11 +48,56 @@ class ProcessRequest:
                 addr = self.database.getSocket(parsedData["player_one"])
                 pOneMsgItem = MessageItem(None,addr,None)
                 self.responder.sendAcceptedResponse(pOneMsgItem, reqItem)
-            elif parsedData["requestType"] == "MakeMove":
-                print("MakeMove!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-                #Find game in game GameCollection... call make move in game
-                self.gameCollection.makeMove(parsedData, reqItem)
-                return True
+            elif parsedData["requestType"] == "MatchCommunication":
+
+                # forward the communication to the opponent
+                # TODO implement this.
+
+                # send a success response
+                # TODO implement this
+
+                raise NotImplementedError  # FIXME by removing this line after we finish this
+
+            elif parsedData["requestType"] == "MatchResultReport":
+
+                # send a success response because we understand and accept the report
+                # TODO implement this
+
+                # put this as one of the results reported for that game
+                # TODO implement this
+
+                # if two results are reported, and they match, update statistics on DB
+                # TODO implement this
+
+                # else if two results are reported, regardless of if they match, end the game
+                # TODO implement this
+
+                # else if the participant that did not report is not connected, we end the game and update statistics
+                # TODO implement this
+
+                # else we keep the game alive and continue processing requests.
+                # TODO implement this
+
+                raise NotImplementedError  # FIXME by removing this line after we finish this
+
+            elif parsedData["requestType"] == "ErrorReport":
+
+                # send a success response because we understand and accept the report
+                # TODO implement this
+
+                # send the opponent of the sender a ERROR match result
+                # TODO implement this
+
+                # end this game.
+                # TODO implement this
+
+                # increment the conflict count on each participant's account in DB
+                # TODO implement this
+
+                # do not track leaderboard statistics for this game
+
+                raise NotImplementedError  # FIXME by removing this line after we finish this
+
             elif parsedData["requestType"] == "CheckForGame":
                 self.gameGenerator.checkForGame(parsedData, reqItem)
                 self.responder.sendResponse(reqItem)

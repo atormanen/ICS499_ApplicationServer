@@ -3,4 +3,4 @@ git stash
 git fetch
 git pull
 chmod +x -R *
-systemctl restart jar_logon.service
+systemctl restart jar_app.service

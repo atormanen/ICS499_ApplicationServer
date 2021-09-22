@@ -1,6 +1,7 @@
 import multiprocessing
 from threading import Thread
 
+
 class GameCollection:
 
     def __init__(self, listener):
@@ -10,18 +11,18 @@ class GameCollection:
         self.moveQueue = []
         self.lock = multiprocessing.Lock()
         self.db = ""
-        #self.socketChecker()
 
-    #This method is not used
+    # self.socketChecker()
+
+    # This method is not used
     def checkSockets(self):
-        while(True):
-            #print("checking sockets")
+        while (True):
+            # print("checking sockets")
             for key, value in self.gameDict.items():
                 print("Chekcing sockets")
-                print("Key: " + key + "     Value: " + value.gameToken)
-                self.listener.processRequest(value.playerOneSocket,(value.player_one_ip,value.player_two_port))
-                self.listener.processRequest(value.playerOneSocket,(value.player_one_ip,value.player_two_port))
-
+                print("Key: " + key + "     Value: " + value.game_token)
+                self.listener.processRequest(value.playerOneSocket, (value.player_one_ip, value.player_two_port))
+                self.listener.processRequest(value.playerOneSocket, (value.player_one_ip, value.player_two_port))
 
     def startSocketChecker(self):
         thread = Thread(target=self.checkSockets)
@@ -32,7 +33,7 @@ class GameCollection:
         self.db = database
 
     def openGameAvailable(self):
-        if(len(self.openGameQueue) > 0):
+        if (len(self.openGameQueue) > 0):
             print("Open game available")
             return True
         else:
@@ -41,16 +42,16 @@ class GameCollection:
     def checkIfAlreadyInGame(self, username):
         print("Inside check games")
         for key, games in self.gameDict.items():
-            print("Key: " + key + "     Value: " + games.gameToken)
+            print("Key: " + key + "     Value: " + games.game_token)
 
-            if(username == games.player_one):
-                if not(games.checkIfStillAlive(username)):
+            if (username == games.player_one):
+                if not (games.checkIfStillAlive(username)):
                     self.removeGame(games)
                     return False
                 else:
                     return True
-            elif(username == games.player_two):
-                if not(games.checkIfStillAlive(username)):
+            elif (username == games.player_two):
+                if not (games.checkIfStillAlive(username)):
                     self.removeGame(games)
                     return False
                 else:
@@ -58,15 +59,15 @@ class GameCollection:
 
         for games in self.openGameQueue:
             print("Value: " + games.player_one)
-            if(username == games.player_one):
-                if not(games.checkIfStillAlive(username)):
+            if (username == games.player_one):
+                if not (games.checkIfStillAlive(username)):
                     print("socket not available")
                     self.openGameQueue.remove(games)
                     print(self.openGameQueue)
                     return False
                 return True
-            elif(username == games.player_two):
-                if not(games.checkIfStillAlive(username)):
+            elif (username == games.player_two):
+                if not (games.checkIfStillAlive(username)):
                     print("socket not available")
                     self.openGameQueue.remove(games)
                     print(self.openGameQueue)
@@ -80,14 +81,14 @@ class GameCollection:
 
     def addSecondPlayer(self, player, signonToken, playerIp, playerPort, socket):
         game = self.openGameQueue.pop(0)
-        #username, signonToken, pTwoIp, pOnePort, socket
-        game.addPlayerTwo(player, signonToken, playerIp, playerPort, socket)
-        self.gameDict[game.gameToken] = game
+        # username, signonToken, pTwoIp, pOnePort, socket
+        game.add_player_two(player, signonToken, playerIp, playerPort, socket)
+        self.gameDict[game.game_token] = game
         return game
 
     def getGameFromToken(self, gameToken):
         try:
-            print("GameCollection getGame: " + self.gameDict[gameToken].gameToken)
+            print("GameCollection getGame: " + self.gameDict[gameToken].game_token)
             return self.gameDict[gameToken]
         except KeyError:
             print("KeyError")
@@ -95,30 +96,30 @@ class GameCollection:
 
     def getGame(self, username):
         for key, games in self.gameDict.items():
-            #print("Key: " + key + "     Value: " + games.gameToken)
-            if(username == games.player_one):
+            # print("Key: " + key + "     Value: " + games.gameToken)
+            if (username == games.player_one):
                 return games
-            elif(username == games.player_two):
+            elif (username == games.player_two):
                 return games
 
         for games in self.openGameQueue:
             print("Value: " + games.player_one)
-            if(username == games.player_one):
+            if (username == games.player_one):
                 return games
-            elif(username == games.player_two):
+            elif (username == games.player_two):
                 return games
         return False
         try:
-            print("GameCollection getGame: " + self.gameDict[gameToken].gameToken)
+            print("GameCollection getGame: " + self.gameDict[gameToken].game_token)
             return self.gameDict[gameToken]
         except KeyError:
             print("KeyError")
             return False
 
     def removeGame(self, game):
-        print("removing game: " + game.gameToken)
-        removedResult = self.gameDict.pop(game.gameToken)
-        print("game: " + game.gameToken + " has been removed")
+        print("removing game: " + game.game_token)
+        removedResult = self.gameDict.pop(game.game_token)
+        print("game: " + game.game_token + " has been removed")
         return removedResult
 
     def makeMove(self, parsedData, reqItem):
@@ -130,42 +131,40 @@ class GameCollection:
         jsonObj = parsedData["move"]
         print(jsonObj)
 
-        #If this is end of game signal, save game stats in db and send end
-        #game to both players
+        # If this is end of game signal, save game stats in db and send end
+        # game to both players
         try:
-            if not(jsonObj["matchResult"] == None):
-                if(jsonObj["matchResult"]["type"]["name"] == 'RESIGNATION'):
+            if not (jsonObj["matchResult"] == None):
+                if (jsonObj["matchResult"]["type"]["name"] == 'RESIGNATION'):
                     print("Resignation*************************")
-                    if(jsonObj["matchResult"]["winningColor"]["name"] ==  'WHITE'):
-                        #Send victory to WHITE and defeat to BLACK
+                    if (jsonObj["matchResult"]["winningColor"]["name"] == 'WHITE'):
+                        # Send victory to WHITE and defeat to BLACK
                         self.db.addGameWon(game.player_two)
-                        if(jsonObj["matchResult"]["type"]["name"] == 'RESIGNATION'):
+                        if (jsonObj["matchResult"]["type"]["name"] == 'RESIGNATION'):
                             self.db.addGameResigned(game.player_one)
                         else:
                             self.db.addGameLost(game.player_one)
                         type = jsonObj["matchResult"]["type"]["name"]
-                    elif(jsonObj["matchResult"]["winningColor"]["name"] ==  'BLACK'):
-                        #Send victory to BLACK and defeat to WHITE
+                    elif (jsonObj["matchResult"]["winningColor"]["name"] == 'BLACK'):
+                        # Send victory to BLACK and defeat to WHITE
                         self.db.addGameWon(game.player_one)
-                        if(jsonObj["matchResult"]["type"]["name"] == 'RESIGNATION'):
+                        if (jsonObj["matchResult"]["type"]["name"] == 'RESIGNATION'):
                             self.db.addGameResigned(game.player_two)
                         else:
                             self.db.addGameLost(game.player_two)
                         type = jsonObj["matchResult"]["type"]["name"]
 
 
-                elif(jsonObj["matchResult"]["type"]["name"] ==  'AGREED_UPON_DRAW'):
-                    #Draw
+                elif (jsonObj["matchResult"]["type"]["name"] == 'AGREED_UPON_DRAW'):
+                    # Draw
                     print("DRAW*************************")
                     self.db.addGamePlayed(game.player_one)
                     self.db.addGamePlayed(game.player_two)
 
-
-
                 game.lastMove = True
                 game.makeMove(requester, jsonObj, game.playerOneSocket)
                 game.makeMove(requester, jsonObj, game.playerTwoSocket)
-                if(game.lastMove == True):
+                if (game.lastMove == True):
                     self.removeGame(game)
                     game.playerTwoSocket.close()
                     game.playerOneSocket.close()
@@ -177,15 +176,14 @@ class GameCollection:
         except TypeError:
             print("Type error")
 
-
-        #Weird way to tell which socket is associated with which player
-        #Only runs on initial startup of game
-        if(jsonObj == "white"):
-            print("addPlayerTwoSocket")
+        # Weird way to tell which socket is associated with which player
+        # Only runs on initial startup of game
+        if (jsonObj == "white"):
+            print("add_player_two_socket")
             game.addPlayerTwoSocket(reqItem.connectionSocket)
             return
-        elif(jsonObj == "black"):
-            print("addPlayerOneSocket")
+        elif (jsonObj == "black"):
+            print("add_player_one_socket")
             game.addPlayerOneSocket(reqItem.connectionSocket)
             return
 

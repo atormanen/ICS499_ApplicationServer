@@ -141,7 +141,7 @@ class DB:
         pOneId = pOneId[0][0]
         nextId = self.dbFetch(self.builder.getLastGameId())
         nextId = nextId[0][0] + 1;
-        self.dbInsert(self.builder.createGame(nextId, game.gameToken, pOneId, pTwoId))
+        self.dbInsert(self.builder.createGame(nextId, game.game_token, pOneId, pTwoId))
 
         self.dbInsert(self.builder.createPlayer(nextId, pOneId, game.player_one, \
                 game.player_one_color, game.player_one_ip, "", \

@@ -1,4 +1,6 @@
 import json
+
+
 # Message item is a wrapper class to hold the data of each reqeust.
 # It holds the json object that was sent to the server as well as
 # the socket
@@ -60,7 +62,7 @@ class MessageItem:
             "player_one_port": "",
             "player_two_ip": ""
         }
-        response["game_token"] = game.gameToken
+        response["game_token"] = game.game_token
         response["player_one"] = game.player_one
         response["player_two"] = game.player_two
         response["player_one_color"] = game.player_one_color
@@ -95,15 +97,15 @@ class MessageItem:
 
         self.responseObj = json.dumps(response)
 
-    def getGameListResponse(self, gameList, request = "getGameList"):
+    def getGameListResponse(self, gameList, request="getGameList"):
         gameDict = {
-                    "game0":"games"
+            "game0": "games"
         }
 
         i = 0
         for item in gameList:
             game = {
-                    "game":""
+                "game": ""
             }
             game["game"] = item[1]
 
@@ -111,9 +113,9 @@ class MessageItem:
             gameDict[gameStr] = user
             i = i + 1
         response = {
-                    "requestType":"getGameList",
-                    "count":"",
-                    "games":""
+            "requestType": "getGameList",
+            "count": "",
+            "games": ""
         }
         response["requestType"] = request
         response["count"] = len(friendsList)

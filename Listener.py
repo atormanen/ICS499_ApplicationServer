@@ -1,6 +1,6 @@
 import socket
 import sys
-#from _thread import *
+# from _thread import *
 from threading import Thread
 import json
 from ProcessRequest import *
@@ -8,8 +8,9 @@ from multiprocessing import Process
 from DataManagement.MessageItem import MessageItem
 from Manifest import Manifest
 
-#Class listener is used to listen on a servers ip address and port portNumber
-#12345 for incoming requests.
+
+# Class listener is used to listen on a servers ip address and port portNumber
+# 12345 for incoming requests.
 class Listener:
     hostname = socket.gethostname()
 
@@ -23,9 +24,9 @@ class Listener:
         self.reqCount = 0
 
     def createSocket(self):
-        self.serverSocket.bind((self.serverIp,self.portNumber))
+        self.serverSocket.bind((self.serverIp, self.portNumber))
         self.serverSocket.listen(5)
-        #print("Server Initialized on ", self.serverIp, ":", self.portNumber)
+        # print("Server Initialized on ", self.serverIp, ":", self.portNumber)
 
     def set_ip(self):
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -39,13 +40,12 @@ class Listener:
             s.close()
             self.serverIp = IP
 
-
-    def sendBadRequest(self,connectionSocket):
-        #print("Error-bad request")
+    def sendBadRequest(self, connectionSocket):
+        # print("Error-bad request")
         msg = "{'ERROoR':'BAD REQUEST'}"
         connectionSocket.send(msg.encode())
 
-    def processRequest(self,connectionSocket, addr):
+    def processRequest(self, connectionSocket, addr):
         full_msg = ''
         rcvd_msg = ''
         bufferExceeded = False
@@ -53,9 +53,9 @@ class Listener:
             if bufferExceeded:
                 try:
                     connectionSocket.settimeout(3)
-                    rcvd_msg = connectionSocket.recv(self.bufferSize).decode("utf-8","replace")
+                    rcvd_msg = connectionSocket.recv(self.bufferSize).decode("utf-8", "replace")
                 except socket.timeout as err:
-                    #Expecting a timeout
+                    # Expecting a timeout
                     break
                 except BlockingIOError:
                     break
@@ -69,7 +69,7 @@ class Listener:
                     break
 
             full_msg += rcvd_msg
-            if(len(rcvd_msg) == 0):
+            if (len(rcvd_msg) == 0):
                 break
             elif len(rcvd_msg) < self.bufferSize:
                 break
@@ -77,42 +77,40 @@ class Listener:
                 rcvd_msg = ''
                 bufferExceeded = True
 
-
         try:
-            #print("TEST ",self.reqCount,"  ",full_msg[1::])
+            # print("TEST ",self.reqCount,"  ",full_msg[1::])
             flag = True
-            while(flag):
+            while (flag):
                 if not (full_msg[0] == "{"):
                     full_msg = full_msg[1::]
-                    if(full_msg[0] == "{"):
+                    if (full_msg[0] == "{"):
                         flag = False
         except (IndexError):
-            #print("error")
+            # print("error")
             return
-        #print("TEST ",self.reqCount,"  ",full_msg)
+        # print("TEST ",self.reqCount,"  ",full_msg)
         try:
             parsedData = json.loads(full_msg)
         except (json.decoder.JSONDecodeError):
             print("unable to load json")
             self.sendBadRequest(connectionSocket)
-            #print("Badd req from listener")
+            # print("Badd req from listener")
             return
         msgItem = MessageItem(connectionSocket, addr, parsedData)
         self.requestQueue.put(msgItem)
 
-
     def listen(self):
         while True:
-            #print(counter)
+            # print(counter)
             self.reqCount = self.reqCount + 1
             try:
-                #print("waiting for connection")
+                # print("waiting for connection")
                 connectionSocket, addr = self.serverSocket.accept()
-                #print(addr[0])
-                thread = Thread(target=self.processRequest,args=(connectionSocket, addr,))
+                # print(addr[0])
+                thread = Thread(target=self.processRequest, args=(connectionSocket, addr,))
                 thread.start()
-                #is thread.join nececary?
-                #thread.join()
+                # is thread.join nececary?
+                # thread.join()
             except IOError:
                 print('Listener: IOError')
                 connectionSocket.close()

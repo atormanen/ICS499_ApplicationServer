@@ -1,11 +1,10 @@
 import json
 from socket import error as socket_error
 from socket import socket as socket_cls
+from threading import Thread
 from typing import Optional
 
 import chess_color
-from threading import Thread
-
 from game.player import Player
 
 
@@ -133,8 +132,6 @@ class Game:
         else:  # no player matched the requester's username
             print(f"{sender_username} was not found in this game")
             return False
-
-
 
     def create_random_game_response(self):
         response = {

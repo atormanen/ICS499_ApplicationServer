@@ -1,9 +1,7 @@
-from game.tokens import Tokens
-from game.game import Game
-import multiprocessing
-from threading import Thread
-
 import time
+
+from game.game import Game
+from game.tokens import Tokens
 
 
 class GameGenerator:
@@ -80,7 +78,8 @@ class GameGenerator:
         if (self.gameCollection.checkIfAlreadyInGame(player_one_username)):
             self.gameCollection.lock.release()
             print(player_one_username, "already in game")
-            req_item.create_random_game_resp_failure(username=player_one_username, was_successful=False, reason="User already in game")
+            req_item.create_random_game_resp_failure(username=player_one_username, was_successful=False,
+                                                     reason="User already in game")
             return False
 
         game = Game(gameToken, parsed_data, pOneIp, pOnePort, \

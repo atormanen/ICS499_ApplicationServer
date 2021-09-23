@@ -1,13 +1,13 @@
 import json
-
-# Message item is a wrapper class to hold the data of each reqeust.
-# It holds the json object that was sent to the server as well as
-# the socket
+from socket import socket
 
 # TODO: Create subclasses for each message type.
 # Too much happening here
 from game.game import Game
-from socket import socket
+
+# Message item is a wrapper class to hold the data of each reqeust.
+# It holds the json object that was sent to the server as well as
+# the socket
 
 FAILURE = "failure"
 SUCCESS = "success"
@@ -26,7 +26,7 @@ class MessageItem:
         response = {
             "request_type": "MatchCommunication",
             "result": SUCCESS if was_successful else FAILURE
-            
+
         }
         self.response_obj = json.dumps(response)
 
@@ -88,7 +88,8 @@ class MessageItem:
         }
         self.response_obj = json.dumps(response)
 
-    def create_random_game_resp_failure(self, username: str, was_successful: str, reason: str) -> None:  # TODO add docString
+    def create_random_game_resp_failure(self, username: str, was_successful: str,
+                                        reason: str) -> None:  # TODO add docString
         response = {
             "request_type": "RequestGame",
             "player_one_username": username,
@@ -98,7 +99,8 @@ class MessageItem:
 
         self.response_obj = json.dumps(response)
 
-    def cancel_random_game_resp(self, username: str, was_successful: bool) -> None:  # TODO add docString and type of status
+    def cancel_random_game_resp(self, username: str,
+                                was_successful: bool) -> None:  # TODO add docString and type of status
         response = {
             "request_type": "RequestGame",
             "player_one_username": username,

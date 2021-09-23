@@ -4,28 +4,29 @@ class MakeMove:
         self.db = mysqlDB
 
     def validateGame(self, username):
-        #validtate game exists and is playable
+        # validtate game exists and is playable
         return False
 
     def validateUsername(self, username):
-        if(self.db.validate_user_exists(username)):
+        if (self.db.validate_user_exists(username)):
             return True
         return False
 
     def updateMove(self, parsedData):
-        #get move string
+        # get move string
 
-        #add move to move string
+        # add move to move string
 
-        #update move string with new move string
+        # update move string with new move string
 
-        #update lastMove timestamp
+        # update lastMove timestamp
 
-		return False
+        return False
 
     def getMove(self, parsedData, reqItem):
-        #get move string
+        # get move string
 
-        #get lastMove timestamp
+        # get lastMove timestamp
 
-        rerurn False
+        rerurn
+        False

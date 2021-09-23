@@ -1,9 +1,6 @@
-from database.db import DB
-from threading import Thread
-from data.responder import Responder
 from data.message_item import MessageItem
-from game.game_collection import GameCollection
-import os
+from data.responder import Responder
+from database.db import DB
 from game.game_generator import GameGenerator
 from game.validate_request import ValidateRequest
 from manifest import Manifest

@@ -1,12 +1,10 @@
-import socket
-import sys
 # from _thread import *
-from threading import Thread
 import json
-from process_request import *
-from multiprocessing import Process
+import socket
+
 from data.message_item import MessageItem
 from manifest import Manifest
+from process_request import *
 
 
 # Class listener is used to listen on a servers ip address and port portNumber

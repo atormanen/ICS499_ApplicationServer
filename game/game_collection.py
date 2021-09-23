@@ -134,28 +134,28 @@ class GameCollection:
         # If this is end of game signal, save game stats in db and send end
         # game to both players
         try:
-            if not (jsonObj["matchResult"] == None):
-                if (jsonObj["matchResult"]["type"]["name"] == 'RESIGNATION'):
+            if not (jsonObj["match_result"] == None):
+                if (jsonObj["match_result"]["type"]["name"] == 'RESIGNATION'):
                     print("Resignation*************************")
-                    if (jsonObj["matchResult"]["winningColor"]["name"] == 'WHITE'):
+                    if (jsonObj["match_result"]["winning_color"]["name"] == 'WHITE'):
                         # Send victory to WHITE and defeat to BLACK
                         self.db.addGameWon(game.player_two)
-                        if (jsonObj["matchResult"]["type"]["name"] == 'RESIGNATION'):
+                        if (jsonObj["match_result"]["type"]["name"] == 'RESIGNATION'):
                             self.db.addGameResigned(game.player_one)
                         else:
                             self.db.addGameLost(game.player_one)
-                        type = jsonObj["matchResult"]["type"]["name"]
-                    elif (jsonObj["matchResult"]["winningColor"]["name"] == 'BLACK'):
+                        type = jsonObj["match_result"]["type"]["name"]
+                    elif (jsonObj["match_result"]["winning_color"]["name"] == 'BLACK'):
                         # Send victory to BLACK and defeat to WHITE
                         self.db.addGameWon(game.player_one)
-                        if (jsonObj["matchResult"]["type"]["name"] == 'RESIGNATION'):
+                        if (jsonObj["match_result"]["type"]["name"] == 'RESIGNATION'):
                             self.db.addGameResigned(game.player_two)
                         else:
                             self.db.addGameLost(game.player_two)
-                        type = jsonObj["matchResult"]["type"]["name"]
+                        type = jsonObj["match_result"]["type"]["name"]
 
 
-                elif (jsonObj["matchResult"]["type"]["name"] == 'AGREED_UPON_DRAW'):
+                elif (jsonObj["match_result"]["type"]["name"] == 'AGREED_UPON_DRAW'):
                     # Draw
                     print("DRAW*************************")
                     self.db.addGamePlayed(game.player_one)

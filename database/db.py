@@ -1,8 +1,8 @@
 from typing import Union
 
 import mysql.connector
-from mysql.connector import Error as MySQLError
 from mysql.connector import CMySQLConnection, MySQLConnection
+from mysql.connector import Error as MySQLError
 
 from database.mysql_db import MysqlDB
 from manifest import Manifest

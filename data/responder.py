@@ -1,5 +1,5 @@
 import socket
-import sys
+
 from data.message_item import MessageItem
 
 

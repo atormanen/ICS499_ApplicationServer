@@ -3,10 +3,10 @@ import sys
 # from _thread import *
 from threading import Thread
 import json
-from ProcessRequest import *
+from process_request import *
 from multiprocessing import Process
-from DataManagement.MessageItem import MessageItem
-from Manifest import Manifest
+from data.message_item import MessageItem
+from manifest import Manifest
 
 
 # Class listener is used to listen on a servers ip address and port portNumber
@@ -106,7 +106,7 @@ class Listener:
             try:
                 # print("waiting for connection")
                 connectionSocket, addr = self.serverSocket.accept()
-                # print(addr[0])
+                # print(address[0])
                 thread = Thread(target=self.processRequest, args=(connectionSocket, addr,))
                 thread.start()
                 # is thread.join nececary?

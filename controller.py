@@ -1,14 +1,14 @@
-from Listener import Listener
-from database.DB import DB
+from listener import Listener
+from database.db import DB
 from multiprocessing import Process, Manager
 from multiprocessing.managers import BaseManager
 import multiprocessing
 from threading import Thread
-from ProcessRequest import ProcessRequest
+from process_request import ProcessRequest
 import os
 import queue
-from GameManagement.GameCollection import GameCollection
-from Manifest import Manifest
+from game.game_collection import GameCollection
+from manifest import Manifest
 
 #Controller will initilaize all the objects and processes needed
 #for the applications. It will sping up a few request request processors

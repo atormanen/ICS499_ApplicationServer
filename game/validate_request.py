@@ -8,17 +8,17 @@ class ValidateRequest:
 
     def isBadRequest(self,parsedData):
         try:
-            if parsedData["requestType"] == "MakeMove":
+            if parsedData["request_type"] == "MakeMove":
                 return False
-            elif parsedData["requestType"] == "CreateGame":
+            elif parsedData["request_type"] == "CreateGame":
                 return False
-            elif parsedData["requestType"] == "AcceptGame":
+            elif parsedData["request_type"] == "AcceptGame":
                 return False
-            elif parsedData["requestType"] == "CheckForGame":
+            elif parsedData["request_type"] == "CheckForGame":
                 return False
-            elif parsedData["requestType"] == "RequestGame":
+            elif parsedData["request_type"] == "RequestGame":
                 return False
-            elif parsedData["requestType"] == "RequestGameCanceled":
+            elif parsedData["request_type"] == "RequestGameCanceled":
                 return False
             else:
                 return True

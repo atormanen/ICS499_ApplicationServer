@@ -1,0 +1,117 @@
+Format for json requests
+request_types: MakeMove, CreateGame, AcceptGame
+
+Clients always listen on port 43489
+
+********************************************************
+CreateGame - client to server
+{
+  "request_type":"CreateGame",
+  "player_one":"ATormanen",
+  "player_two":"second_player",
+  "signon_token:"player_one's token"
+}
+
+Player_two accept game - client to server
+{
+  "request_type":"AcceptGame",
+  "player_one":"player_one",
+  "player_two":"second_player",
+  "signon_token:"player_two's token"
+  "game_token":"gameToken"
+}
+
+CreateGame Response - server to both clients
+{
+  "request_type":"CreateGame",
+  "player_one":"ATormanen",
+  "player_two":"second_player",
+  "game_token":"laksdjf;laksjdf;lkasjdf"
+}
+
+Join game
+{
+  "request_type":"JoinGame",
+  "player_one":"ATormanen",
+  "game_token":"laksdjf;laksjdf;lkasjdf"
+}
+
+********************************************************
+{
+ "request_type":"move_available",
+ "game_token":"gameToken"
+}
+CheckForMove
+{
+  "request_type":"MakeMove",
+  "username":"ATormanen",
+  "signon_token:"tokenstuff",
+  "game_token":"alskdjf;laksjdg;laksjdf"
+}
+
+CheckForMoveResponse
+{
+  "request_type":"MakeMove",
+  "move_available":"True\False"
+}
+
+********************************************************
+
+MakeMove
+{
+  "request_type":"MakeMove",
+  "username":"ATormanen",
+  "signon_token:"tokenstuff",
+  "game_token":"alskdjf;laksjdg;laksjdf",
+  "move ": {
+   json from joshua
+}
+}
+
+MakeMove response
+{
+"request_type":"MakeMove",
+"game_token":"alskdjf;laksjdg;laksjdf",
+"stats":"move_accepted"
+}
+
+********************************************************
+
+CheckForGames
+{
+"request_type":"CheckForGame",
+"username":"ATormanen",
+"signon_token":"tokenstuff"
+}
+
+********************************************************
+
+RequestGame
+{
+"request_type":"RequestGame",
+"username":"ATormanen",
+"signon_token":"tokenstuff"
+}
+
+RequestGameResp
+{
+"request_type":"RequestGame",
+"status":"success",
+"game_token":";alskdf"
+"player_one":"ATormanen",
+"player_two":"billy",
+"player_one_color":"black",
+"player_two_color":"white",
+"player_one_ip":"192.168.1.128",
+"player_one_port":"4983"
+"player_one_avatar":1,
+"player_two_avatar",1
+}
+
+RequestGameRespFalure
+{
+"request_type":"RequestGame",
+"player_one":"",
+"status":"",
+"reason":""
+}

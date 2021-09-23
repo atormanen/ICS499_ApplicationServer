@@ -8,7 +8,7 @@ class MakeMove:
         return False
 
     def validateUsername(self, username):
-        if(self.db.validateUserExists(username)):
+        if(self.db.validate_user_exists(username)):
             return True
         return False
 

@@ -88,7 +88,7 @@ class GameCollection:
 
     def getGameFromToken(self, gameToken):
         try:
-            print("GameCollection getGame: " + self.gameDict[gameToken].game_token)
+            print("GameCollection get_game: " + self.gameDict[gameToken].game_token)
             return self.gameDict[gameToken]
         except KeyError:
             print("KeyError")
@@ -96,7 +96,7 @@ class GameCollection:
 
     def getGame(self, username):
         for key, games in self.gameDict.items():
-            # print("Key: " + key + "     Value: " + games.gameToken)
+            # print("Key: " + key + "     Value: " + games.game_token)
             if (username == games.player_one):
                 return games
             elif (username == games.player_two):
@@ -110,7 +110,7 @@ class GameCollection:
                 return games
         return False
         try:
-            print("GameCollection getGame: " + self.gameDict[gameToken].game_token)
+            print("GameCollection get_game: " + self.gameDict[gameToken].game_token)
             return self.gameDict[gameToken]
         except KeyError:
             print("KeyError")
@@ -180,11 +180,11 @@ class GameCollection:
         # Only runs on initial startup of game
         if (jsonObj == "white"):
             print("add_player_two_socket")
-            game.addPlayerTwoSocket(reqItem.connectionSocket)
+            game.addPlayerTwoSocket(reqItem.connection_socket)
             return
         elif (jsonObj == "black"):
             print("add_player_one_socket")
-            game.addPlayerOneSocket(reqItem.connectionSocket)
+            game.addPlayerOneSocket(reqItem.connection_socket)
             return
 
-        game.makeMove(requester, jsonObj, reqItem.connectionSocket)
+        game.makeMove(requester, jsonObj, reqItem.connection_socket)

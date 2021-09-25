@@ -5,11 +5,11 @@ files:
     destination: /var/logonServer
     overwrite: yes
 hooks:
- BeforeInstall:
+  BeforeInstall:
     - location: scripts/removeApp.sh
       timeout: 180
       runas: root
- AfterInstall:
+  AfterInstall:
     - location: scripts/changePermissions.sh
       timeout: 180
       runas: root

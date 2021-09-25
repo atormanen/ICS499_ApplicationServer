@@ -1,3 +1,4 @@
+"""The game module contains only a Game class"""
 import json
 from socket import error as socket_error
 from socket import socket as socket_cls
@@ -9,31 +10,19 @@ from game.player import Player
 
 
 class Game:
-
+    """A Game object provides ways to access attributes of a given game, add a second player,
+    evaluate match results, and handle match communication.
+    """
     def __init__(self, game_token, parsed_data, p_one_ip, p_one_port, socket, listener, db):
         self.db = db
         self.listener = listener
         self.game_token = game_token
-        # self.player_one_username = parsed_data["username"]
-        # self.player_one_signon_token = parsed_data["signon_token"]
-        # self.player_two = ''
-        # self.player_two_signon_token = ''
-        # self.player_one_color = ''
-        # self.player_two_color = ''
-        # self.player_one_avatar = ''
-        # self.player_two_avatar = ''
-        # self.player_one_ip = pOneIp
-        # self.player_two_ip = ''
-        # self.player_one_port = pOnePort
-        # self.player_two_port = ''
-        # self.playerOneSocket = ''
-        # self.playerTwoSocket = ''
         self.player_one_socket_initial: socket_cls = socket
-        Optional[self.player_two_socket_initial: socket_cls] = None
+        self.player_two_socket_initial: Optional[socket_cls] = None
         self.player_one_socket_initial_flag = 0
         self.player_two_socket_initial_flag = 0
         self.responseObj = ''
-        self.lastMove = False
+        self.last_move = False
         self.gameClosedFlag = False
         self.player_one: Player = Player(game_token=self.game_token,
                                          username=parsed_data["username"],
@@ -43,14 +32,14 @@ class Game:
                                          socket=socket,
                                          color=chess_color.get_random_color(),
                                          avatar=self.db.get_avatar(parsed_data["username"]))
-        Optional[self.player_two:Player] = None
+        self.player_two:Optional[Player] = None
 
     def listen(self, socket):
-        while (self.lastMove == False):
+        while not self.last_move:
             # msg = socket.recv(1024) test
-            self.listener.processRequest(socket, (self.player_one.ip, self.player_one.port))
+            self.listener.process_request(socket, (self.player_one.ip, self.player_one.port))
 
-    def checkIfStillAlive(self, username) -> bool:
+    def check_if_still_alive(self, username) -> bool:
         print("Checking if socket is still alive")
         if username == self.player_one.username:
             try:
@@ -70,13 +59,13 @@ class Game:
         # socket test passed
         return True
 
-    def add_player_two(self, username, signonToken, pTwoIp, pTwoPort, socket):
+    def add_player_two(self, username, signon_token, p_two_ip, p_two_port, socket):
 
         self.player_two = Player(game_token=self.game_token,
                                  username=username,
-                                 signon_token=signonToken,
-                                 ip=pTwoIp,
-                                 port=pTwoPort,
+                                 signon_token=signon_token,
+                                 ip=p_two_ip,
+                                 port=p_two_port,
                                  socket=socket,
                                  color=chess_color.get_other_color(self.player_one.color),
                                  avatar=self.db.get_avatar(username))
@@ -91,7 +80,7 @@ class Game:
         self.player_one.socket = socket
         self.player_one.socket.setblocking(False)
         self.player_one_socket_initial_flag = 1
-        ## TODO: find a different way to handle multpiple sockets
+        # TODO: find a different way to handle multpiple sockets
         thread = Thread(target=self.listen, args=(self.playerOneSocket,))
         thread.start()
 
@@ -100,7 +89,7 @@ class Game:
         self.player_two.socket = socket
         self.player_two.socket.setblocking(False)
         self.player_two_socket_initial_flag = 1
-        ## TODO: find a different way to handle multpiple sockets
+        # TODO: find a different way to handle multpiple sockets
         thread = Thread(target=self.listen, args=(self.player_two.socket,))
         thread.start()
 
@@ -134,29 +123,18 @@ class Game:
             return False
 
     def create_random_game_response(self):
-        response = {
-            "request_type": "RequestGame",
-            "status": "success",
-            "game_token": "",
-            "player_one_username": "",
-            "player_two": "",
-            "player_one_color": "",
-            "player_two_color": "",
-            "player_one_ip": "",
-            "player_one_port": "",
-            "player_two_ip": ""
-        }
-        response["game_token"] = self.game_token
-        response["player_one_username"] = self.player_one.username
-        response["player_two"] = self.player_two.username
-        response["player_one_color"] = self.player_one.color
-        response["player_two_color"] = self.player_two.color
-        response["player_one_ip"] = self.player_one.ip
-        response["player_one_port"] = self.player_one.port
-        response["player_two_ip"] = self.player_two.ip
-        response["player_two_port"] = self.player_two.port
-        response["player_one_avatar"] = self.player_one.avatar
-        response["player_two_avatar"] = self.player_two.avatar
+        response = {"request_type": "RequestGame", "status": "success",
+                    "game_token": self.game_token,
+                    "player_one_username": self.player_one.username,
+                    "player_two": self.player_two.username,
+                    "player_one_color": self.player_one.color,
+                    "player_two_color": self.player_two.color,
+                    "player_one_ip": self.player_one.ip,
+                    "player_one_port": self.player_one.port,
+                    "player_two_ip": self.player_two.ip,
+                    "player_two_port": self.player_two.port,
+                    "player_one_avatar": self.player_one.avatar,
+                    "player_two_avatar": self.player_two.avatar}
         self.responseObj = json.dumps(response)
 
     def send_game_response(self):

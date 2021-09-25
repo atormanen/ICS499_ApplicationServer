@@ -1,42 +1,45 @@
 # Friends management will handle the mechanics of sending freinds reqeusts,
 # handeling friends lists, and accepting fiend requests
+from data.message_item import MessageItem
+
+
 class FriendsManagement:
 
     def __init__(self, database):
         self.db = database
 
-    def validateUsername(self, username):
-        if (self.db.validate_user_exists(username)):
+    def validate_username(self, username):
+        if self.db.user_exists(username):
             return True
         return False
 
-    def getFriendsList(self, parsedData, reqItem):
+    def get_friends_list(self, parsed_data, req_item):
         # connect to mysqldb to get FriendsList
-        friendsList = self.db.getFriendsList(parsedData["username"])
-        reqItem.getFriendsListResponse(friendsList)
+        friends_list = self.db.get_friends_list(parsed_data["username"])
+        req_item.getFriendsListResponse(friends_list)
 
-    def getUserStats(self, username):
-        if (self.validateUsername(username)):
-            stats = self.db.getUserStats(username)
+    def get_user_stats(self, username):
+        if self.validate_username(username):
+            stats = self.db.get_user_stats(username)
             return stats
         return False
 
-    def sendFriendRequest(self, parsedData, reqItem):
+    def send_friend_request(self, parsed_data, req_item):
         # send a freind req
-        username = parsedData["username"]
-        friendsUsername = parsedData["friends_username"]
+        username = parsed_data["username"]
+        friends_username = parsed_data["friends_username"]
         result = False
-        if (self.validateUsername(username)):
-            if (self.validateUsername(friendsUsername)):
-                result = self.db.sendFriendRequest(username, friendsUsername)
-                reqItem.sendFriendReqResponse(result)
-        reqItem.acceptFriendReqResponse(result)
+        if self.validate_username(username):
+            if self.validate_username(friends_username):
+                result = self.db.send_friend_request(username, friends_username)
+                req_item.sendFriendReqResponse(result)
+        req_item.acceptFriendReqResponse(result)
 
-    def validateFriendRequest(self, parsedData, reqItem):
-        username = parsedData["username"]
-        friendsUsername = parsedData["friends_username"]
+    def validate_friend_request(self, parsed_data, req_item: MessageItem):
+        username = parsed_data["username"]
+        friends_username = parsed_data["friends_username"]
         result = False
-        if (self.validateUsername(username)):
-            if (self.validateUsername(friendsUsername)):
-                result = self.db.acceptFriendRequest(username, friendsUsername, True)
-        reqItem.acceptFriendReqResponse(result)
+        if self.validate_username(username):
+            if self.validate_username(friends_username):
+                result = self.db.acceptFriendRequest(username, friends_username, True)
+        req_item.accept_friend_request_response(result)  # FIXME

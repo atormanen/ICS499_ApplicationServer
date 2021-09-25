@@ -1,29 +1,37 @@
 # Is this class nececary? Should it be combined with signin?
+from database.db import DB
+from database.mysql_db import MysqlDB
 
-class AccountManagement:
+from mysql.connector import Error as MySQLError
+
+
+class AccountManager:
     username = ''
     password = ''
 
     def __init__(self, mysqlDB):
-        self.db = mysqlDB
+        self.db: MysqlDB = mysqlDB
 
-    def validateUsername(self, username):
-        if (self.db.validate_user_exists(username)):
+    def validate_username(self, username):
+        if self.db.user_exists(username):
             return True
         return False
 
-    def createAccount(self, parsedData):
+    def create_account(self, parsedData):
         # check if username exists
         # return false if username alread exists
-        result = self.db.validateUsernameAvailable(parsedData["username"])
+        username_is_available = not self.db.user_exists(parsedData["username"])
         # call mysqlDB to create CreateAccount
-        if result == 0:
-            self.db.createUser(parsedData)
-            return True
+        if username_is_available:
+            try:
+                self.db.create_user(parsedData)  # FIXME
+                return True
+            except MySQLError:
+                return False
         else:
             return False
-        # if account createion succussful return true otherwise False
+        # if account creation is successful return true otherwise False
 
-    def getUserStats(self, parsedData, reqItem):
-        stats = self.db.getUserStats(parsedData["username"])
-        reqItem.getUSerStatsResponse(stats[0])
+    def get_user_stats(self, parsed_data, req_item):
+        stats = self.db.get_user_stats(parsed_data["username"])  # FIXME
+        req_item.getUSerStatsResponse(stats[0])

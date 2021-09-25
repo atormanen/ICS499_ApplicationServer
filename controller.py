@@ -2,10 +2,12 @@ import multiprocessing
 from multiprocessing import Process
 from threading import Thread
 
+import listener
+import manifest
 from game.game_collection import GameCollection
 from listener import Listener
 from manifest import Manifest
-from process_request import ProcessRequest
+from request_processor import RequestProcessor
 
 
 # Controller will initilaize all the objects and processes needed
@@ -15,28 +17,28 @@ class Controller:
 
     # requestQueue is shared queue among all processes
     def __init__(self):
-        self.manifest = Manifest()
-        self.requestQueue = multiprocessing.Queue()
-        self.gameQueue = multiprocessing.Queue()
+        self.manifest: manifest.Manifest = Manifest()
+        self.requestQueue: multiprocessing.Queue = multiprocessing.Queue()
+        self.gameQueue: multiprocessing.Queue = multiprocessing.Queue()
         # self.gameCollectionQueue = multiprocessing.Queue()
 
-        self.listener = Listener(self.requestQueue)
-        self.gameCollection = GameCollection(self.listener)
-        # self.gameCollection.startSocketChecker()
+        self.listener: listener.Listener = Listener(self.requestQueue)
+        self.gameCollection: GameCollection = GameCollection(self.listener)
+        # self.gameCollection.start_socket_checker()
 
-    def createRequestProcessor(self):
-        req = ProcessRequest(self.requestQueue, self.gameQueue, self.gameCollection)
-        req.processRequests()
+    def create_request_processor(self):
+        req: RequestProcessor = RequestProcessor(self.requestQueue, self.gameQueue, self.gameCollection)
+        req.process_requests()
 
-    def createRequestProcessors(self):
+    def create_request_processors(self):
         processes = []
         for i in range(self.manifest.number_of_request_processors):
-            processes.append(Process(target=self.createRequestProcessor))
+            processes.append(Process(target=self.create_request_processor))
         for i in processes:
             i.start()
 
-    def createListener(self):
-        self.listener.createListener()
+    def create_listener(self):
+        self.listener.create_listener()
         # self.listener.listen()
         thread = Thread(target=self.listener.listen)
         thread.start()
@@ -49,6 +51,6 @@ def main():
 
 if __name__ == '__main__':
     c = Controller()
-    c.createRequestProcessors()
-    c.createListener()
+    c.create_request_processors()
+    c.create_listener()
     main()

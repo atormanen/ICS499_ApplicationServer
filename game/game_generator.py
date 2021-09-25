@@ -15,17 +15,17 @@ class GameGenerator:
         self.db = mysqlDB
         self.token = Tokens()
         self.gameQueue = gameQueue
-        self.gameCollection = gameCollection
+        self.game_collection = gameCollection
 
-    def validateUsername(self, username):
+    def validate_username(self, username):
         print("validateing username:", username)
-        userExits = self.db.validate_user_exists(username)
+        userExits = self.db.user_exists(username)
         if (userExits[0][0] == 1):
             # print("user exists")
             return True
         return False
 
-    def tokenUpToDate(self, username):
+    def token_up_to_date(self, username):
         print("checking if token is up to date:", username)
         tokenExpiration = self.db.get_token_creation_time(username)
         currentTime = time.time()
@@ -34,153 +34,154 @@ class GameGenerator:
             return False
         return True
 
-    def validateToken(self, username, signonToken):
+    def validate_token(self, username, signon_token):
         print("validating token:", username)
-        savedToken = self.db.get_signon_token(username)
-        # print("signonToken: " + signonToken)
-        if (savedToken == signonToken):
+        saved_token = self.db.get_signon_token(username)
+        # print("signon_token: " + signon_token)
+        if saved_token == signon_token:
             return True
         return False
 
-    def createGame(self, parsed_data, req_item):
+    def create_game(self, parsed_data, req_item):
         player_one_username = parsed_data["player_one_username"]
         player_two_username = parsed_data["player_two_username"]
         print("creating game: ", player_one_username + ",", player_two_username)
         player_one_signon_token = parsed_data["signon_token"]
 
-        if (self.validateUsername(player_one_username) == False):
+        if not self.validate_username(player_one_username):
             print(player_one_username, "was an invalid username")
             return False
-        if (self.validateUsername(player_two_username) == False):
+        if not self.validate_username(player_two_username):
             print(player_two_username, "was an invalid username")
             return False
-        if (self.validateToken(player_one_username, player_one_signon_token) == False):
+        if not self.validate_token(player_one_username, player_one_signon_token):
             print(player_one_username, "had an invalid token")
             return False
-        if (self.tokenUpToDate(player_one_username) == False):
+        if not self.token_up_to_date(player_one_username):
             print(player_one_username, "had an out of date token")
             return False
 
-        pOneIp = req_item.ip_address
-        pOnePort = req_item.port
-        gameToken = self.token.getToken()
-        self.db.create_game(gameToken, player_one_username, player_one_signon_token, player_two_username, \
-                            pOneIp, pOnePort)
-        req_item.create_game_resp_not_accepted(player_one_username, gameToken)
+        p_one_ip = req_item.ip_address
+        p_one_port = req_item.port
+        game_token = self.token.get_token()
+        self.db.create_game(game_token, player_one_username, player_one_signon_token, player_two_username,
+                            p_one_ip, p_one_port)
+        req_item.create_game_resp_not_accepted(player_one_username, game_token)
 
-        pOneIp = req_item.ip_address
-        pOnePort = req_item.port
+        p_one_ip = req_item.ip_address
+        p_one_port = req_item.port
 
         # Check for open games in game GameCollection
         # If no open games, create a game and wait for a player to join
-        self.gameCollection.lock.acquire()
+        self.game_collection.lock.acquire()
 
-        if (self.gameCollection.checkIfAlreadyInGame(player_one_username)):
-            self.gameCollection.lock.release()
+        if (self.game_collection.check_if_already_in_game(player_one_username)):
+            self.game_collection.lock.release()
             print(player_one_username, "already in game")
             req_item.create_random_game_resp_failure(username=player_one_username, was_successful=False,
                                                      reason="User already in game")
             return False
 
-        game = Game(gameToken, parsed_data, pOneIp, pOnePort, \
-                    req_item.connection_socket, self.gameCollection.listener, self.db)
-        self.gameCollection.lock.release()
+        #  FIXME game variable is never used after this assignment.
+        game = Game(game_token, parsed_data, p_one_ip, p_one_port,
+                    req_item.connection_socket, self.game_collection.listener, self.db)
+        self.game_collection.lock.release()
 
-    def waitForPlayer(self, gameToken):
+    def wait_for_player(self, game_token):
         print("waiting for second player")
 
-        while (self.gameCollection.get_game(gameToken) == False):
+        while not self.game_collection.get_game(game_token):
             time.sleep(2)
-        print(self.gameCollection.get_game(gameToken).game_token)
+        print(self.game_collection.get_game(game_token).game_token)
         print("Second player received")
 
-    def waitForGame(self):
+    def wait_for_game(self):
         print("waiting for game")
         game = self.db.search_for_game()
         return game
 
-    def requestGameCanceled(self, parsedData, reqItem):
+    def request_game_canceled(self, parsed_data, req_item):
         print("canceling game request")
         try:
-            username = parsedData["username"]
-            signonToken = parsedData["signon_token"]
+            username = parsed_data["username"]
+            signon_token = parsed_data["signon_token"]  # FIXME by removing assignment if we are not using signon_token
         except KeyError:
             print("KeyError")
             return False
-        if (self.gameCollection.checkIfAlreadyInGame(username)):
-            game = self.gameCollection.get_game(username)
-            self.gameCollection.removeGame(game)
+        if self.game_collection.check_if_already_in_game(username):
+            game = self.game_collection.get_game(username)
+            self.game_collection.remove_game(game)
             print("game removed")
-            reqItem.cancel_random_game_resp(username, was_successful=True)
+            req_item.cancel_random_game_resp(username, was_successful=True)
         else:
-            reqItem.cancel_random_game_resp(username, was_successful=False)
+            req_item.cancel_random_game_resp(username, was_successful=False)
 
-    def createRandomGame(self, parsedData, reqItem):
+    def create_random_game(self, parsed_data, req_item):
         print("creating random game")
         try:
-            print(parsedData["request_type"])
-            playerOne = parsedData["username"]
-            playerOneSignonToken = parsedData["signon_token"]
+            print(parsed_data["request_type"])
+            player_one_username = parsed_data["username"]
+            playerOneSignonToken = parsed_data["signon_token"]
         except KeyError:
             print("KeyError")
             return False
         # gaemToken = parsed_data["game_token"]
-        print(playerOne)
-        if (self.validateUsername(playerOne) == False):
-            print(playerOne, "username was invalid")
-            reqItem.create_random_game_resp_failure(playerOne, "failure", "failed validation")
+        print(player_one_username)
+        if not self.validate_username(player_one_username):
+            print(player_one_username, "username was invalid")
+            req_item.create_random_game_resp_failure(player_one_username, "failure", "failed validation")
             return False
-        if (self.validateToken(playerOne, playerOneSignonToken) == False):
-            print(playerOne, "signon Token was invalid")
-            reqItem.create_random_game_resp_failure(playerOne, "failure", "failed validation")
+        if not self.validate_token(player_one_username, playerOneSignonToken):
+            print(player_one_username, "signon Token was invalid")
+            req_item.create_random_game_resp_failure(player_one_username, "failure", "failed validation")
             return False
-        if (self.tokenUpToDate(playerOne) == False):
-            print(playerOne, "signon Token was out of date")
-            reqItem.create_random_game_resp_failure(playerOne, "failure", "expired token")
+        if not self.token_up_to_date(player_one_username):
+            print(player_one_username, "signon Token was out of date")
+            req_item.create_random_game_resp_failure(player_one_username, "failure", "expired token")
             return False
 
-        print("setting ipaddress and port for", playerOne)
-        pOneIp = reqItem.ip_address
-        pOnePort = reqItem.port
+        print("setting ipaddress and port for", player_one_username)
+        p_one_ip = req_item.ip_address
+        p_one_port = req_item.port
 
         # Check for open games in game GameCollection
         # If no open games, create a game and wait for a player to join
 
         print("waiting for lock", self.counter)
-        self.gameCollection.lock.acquire()
+        self.game_collection.lock.acquire()
         print("got lock", self.counter)
 
-        if (self.gameCollection.checkIfAlreadyInGame(playerOne)):
-            self.gameCollection.lock.release()
-            print(playerOne, "already in game")
-            reqItem.create_random_game_resp_failure(playerOne, "failure", "User already in game")
+        if (self.game_collection.check_if_already_in_game(player_one_username)):
+            self.game_collection.lock.release()
+            print(player_one_username, "already in game")
+            req_item.create_random_game_resp_failure(player_one_username, "failure", "User already in game")
             return False
 
-        if (self.gameCollection.openGameAvailable()):
+        if (self.game_collection.open_game_available()):
             print("An open game is availiable")
-            game = self.gameCollection.addSecondPlayer(playerOne, playerOneSignonToken, \
-                                                       pOneIp, pOnePort, reqItem.connection_socket)
-            self.gameCollection.lock.release()
+            game = self.game_collection.add_second_player(player_one_username, playerOneSignonToken, \
+                                                          p_one_ip, p_one_port, req_item.connection_socket)
+            self.game_collection.lock.release()
             game.send_game_response()
         else:
             print("An open game is not availiable")
-            gameToken = self.token.getToken()
-            game = Game(gameToken, parsedData, pOneIp, pOnePort, \
-                        reqItem.connection_socket, self.gameCollection.listener, self.db)
-            self.gameCollection.addOpenGame(game)
+            game_token = self.token.get_token()
+            game = Game(game_token, parsed_data, p_one_ip, p_one_port,
+                        req_item.connection_socket, self.game_collection.listener, self.db)
+            self.game_collection.add_open_game(game)
             # self.db.create_random_game(game)
-            self.gameCollection.lock.release()
+            self.game_collection.lock.release()
 
-    def createRandomGameTest(self, parsedData, reqItem):
-        playerOne = parsedData["username"]
-        playerOneSignonToken = parsedData["signon_token"]
-        pOneIp = reqItem.ip_address
-        pOnePort = reqItem.port
+    def create_random_game_test(self, parsed_data, req_item):
+        player_one = parsed_data["username"]
+        player_one_signon_token = parsed_data["signon_token"]
+        p_one_ip = req_item.ip_address
+        p_one_port = req_item.port
 
-        gameToken = self.token.getToken()
-        game = Game(gameToken, parsedData, pOneIp, pOnePort, reqItem.connection_socket)
-        self.gameCollection.addOpenGame(game)
-        self.gameCollection.get_game(gameToken)
+        game_token = self.token.get_token()
+        game = Game(game_token, parsed_data, p_one_ip, p_one_port, req_item.connection_socket)
+        self.game_collection.add_open_game(game)
+        self.game_collection.get_game(game_token)
 
     def acceptGame(self, parsedData, reqItem):
         print("accepting game")
@@ -189,13 +190,13 @@ class GameGenerator:
         playerTwoSignonToken = parsedData["signon_token"]
         gameToken = parsedData["game_token"]
 
-        if (self.validateUsername(playerOne) == False):
+        if (self.validate_username(playerOne) == False):
             return False
-        if (self.validateUsername(playerTwo) == False):
+        if (self.validate_username(playerTwo) == False):
             return False
-        if (self.validateToken(playerTwo, playerTwoSignonToken) == False):
+        if (self.validate_token(playerTwo, playerTwoSignonToken) == False):
             return False
-        if (self.tokenUpToDate(playerOne) == False):
+        if (self.token_up_to_date(playerOne) == False):
             return False
 
         pOneIp = reqItem.ip_address
@@ -206,8 +207,8 @@ class GameGenerator:
         gameId = self.db.get_game_id(gameToken)
         self.db.create_player(gameId, playerTwo, reqItem.ip_address, reqItem.port, \
                               gameToken)
-        game = self.gameCollection.addSecondPlayer(playerTwo, playerTwoSignonToken, \
-                                                   pOneIp, pOnePort, reqItem.connection_socket)
+        game = self.game_collection.add_second_player(playerTwo, playerTwoSignonToken, \
+                                                      pOneIp, pOnePort, reqItem.connection_socket)
 
     # game.sendGameResposne()
 
@@ -215,13 +216,13 @@ class GameGenerator:
         print("checking for game")
         username = parsedData["username"]
         playerOneSignonToken = parsedData["signon_token"]
-        if (self.validateUsername(username) == False):
+        if (self.validate_username(username) == False):
             print(username, "was an invalid username")
             return False
-        if (self.validateToken(username, playerOneSignonToken) == False):
+        if (self.validate_token(username, playerOneSignonToken) == False):
             print(username, "had an invalid token")
             return False
-        if (self.tokenUpToDate(username) == False):
+        if (self.token_up_to_date(username) == False):
             print(username, "had an out of date token")
             return False
 

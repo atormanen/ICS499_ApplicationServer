@@ -1,10 +1,11 @@
 # from _thread import *
 import json
 import socket
+from threading import Thread
 
 from data.message_item import MessageItem
 from manifest import Manifest
-from process_request import *
+from request_processor import *
 
 
 # Class listener is used to listen on a servers ip address and port portNumber
@@ -12,46 +13,46 @@ from process_request import *
 class Listener:
     hostname = socket.gethostname()
 
-    def __init__(self, requestQueue):
-        self.requestQueue = requestQueue
-        self.serverSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.manifest = Manifest()
-        self.bufferSize = self.manifest.listener_buffer_size
-        self.portNumber = self.manifest.port_number
-        self.serverIp = ''
-        self.reqCount = 0
+    def __init__(self, request_queue):
+        self.request_queue = request_queue
+        self.server_socket: socket.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.manifest: Manifest = Manifest()
+        self.buffer_size: int = self.manifest.listener_buffer_size
+        self.port_number: int = self.manifest.port_number
+        self.server_ip: str = ''
+        self.req_count: int = 0
 
-    def createSocket(self):
-        self.serverSocket.bind((self.serverIp, self.portNumber))
-        self.serverSocket.listen(5)
+    def create_socket(self):
+        self.server_socket.bind((self.server_ip, self.port_number))
+        self.server_socket.listen(5)
         # print("Server Initialized on ", self.serverIp, ":", self.portNumber)
 
-    def set_ip(self):
+    def set_ip(self) -> None:
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         try:
             # doesn't even have to be reachable
             s.connect(('10.255.255.255', 1))
             IP = s.getsockname()[0]
-        except:
+        except:  # FIXME too broad exception clause
             IP = '127.0.0.1'
         finally:
             s.close()
-            self.serverIp = IP
+            self.server_ip = IP
 
-    def sendBadRequest(self, connectionSocket):
+    def send_bad_request(self, connection_socket):
         # print("Error-bad request")
         msg = "{'ERROoR':'BAD REQUEST'}"
-        connectionSocket.send(msg.encode())
+        connection_socket.send(msg.encode())
 
-    def processRequest(self, connectionSocket, addr):
+    def process_request(self, connection_socket, addr):
         full_msg = ''
         rcvd_msg = ''
-        bufferExceeded = False
+        buffer_exceeded = False
         while True:
-            if bufferExceeded:
+            if buffer_exceeded:
                 try:
-                    connectionSocket.settimeout(3)
-                    rcvd_msg = connectionSocket.recv(self.bufferSize).decode("utf-8", "replace")
+                    connection_socket.settimeout(3)
+                    rcvd_msg = connection_socket.recv(self.buffer_size).decode("utf-8", "replace")
                 except socket.timeout as err:
                     # Expecting a timeout
                     break
@@ -59,7 +60,7 @@ class Listener:
                     break
             else:
                 try:
-                    rcvd_msg = connectionSocket.recv(self.bufferSize).decode("utf-8", "replace")
+                    rcvd_msg = connection_socket.recv(self.buffer_size).decode("utf-8", "replace")
                 except UnicodeDecodeError:
                     print("UnicodeDecodeError")
                     break
@@ -69,11 +70,11 @@ class Listener:
             full_msg += rcvd_msg
             if (len(rcvd_msg) == 0):
                 break
-            elif len(rcvd_msg) < self.bufferSize:
+            elif len(rcvd_msg) < self.buffer_size:
                 break
-            elif len(rcvd_msg) == self.bufferSize:
+            elif len(rcvd_msg) == self.buffer_size:
                 rcvd_msg = ''
-                bufferExceeded = True
+                buffer_exceeded = True
 
         try:
             # print("TEST ",self.reqCount,"  ",full_msg[1::])
@@ -88,31 +89,33 @@ class Listener:
             return
         # print("TEST ",self.reqCount,"  ",full_msg)
         try:
-            parsedData = json.loads(full_msg)
+            parsed_data = json.loads(full_msg)
         except (json.decoder.JSONDecodeError):
             print("unable to load json")
-            self.sendBadRequest(connectionSocket)
-            # print("Badd req from listener")
+            self.send_bad_request(connection_socket)
+            # print("Bad req from listener")
             return
-        msgItem = MessageItem(connectionSocket, addr, parsedData)
-        self.requestQueue.put(msgItem)
+        msg_item = MessageItem(connection_socket, addr, parsed_data)
+        self.request_queue.put(msg_item)
 
     def listen(self):
+        connection_socket = None
         while True:
             # print(counter)
-            self.reqCount = self.reqCount + 1
+            self.req_count = self.req_count + 1
             try:
                 # print("waiting for connection")
-                connectionSocket, addr = self.serverSocket.accept()
+                connection_socket, addr = self.server_socket.accept()
                 # print(address[0])
-                thread = Thread(target=self.processRequest, args=(connectionSocket, addr,))
+                thread: Thread = Thread(target=self.process_request, args=(connection_socket, addr,))
                 thread.start()
                 # is thread.join nececary?
                 # thread.join()
             except IOError:
                 print('Listener: IOError')
-                connectionSocket.close()
+                if connection_socket is not None:
+                    connection_socket.close()
 
-    def createListener(self):
+    def create_listener(self):
         self.set_ip()
-        self.createSocket()
+        self.create_socket()

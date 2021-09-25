@@ -1,12 +1,12 @@
 # Validate request will check the initial variable to see what kind of request
 # type it is.
 ## TODO: Check the entire json object for apropriate fields and not just the req type
-class ValidateRequest:
+class RequestValidator:
 
     def __init__(self):
         self.num = 0
 
-    def isBadRequest(self, parsedData):
+    def is_bad_request(self, parsedData):
         try:
             if parsedData["request_type"] == "MakeMove":
                 return False

@@ -1,18 +1,20 @@
+"""Constants and functions regarding the chess colors white and black"""
 import random
 
-BLACK = 'black'
-WHITE = 'white'
+BLACK: str = 'black'
+"""str: The string representing the chess color black."""
+
+WHITE: str = 'white'
+"""str: The string representing the chess color white."""
 
 
-@classmethod
-def get_random_color(cls):
+def get_random_color():
     """gets either 'black' or 'white' randomly"""
-    return random.choice(['black', 'white'])
+    return random.choice([BLACK, WHITE])
 
 
-@classmethod
-def get_other_color(cls, color):
-    """gets the opisit color as the argument
+def get_other_color(color: str):
+    f"""gets the opposite color as the argument
 
     Args:
         color: 'white' or 'black'
@@ -24,9 +26,9 @@ def get_other_color(cls, color):
         ValueError: if the argument was not 'white' or 'black'
 
     """
-    if color == 'black':
-        return 'white'
-    elif color == 'white':
-        return 'black'
+    if color == BLACK:
+        return WHITE
+    elif color == WHITE:
+        return BLACK
     else:
-        raise ValueError("color must be 'white' or 'black'")
+        raise ValueError(f"{color} was invalid. Color must be {BLACK} or {WHITE}")

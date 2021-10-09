@@ -27,6 +27,7 @@ class Game:
         self.responseObj = ''
         self.last_move = False
         self.gameClosedFlag = False
+        self.chess_color = chess_color()
         self.player_one: Player = Player(game_token=self.game_token,
                                          username=parsed_data["username"],
                                          signon_token=parsed_data["signon_token"],

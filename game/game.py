@@ -5,7 +5,7 @@ from socket import socket as socket_cls
 from threading import Thread
 from typing import Optional
 
-import chess_color
+from game.chess_color import chess_color
 from game.player import Player
 
 
@@ -13,6 +13,9 @@ class Game:
     """A Game object provides ways to access attributes of a given game, add a second player,
     evaluate match results, and handle match communication.
     """
+
+    log_function_name = lambda x: logger.debug(f"func {inspect.stack()[1][3]}")
+
     def __init__(self, game_token, parsed_data, p_one_ip, p_one_port, socket, listener, db):
         self.db = db
         self.listener = listener
@@ -24,6 +27,7 @@ class Game:
         self.responseObj = ''
         self.last_move = False
         self.gameClosedFlag = False
+        self.chess_color = chess_color()
         self.player_one: Player = Player(game_token=self.game_token,
                                          username=parsed_data["username"],
                                          signon_token=parsed_data["signon_token"],
@@ -40,18 +44,18 @@ class Game:
             self.listener.process_request(socket, (self.player_one.ip, self.player_one.port))
 
     def check_if_still_alive(self, username) -> bool:
-        print("Checking if socket is still alive")
+        self.log_function_name()
         if username == self.player_one.username:
             try:
                 self.player_one.socket.send("socket test".encode("utf-8"))
             except socket_error:
-                print("socket is dead")
+                logger.log(VERBOSE, 'socket is dead')
                 return False
         elif self.player_two is not None and username == self.player_two.username:
             try:
                 self.player_two.socket.send("socket test".encode("utf-8"))
             except socket_error:
-                print("socket is dead")
+                logger.log(VERBOSE, 'socket is dead')
                 return False
         else:  # the username is not associated with a player in this game
             return False
@@ -60,6 +64,7 @@ class Game:
         return True
 
     def add_player_two(self, username, signon_token, p_two_ip, p_two_port, socket):
+        self.log_function_name()
 
         self.player_two = Player(game_token=self.game_token,
                                  username=username,
@@ -76,7 +81,7 @@ class Game:
         self.player_one.opponent = self.player_two
 
     def add_player_one_socket(self, socket):
-        print("player one socket: " + str(socket))
+        self.log_function_name()
         self.player_one.socket = socket
         self.player_one.socket.setblocking(False)
         self.player_one_socket_initial_flag = 1
@@ -85,7 +90,7 @@ class Game:
         thread.start()
 
     def add_player_two_socket(self, socket):
-        print("player two socket: " + str(socket))
+        self.log_function_name()
         self.player_two.socket = socket
         self.player_two.socket.setblocking(False)
         self.player_two_socket_initial_flag = 1
@@ -103,6 +108,7 @@ class Game:
         Returns:
             bool: True if successful, else False
         """
+        self.log_function_name()
         if (sender_username == self.player_one.username):
             try:
                 self.player_two.socket.send(str(communication_obj).encode("utf-8"))
@@ -119,10 +125,11 @@ class Game:
 
         # self.player_two.socket.send(str(succsess_response()).encode("utf-8"))
         else:  # no player matched the requester's username
-            print(f"{sender_username} was not found in this game")
+            logger.log(VERBOSE, f"{sender_username} was not found in this game")
             return False
 
     def create_random_game_response(self):
+        self.log_function_name()
         response = {"request_type": "RequestGame", "status": "success",
                     "game_token": self.game_token,
                     "player_one_username": self.player_one.username,
@@ -138,10 +145,9 @@ class Game:
         self.responseObj = json.dumps(response)
 
     def send_game_response(self):
+        self.log_function_name()
         self.create_random_game_response()
         self.player_one_socket_initial.send(self.responseObj.encode("utf-8"))
         self.player_two_socket_initial.send(self.responseObj.encode("utf-8"))
-        print(self.player_one.username + "    " + str(self.playerOneSocket))
-        print(self.player_two.username + "    " + str(self.playerTwoSocket))
         self.player_one_socket_initial.close()
         self.player_two_socket_initial.close()

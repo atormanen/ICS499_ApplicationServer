@@ -14,6 +14,9 @@ SUCCESS = "success"
 
 
 class MessageItem:
+
+    log_function_name = lambda x: logger.debug(f"func {inspect.stack()[1][3]}")
+
     def __init__(self, connection_socket: socket, address, parsed_data: dict[str, str]) -> None:
         self.connection_socket: socket = connection_socket
         self.ip_address: str = address[0]
@@ -21,7 +24,17 @@ class MessageItem:
         self.parsed_data: dict[str, str] = parsed_data
         self.response_obj: str = ''
 
+
+    def invalidRequest(self):
+        self.log_function_name()
+        response = {
+                    "status":"fail - invalid request. please double check request syntax"
+        }
+        self.responseObj = json.dumps(response)
+        
+
     def create_match_communication_response(self, was_successful) -> None:
+        self.log_function_name()
         """Create a response for a match communication request"""
         response = {
             "request_type": "MatchCommunication",
@@ -31,6 +44,7 @@ class MessageItem:
         self.response_obj = json.dumps(response)
 
     def create_match_result_report_response(self, was_successful) -> None:
+        self.log_function_name()
         """Create a response for a match result report request"""
         response = {
             "request_type": "MatchResultReport",
@@ -39,6 +53,7 @@ class MessageItem:
         self.response_obj = json.dumps(response)
 
     def create_error_report_response(self, was_successful: bool) -> None:
+        self.log_function_name()
         """Create a response for an error result report request"""
         response = {
             "request_type": "ErrorReport",
@@ -47,6 +62,7 @@ class MessageItem:
         self.response_obj = json.dumps(response)
 
     def create_game_resp_not_accepted(self, player_one_username: str, game_token: str) -> None:
+        self.log_function_name()
         """Creates a response for a request to create a game, but an opponent hasn't accepted yet"""  # FIXME if needed
         response = {
             "request_type": "CreateGame",
@@ -56,6 +72,7 @@ class MessageItem:
         self.response_obj = json.dumps(response)
 
     def accept_game(self, player_one_username: str, player_two_username: str, game_token: str) -> None:
+        self.log_function_name()
         """Creates a response for when a game is accepted by the second player"""
         response = {
             "request_type": "CreateGame",
@@ -66,6 +83,7 @@ class MessageItem:
         self.response_obj = json.dumps(response)
 
     def check_for_game_response(self, player_one_username: str, game_token: str) -> None:  # TODO add docString
+        self.log_function_name()
         response = {
             "request_type": "CreateGame",
             "username": player_one_username,
@@ -74,6 +92,7 @@ class MessageItem:
         self.response_obj = json.dumps(response)
 
     def create_random_game_resp(self, game: Game) -> None:  # TODO add docString
+        self.log_function_name()
         response = {
             "request_type": "RequestGame",
             "status": SUCCESS,
@@ -90,6 +109,7 @@ class MessageItem:
 
     def create_random_game_resp_failure(self, username: str, was_successful: str,
                                         reason: str) -> None:  # TODO add docString
+        self.log_function_name()
         response = {
             "request_type": "RequestGame",
             "player_one_username": username,
@@ -101,6 +121,7 @@ class MessageItem:
 
     def cancel_random_game_resp(self, username: str,
                                 was_successful: bool) -> None:  # TODO add docString and type of status
+        self.log_function_name()
         response = {
             "request_type": "RequestGame",
             "player_one_username": username,

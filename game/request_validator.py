@@ -3,10 +3,13 @@
 ## TODO: Check the entire json object for apropriate fields and not just the req type
 class RequestValidator:
 
+    log_function_name = lambda x: logger.debug(f"func {inspect.stack()[1][3]}")
+
     def __init__(self):
         self.num = 0
 
     def is_bad_request(self, parsedData):
+        self.log_function_name()
         try:
             if parsedData["request_type"] == "MakeMove":
                 return False
@@ -22,5 +25,5 @@ class RequestValidator:
                 return False
             else:
                 return True
-        except KeyError:
-            print("KeyError")
+        except KeyError as e:
+            logger.error(e)

@@ -15,6 +15,8 @@ from request_processor import RequestProcessor
 # and then run the listener thread.
 class Controller:
 
+    log_function_name = lambda x: logger.debug(f"func {inspect.stack()[1][3]}")
+
     # requestQueue is shared queue among all processes
     def __init__(self):
         self.manifest: manifest.Manifest = Manifest()
@@ -27,10 +29,12 @@ class Controller:
         # self.gameCollection.start_socket_checker()
 
     def create_request_processor(self):
+        self.log_function_name()
         req: RequestProcessor = RequestProcessor(self.requestQueue, self.gameQueue, self.gameCollection)
         req.process_requests()
 
     def create_request_processors(self):
+        self.log_function_name()
         processes = []
         for i in range(self.manifest.number_of_request_processors):
             processes.append(Process(target=self.create_request_processor))
@@ -38,6 +42,7 @@ class Controller:
             i.start()
 
     def create_listener(self):
+        self.log_function_name()
         self.listener.create_listener()
         # self.listener.listen()
         thread = Thread(target=self.listener.listen)

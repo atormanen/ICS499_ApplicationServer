@@ -6,6 +6,9 @@ from mysql.connector import Error as MySQLError
 
 
 class AccountManager:
+
+    log_function_name = lambda x: logger.debug(f"func {inspect.stack()[1][3]}")
+
     username = ''
     password = ''
 
@@ -13,11 +16,13 @@ class AccountManager:
         self.db: MysqlDB = mysqlDB
 
     def validate_username(self, username):
+        self.log_function_name()
         if self.db.user_exists(username):
             return True
         return False
 
     def create_account(self, parsedData):
+        self.log_function_name()
         # check if username exists
         # return false if username alread exists
         username_is_available = not self.db.user_exists(parsedData["username"])
@@ -33,5 +38,6 @@ class AccountManager:
         # if account creation is successful return true otherwise False
 
     def get_user_stats(self, parsed_data, req_item):
+        self.log_function_name()
         stats = self.db.get_user_stats(parsed_data["username"])  # FIXME
         req_item.getUSerStatsResponse(stats[0])

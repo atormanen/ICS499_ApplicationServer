@@ -11,6 +11,8 @@ from request_processor import *
 # Class listener is used to listen on a servers ip address and port portNumber
 # 12345 for incoming requests.
 class Listener:
+
+    log_function_name = lambda x: logger.debug(f"func {inspect.stack()[1][3]}")
     hostname = socket.gethostname()
 
     def __init__(self, request_queue):
@@ -23,11 +25,12 @@ class Listener:
         self.req_count: int = 0
 
     def create_socket(self):
+        self.log_function_name()
         self.server_socket.bind((self.server_ip, self.port_number))
         self.server_socket.listen(5)
-        # print("Server Initialized on ", self.serverIp, ":", self.portNumber)
 
     def set_ip(self) -> None:
+        self.log_function_name()
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         try:
             # doesn't even have to be reachable
@@ -40,11 +43,12 @@ class Listener:
             self.server_ip = IP
 
     def send_bad_request(self, connection_socket):
-        # print("Error-bad request")
-        msg = "{'ERROoR':'BAD REQUEST'}"
+        self.log_function_name()
+        msg = "{'ERROR':'BAD REQUEST'}"
         connection_socket.send(msg.encode())
 
     def process_request(self, connection_socket, addr):
+        self.log_function_name()
         full_msg = ''
         rcvd_msg = ''
         buffer_exceeded = False
@@ -61,8 +65,8 @@ class Listener:
             else:
                 try:
                     rcvd_msg = connection_socket.recv(self.buffer_size).decode("utf-8", "replace")
-                except UnicodeDecodeError:
-                    print("UnicodeDecodeError")
+                except UnicodeDecodeError as e:
+                    logger.error(e)
                     break
                 except BlockingIOError:
                     break
@@ -85,34 +89,31 @@ class Listener:
                     if (full_msg[0] == "{"):
                         flag = False
         except (IndexError):
-            # print("error")
             return
         # print("TEST ",self.reqCount,"  ",full_msg)
         try:
             parsed_data = json.loads(full_msg)
         except (json.decoder.JSONDecodeError):
-            print("unable to load json")
+            logger.error('unable to load json')
             self.send_bad_request(connection_socket)
-            # print("Bad req from listener")
             return
         msg_item = MessageItem(connection_socket, addr, parsed_data)
+        logger.debug(f"message item: {parsedData}")
         self.request_queue.put(msg_item)
 
     def listen(self):
+        self.log_function_name()
         connection_socket = None
         while True:
-            # print(counter)
+
             self.req_count = self.req_count + 1
             try:
-                # print("waiting for connection")
                 connection_socket, addr = self.server_socket.accept()
-                # print(address[0])
+                logger.debug(f"received message from {str(addr)}")
                 thread: Thread = Thread(target=self.process_request, args=(connection_socket, addr,))
                 thread.start()
-                # is thread.join nececary?
-                # thread.join()
-            except IOError:
-                print('Listener: IOError')
+            except IOError as error:
+                logger.error(error)
                 if connection_socket is not None:
                     connection_socket.close()
 

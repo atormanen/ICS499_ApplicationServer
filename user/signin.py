@@ -9,11 +9,14 @@ from database.mysql_db import MysqlDB
 
 class Signin:
 
+    log_function_name = lambda x: logger.debug(f"func {inspect.stack()[1][3]}")
+
     def __init__(self, db):
         self.db: MysqlDB = db
         self.token = Tokens()
 
     def validate_password(self, username, password):
+        self.log_function_name()
         if self.db.user_exists(username):
             db_password = self.db.get_password_for(username)  # FIXME
             db_password = db_password[0][0]
@@ -23,6 +26,7 @@ class Signin:
         return False
 
     def token_up_to_date(self, username):
+        self.log_function_name()
         token_expiration = self.db.get_token_creation_time(username)
         current_time = time.time()
         time_diference = current_time - token_expiration[0][0]
@@ -31,6 +35,7 @@ class Signin:
         return True
 
     def signin(self, parsed_data):
+        self.log_function_name()
         username = parsed_data["username"]
         password = parsed_data["password"]
         if self.validate_password(username, password):

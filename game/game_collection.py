@@ -8,6 +8,8 @@ from game.game import Game
 
 class GameCollection:
 
+    log_function_name = lambda x: logger.debug(f"func {inspect.stack()[1][3]}")
+
     def __init__(self, listener):
         self.listener = listener
         self.game_dict: Dict[str, Game] = dict()
@@ -19,33 +21,37 @@ class GameCollection:
     # self.socketChecker()
 
     def check_sockets(self):
+        self.log_function_name()
         while True:  # should we have this eventually end? If so FIXME
             # print("checking sockets")
             for key, value in self.game_dict.items():
-                print("Checking sockets")
-                print("key: " + key + "     game_token: " + value.game_token)
+                logger.log(VERBOSE, "checking sockets")
+                logger.log(VERBOSE, f"key: {key}   game_toke: {value.game_token}")
                 self.listener.process_request(value.player_one.socket, (value.player_one.ip, value.player_one.port))
                 self.listener.process_request(value.player_two.socket, (value.player_two.ip, value.player_two.port))
 
     def start_socket_checker(self):
+        self.log_function_name()
         thread = Thread(target=self.check_sockets)
-        print("Starting socket checker")
+        logger.log(VERBOSE, "starting socket checker")
         thread.start()
 
     def set_database(self, database):
+        self.log_function_name()
         self.db = database
 
     def open_game_available(self):
+        self.log_function_name()
         if (len(self.open_game_queue) > 0):
-            print("Open game available")
+            logger.log(VERBOSE, "open game available")
             return True
         else:
             return False
 
     def check_if_already_in_game(self, username):
-        print("Inside check games")
+        self.log_function_name()
         for key, games in self.game_dict.items():
-            print("Key: " + key + "     Value: " + games.game_token)
+            logger.log(VERBOSE, f"key: {key}   game_toke: {games.game_token}")
 
             if (username == games.player_one):
                 if not (games.check_if_still_alive(username)):
@@ -61,28 +67,28 @@ class GameCollection:
                     return True
 
         for games in self.open_game_queue:
-            print("Value: " + games.player_one)
+            logger.log(VERBOSE, f"value: {games.player_one}")
             if (username == games.player_one):
                 if not (games.check_if_still_alive(username)):
-                    print("socket not available")
+                    logger.log(VERBOSE, 'socket not available')
                     self.open_game_queue.remove(games)
-                    print(self.open_game_queue)
                     return False
                 return True
             elif (username == games.player_two):
                 if not (games.check_if_still_alive(username)):
-                    print("socket not available")
+                    logger.log(VERBOSE, 'socket not available')
                     self.open_game_queue.remove(games)
-                    print(self.open_game_queue)
                     return False
                 return True
         return False
 
     def add_open_game(self, game):
+        self.log_function_name()
         self.open_game_queue.append(game)
         return True
 
     def add_second_player(self, player, signonToken, playerIp, playerPort, socket):
+        self.log_function_name()
         game = self.open_game_queue.pop(0)
         # username, signonToken, pTwoIp, pOnePort, socket
         game.add_player_two(player, signonToken, playerIp, playerPort, socket)
@@ -90,39 +96,37 @@ class GameCollection:
         return game
 
     def get_game_from_token(self, gameToken):
+        self.log_function_name()
         try:
-            print("GameCollection get_game: " + self.game_dict[gameToken].game_token)
             return self.game_dict[gameToken]
-        except KeyError:
-            print("KeyError")
+        except KeyError as e:
+            logger.error(e)
             return False
 
     def get_game(self, username):
+        self.log_function_name()
         for key, games in self.game_dict.items():
-            # print("Key: " + key + "     Value: " + games.game_token)
             if (username == games.player_one):
                 return games
             elif (username == games.player_two):
                 return games
 
         for games in self.open_game_queue:
-            print("Value: " + games.player_one.username)
+            logger.debug(f"value: {games.player_one.username}")
             if username == games.player_one.username:
                 return games
             elif username == games.player_two.username:
                 return games
         return False
         try:  # FIXME unreachable code
-            print("GameCollection get_game: " + self.game_dict[gameToken].game_token)
             return self.game_dict[gameToken]
         except KeyError:
-            print("KeyError")
             return False
 
     def remove_game(self, game):
-        print("removing game: " + game.game_token)
+        self.log_function_name()
+        logger.info(VERBOSE, f"removing game: {game_token}")
         removed_result = self.game_dict.pop(game.game_token)
-        print("game: " + game.game_token + " has been removed")
         return removed_result
 
 # TODO remove this if we don't need it

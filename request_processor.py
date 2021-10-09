@@ -11,6 +11,8 @@ from manifest import Manifest
 
 class RequestProcessor:
 
+    log_function_name = lambda x: logger.debug(f"func {inspect.stack()[1][3]}")
+
     # PrecessReqeust is set up to be a seperate process in the OS and
     # will hold the shared request queue object. It will pull requests
     # from the queue as they are inserted from the listener
@@ -33,10 +35,10 @@ class RequestProcessor:
 
     ## TODO: find a better way to process these requests types.
     def proccesrequest_type(self, req_item: MessageItem):
+        self.log_function_name()
         if self.req_validation.is_bad_request(req_item.parsed_data):
             self.responder.send_bad_request_response(req_item.connection_socket)
             return
-        print(req_item.parsed_data)
         parsed_data = req_item.parsed_data
         try:
             if parsed_data["request_type"] == "CreateGame":
@@ -109,15 +111,19 @@ class RequestProcessor:
                 self.responder.send_response(req_item)
             else:
                 self.responder.send_bad_request_response(req_item.connection_socket)
-        except KeyError:
-            print("Process Request - Key error")
+        except KeyError as e:
+            logger.error(e)
 
     # The process thread will block on requestQueue.get() until something
     # arrives.
     def process_requests(self):
+        self.log_function_name()
         while True:
-            # print("blocking on req item")
             request_item = self.request_queue.get()
-            print("Processing request")
-            # Decrypt parsed_data
-            self.proccesrequest_type(request_item)
+             try:
+                 self.proccesrequest_type(request_item)
+             except Exception as e:
+                 logger.error('invalid request')
+             finally:
+                 request_item.invalidRequest()
+                 self.responder.sendResponse(request_item)

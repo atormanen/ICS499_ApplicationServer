@@ -5,7 +5,7 @@ from socket import socket as socket_cls
 from threading import Thread
 from typing import Optional
 
-import chess_color
+from chess_color import chess_color
 from game.player import Player
 
 

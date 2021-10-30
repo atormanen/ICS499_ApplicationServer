@@ -134,7 +134,7 @@ class MessageItem:
     #   If we are not going to use it, we should remove it.
     #   If we will use it, it needs to be fixed because there are Errors.
     #
-    # def get_game_list_response(self, game_list: list[str], request: str = "getGameList") -> None:
+    # def get_game_list_response(self, game_list: list[str], request: str = "get_game_list") -> None:
     #     game_dict = {
     #         "game0": "games"
     #     }
@@ -150,7 +150,7 @@ class MessageItem:
     #         game_dict[game_str] = user
     #         i = i + 1
     #     response = {
-    #         "request_type": "getGameList",
+    #         "request_type": "get_game_list",
     #         "count": "",
     #         "games": ""
     #     }

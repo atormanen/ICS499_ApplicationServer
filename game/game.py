@@ -130,7 +130,7 @@ class Game:
 
     def create_random_game_response(self):
         self.log_function_name()
-        response = {"request_type": "RequestGame", "status": "success",
+        response = {"request_type": "request_game", "status": "success",
                     "game_token": self.game_token,
                     "player_one_username": self.player_one.username,
                     "player_two": self.player_two.username,

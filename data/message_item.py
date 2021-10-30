@@ -37,7 +37,7 @@ class MessageItem:
         self.log_function_name()
         """Create a response for a match communication request"""
         response = {
-            "request_type": "MatchCommunication",
+            "request_type": "match_communication",
             "result": SUCCESS if was_successful else FAILURE
 
         }
@@ -47,7 +47,7 @@ class MessageItem:
         self.log_function_name()
         """Create a response for a match result report request"""
         response = {
-            "request_type": "MatchResultReport",
+            "request_type": "match_result_report",
             "result": SUCCESS if was_successful else FAILURE
         }
         self.response_obj = json.dumps(response)
@@ -56,7 +56,7 @@ class MessageItem:
         self.log_function_name()
         """Create a response for an error result report request"""
         response = {
-            "request_type": "ErrorReport",
+            "request_type": "error_report",
             "result": SUCCESS if was_successful else FAILURE
         }
         self.response_obj = json.dumps(response)
@@ -65,7 +65,7 @@ class MessageItem:
         self.log_function_name()
         """Creates a response for a request to create a game, but an opponent hasn't accepted yet"""  # FIXME if needed
         response = {
-            "request_type": "CreateGame",
+            "request_type": "create_game",
             "player_one_username": player_one_username,
             "game_token": game_token
         }
@@ -75,7 +75,7 @@ class MessageItem:
         self.log_function_name()
         """Creates a response for when a game is accepted by the second player"""
         response = {
-            "request_type": "CreateGame",
+            "request_type": "create_game",
             "player_one_username": player_one_username,
             "player_two": player_two_username,
             "game_token": game_token
@@ -85,7 +85,7 @@ class MessageItem:
     def check_for_game_response(self, player_one_username: str, game_token: str) -> None:  # TODO add docString
         self.log_function_name()
         response = {
-            "request_type": "CreateGame",
+            "request_type": "create_game",
             "username": player_one_username,
             "game_token": game_token
         }
@@ -94,7 +94,7 @@ class MessageItem:
     def create_random_game_resp(self, game: Game) -> None:  # TODO add docString
         self.log_function_name()
         response = {
-            "request_type": "RequestGame",
+            "request_type": "request_game",
             "status": SUCCESS,
             "game_token": game.game_token,
             "player_one_username": game.player_one.username,
@@ -111,7 +111,7 @@ class MessageItem:
                                         reason: str) -> None:  # TODO add docString
         self.log_function_name()
         response = {
-            "request_type": "RequestGame",
+            "request_type": "request_game",
             "player_one_username": username,
             "status": SUCCESS if was_successful else FAILURE,
             "reason": reason
@@ -123,7 +123,7 @@ class MessageItem:
                                 was_successful: bool) -> None:  # TODO add docString and type of status
         self.log_function_name()
         response = {
-            "request_type": "RequestGame",
+            "request_type": "request_game",
             "player_one_username": username,
             "status": SUCCESS if was_successful else FAILURE
         }

@@ -3,15 +3,12 @@ import json
 import socket
 from threading import Thread
 
-from data.message_item import MessageItem
-from manifest import Manifest
 from request_processor import *
 
 
 # Class listener is used to listen on a servers ip address and port portNumber
 # 12345 for incoming requests.
 class Listener:
-
     log_function_name = lambda x: logger.debug(f"func {inspect.stack()[1][3]}")
     hostname = socket.gethostname()
 
@@ -32,15 +29,16 @@ class Listener:
     def set_ip(self) -> None:
         self.log_function_name()
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        ip = None
         try:
             # doesn't even have to be reachable
             s.connect(('10.255.255.255', 1))
-            IP = s.getsockname()[0]
+            ip = s.getsockname()[0]
         except:  # FIXME too broad exception clause
-            IP = '127.0.0.1'
+            ip = '127.0.0.1'
         finally:
             s.close()
-            self.server_ip = IP
+            self.server_ip = ip
 
     def send_bad_request(self, connection_socket):
         self.log_function_name()

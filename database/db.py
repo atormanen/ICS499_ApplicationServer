@@ -6,6 +6,7 @@ from mysql.connector import Error as MySQLError
 
 from database.mysql_db import MysqlDB
 from manifest import Manifest
+from global_logger import *
 
 
 # from queryBuilder import queryBuilder
@@ -13,8 +14,6 @@ from manifest import Manifest
 # MysqlDB is a class used to implement common database queries programaticly. It
 # uses the querryBuilder class which holds the actual mysql syntax.
 class DB:
-
-    log_function_name = lambda x: logger.debug(f"func {inspect.stack()[1][3]}")
 
     def __init__(self, user, password, reader, writer, database):
         self.manifest = Manifest()
@@ -133,9 +132,10 @@ class DB:
                 mydb.close()
             return result
 
+    @logged_method
     def create_game(self, game_token, player_one_username, player_one_signon_token, \
                     player_two_username, p_one_ip4, p_one_port):
-        self.log_function_name()
+
         p_one_id = self.user_db_fetch(self.builder.get_user_id(player_one_username))
         p_one_id = p_one_id[0][0]
         p_two_id = self.user_db_fetch(self.builder.get_user_id(player_two_username))
@@ -152,8 +152,9 @@ class DB:
                                                   p_one_port, player_one_signon_token))
 
     # FIXME there is an error needing a fix
+    @logged_method
     def create_random_game(self, game):
-        self.log_function_name()
+
         p_one_id = self.user_db_fetch(self.builder.get_user_id(game.player_one))
         p_one_id = p_one_id[0][0]
         next_id = self.db_fetch(self.builder.get_last_game_id())
@@ -164,121 +165,141 @@ class DB:
                                                   game.player_one_color, game.player_one_ip, "",
                                                   game.player_one_port, game.player_one_signon_token))
 
+    @logged_method
     def complete_random_game(self, game):
-        self.log_function_name()
+
         pTwoId = self.user_db_fetch(self.builder.get_user_id(game.player_two))
         pTwoId = pTwoId[0][0]
-        self.db_insert(self.builder.create_player(nextId, pTwoId, game.player_two,
+
+        self.db_insert(self.builder.create_player(game.id, pTwoId, game.player_two,
                                                   game.player_two_color, game.player_two_ip, "",
                                                   game.player_two_port, game.player_two_signon_token))
 
+    @logged_method
     def search_for_game(self):
-        self.log_function_name()
+
         result = self.db_fetch(self.builder.get_open_random_game())
         return result
 
     # Return 0 if false, 1 if true
+    @logged_method
     def validate_user_exists(self, username):
-        self.log_function_name()
+
         result = self.user_db_fetch(self.builder.user_exists(username))
         # result = result[0][0]
         return result
 
     # Return 0 if false, 1 if true
+    @logged_method
     def validate_game_exists(self, game_token):
-        self.log_function_name()
+
         result = self.db_fetch(self.builder.validate_game_exists(game_token))
         result = result[0][0]
         return result
 
+    @logged_method
     def get_token_creation_time(self, username):
-        self.log_function_name()
+
         result = self.user_db_fetch(self.builder.get_token_creation_time(username))
         return result
 
+    @logged_method
     def get_signon_token(self, username):
-        self.log_function_name()
+
         result = self.user_db_fetch(self.builder.get_signon_token(username))
         result = result[0][0]
         return result
 
+    @logged_method
     def accept_game(self, game_token):
-        self.log_function_name()
+
         self.db_update(self.builder.accept_game(game_token))
 
+    @logged_method
     def check_for_game(self, username):
-        self.log_function_name()
+
         userId = self.user_db_fetch(self.builder.get_user_id(username))
         userId = userId[0][0]
         gameToken = self.db_fetch(self.builder.check_for_game(userId))
         gameToken = gameToken[0][0]
         return gameToken
 
+    @logged_method
     def update_socket(self, username, ip, port):
-        self.log_function_name()
+
         userId = self.user_db_fetch(self.builder.get_user_id(username))
         userId = userId[0][0]
         self.db_update(self.builder.update_socket(userId, ip, port))
 
+    @logged_method
     def get_last_game_id(self):
-        self.log_function_name()
+
         id = self.db_fetch(self.builder.get_last_game_id())
         id = id[0][0]
         return id
 
+    @logged_method
     def get_socket(self, username):
-        self.log_function_name()
+
         userId = self.user_db_fetch(self.builder.get_user_id(username))
         userId = userId[0][0]
         socket = self.db_fetch(self.builder.get_socket(userId))
         socket = socket[0]
         return socket
 
+    @logged_method
     def get_game_id(self, token):
-        self.log_function_name()
+
         gameId = self.db_fetch(self.builder.get_game_id(token))
         gameId = gameId[0][0]
         return gameId
 
+    @logged_method
     def create_player(self, game_id, username, ip4, port, signon_token):
-        self.log_function_name()
+
         userId = self.user_db_fetch(self.builder.get_user_id(username))
         userId = userId[0][0]
         self.db_insert(self.builder.create_player(game_id, userId, ip4, "",
                                                   port, signon_token))
 
+    @logged_method
     def get_game(self, game_token):
-        self.log_function_name()
+
         gameId = self.get_game_id(game_token)
         game = self.db_fetch(self.builder.get_game(gameId))
         return game
 
+    @logged_method
     def get_avatar(self, username):
-        self.log_function_name()
+
         avatarInt = self.user_db_fetch(self.builder.get_avatar(username))
         avatarInt = avatarInt[0][0]
         return avatarInt
 
+    @logged_method
     def add_game_won(self, username):
-        self.log_function_name()
+
         userId = self.user_db_fetch(self.builder.get_user_id(username))
         userId = userId[0][0]
         self.user_db_update(self.builder.add_game_won(userId))
 
+    @logged_method
     def add_game_lost(self, username):
-        self.log_function_name()
+
         userId = self.user_db_fetch(self.builder.get_user_id(username))
         userId = userId[0][0]
         self.user_db_update(self.builder.add_game_lost(userId))
 
+    @logged_method
     def add_game_resigned(self, username):
-        self.log_function_name()
+
         userId = self.user_db_fetch(self.builder.get_user_id(username))
         userId = userId[0][0]
         self.user_db_update(self.builder.add_game_resigned(userId))
 
+    @logged_method
     def add_game_played(self, username):
-        self.log_function_name()
+
         userId = self.user_db_fetch(self.builder.get_user_id(username))
         userId = userId[0][0]
         self.user_db_update(self.builder.add_game_played(userId))

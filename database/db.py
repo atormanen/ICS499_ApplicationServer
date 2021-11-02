@@ -72,11 +72,12 @@ class DB:
 
     def user_db_update(self, statement) -> bool:
         try:
-            mydb: Union[CMySQLConnection, MySQLConnection] = mysql.connector.connect(user=self.user,
-                                                                                     password=self.password,
-                                                                                     host=self.writer,
-                                                                                     database='userdb',
-                                                                                     auth_plugin='mysql_native_password')
+            mydb: Union[CMySQLConnection,
+                        MySQLConnection] = mysql.connector.connect(user=self.user,
+                                                                   password=self.password,
+                                                                   host=self.writer,
+                                                                   database='userdb',
+                                                                   auth_plugin='mysql_native_password')
             cursor = mydb.cursor()
             cursor.execute(statement)
             mydb.commit()

@@ -22,9 +22,9 @@ class Game:
         self.player_two_socket_initial: Optional[socket_cls] = None
         self.player_one_socket_initial_flag = 0
         self.player_two_socket_initial_flag = 0
-        self.responseObj = ''
+        self.response_obj = ''
         self.last_move = False
-        self.gameClosedFlag = False
+        self.game_closed_flag = False
         self.chess_color = ChessColor()
         self.player_one: Player = Player(game_token=self.game_token,
                                          username=parsed_data["username"],
@@ -86,7 +86,7 @@ class Game:
         self.player_one.socket.setblocking(False)
         self.player_one_socket_initial_flag = 1
         # TODO: find a different way to handle multpiple sockets
-        thread = Thread(target=self.listen, args=(self.playerOneSocket,))
+        thread = Thread(target=self.listen, args=(self.player_one.socket,))
         thread.start()
 
     @logged_method
@@ -145,13 +145,13 @@ class Game:
                     "player_two_port": self.player_two.port,
                     "player_one_avatar": self.player_one.avatar,
                     "player_two_avatar": self.player_two.avatar}
-        self.responseObj = json.dumps(response)
+        self.response_obj = json.dumps(response)
 
     @logged_method
     def send_game_response(self):
 
         self.create_random_game_response()
-        self.player_one_socket_initial.send(self.responseObj.encode("utf-8"))
-        self.player_two_socket_initial.send(self.responseObj.encode("utf-8"))
+        self.player_one_socket_initial.send(self.response_obj.encode("utf-8"))
+        self.player_two_socket_initial.send(self.response_obj.encode("utf-8"))
         self.player_one_socket_initial.close()
         self.player_two_socket_initial.close()

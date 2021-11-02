@@ -13,7 +13,7 @@ class GameCollection:
         self.listener = listener
         self.game_dict: Dict[str, Game] = dict()
         self.open_game_queue: List[Game] = []
-        self.moveQueue = []  # I can't find the usage of this anywhere. If we can remove then FIXME
+        self.move_queue = []  # I can't find the usage of this anywhere. If we can remove then FIXME
         self.lock = multiprocessing.Lock()
         self.db: Optional[DB] = None
 

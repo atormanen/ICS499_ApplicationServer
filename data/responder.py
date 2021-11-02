@@ -43,7 +43,7 @@ class Responder:
 
         try:
             msg_item.connection_socket.send(msg_item.response_obj.encode())
-        except ConnectionResetError:
+        except ConnectionResetError as e:
             logger.error(e)
 
     @logged_method

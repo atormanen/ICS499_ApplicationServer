@@ -19,18 +19,18 @@ class Controller:
     # requestQueue is shared queue among all processes
     def __init__(self):
         self.manifest: manifest.Manifest = Manifest()
-        self.requestQueue: multiprocessing.Queue = multiprocessing.Queue()
-        self.gameQueue: multiprocessing.Queue = multiprocessing.Queue()
+        self.request_queue: multiprocessing.Queue = multiprocessing.Queue()
+        self.game_queue: multiprocessing.Queue = multiprocessing.Queue()
         # self.gameCollectionQueue = multiprocessing.Queue()
 
-        self.listener: listener.Listener = Listener(self.requestQueue)
-        self.gameCollection: GameCollection = GameCollection(self.listener)
+        self.listener: listener.Listener = Listener(self.request_queue)
+        self.game_collection: GameCollection = GameCollection(self.listener)
         # self.gameCollection.start_socket_checker()
 
     @logged_method
     def create_request_processor(self):
 
-        req: RequestProcessor = RequestProcessor(self.requestQueue, self.gameQueue, self.gameCollection)
+        req: RequestProcessor = RequestProcessor(self.request_queue, self.game_queue, self.game_collection)
         req.process_requests()
 
     @logged_method

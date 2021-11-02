@@ -9,7 +9,6 @@ from request_processor import *
 # Class listener is used to listen on a servers ip address and port portNumber
 # 12345 for incoming requests.
 class Listener:
-    log_function_name = lambda x: logger.debug(f"func {inspect.stack()[1][3]}")
     hostname = socket.gethostname()
 
     def __init__(self, request_queue):
@@ -21,13 +20,15 @@ class Listener:
         self.server_ip: str = ''
         self.req_count: int = 0
 
+    @logged_method
     def create_socket(self):
-        self.log_function_name()
+
         self.server_socket.bind((self.server_ip, self.port_number))
         self.server_socket.listen(5)
 
+    @logged_method
     def set_ip(self) -> None:
-        self.log_function_name()
+
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         ip = None
         try:
@@ -40,13 +41,15 @@ class Listener:
             s.close()
             self.server_ip = ip
 
+    @logged_method
     def send_bad_request(self, connection_socket):
-        self.log_function_name()
+
         msg = "{'ERROR':'BAD REQUEST'}"
         connection_socket.send(msg.encode())
 
+    @logged_method
     def process_request(self, connection_socket, addr):
-        self.log_function_name()
+
         full_msg = ''
         rcvd_msg = ''
         buffer_exceeded = False
@@ -96,11 +99,12 @@ class Listener:
             self.send_bad_request(connection_socket)
             return
         msg_item = MessageItem(connection_socket, addr, parsed_data)
-        logger.debug(f"message item: {parsedData}")
+        logger.debug(f"message item: {parsed_data}")
         self.request_queue.put(msg_item)
 
+    @logged_method
     def listen(self):
-        self.log_function_name()
+
         connection_socket = None
         while True:
 

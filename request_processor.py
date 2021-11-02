@@ -44,8 +44,8 @@ class RequestProcessor:
             elif parsed_data["request_type"] == RequestType.ACCEPT_GAME:
                 self.game_generator.accept_game(parsed_data, req_item)
                 addr = self.database.get_socket(parsed_data["player_one_username"])
-                pOneMsgItem = MessageItem(None, addr, None)  # FIXME
-                self.responder.send_accepted_response(pOneMsgItem, req_item)
+                p_one_msg_item = MessageItem(None, addr, None)  # FIXME
+                self.responder.send_accepted_response(p_one_msg_item, req_item)
             elif parsed_data["request_type"] == RequestType.MATCH_COMMUNICATION:
 
                 # forward the communication to the opponent
@@ -112,7 +112,7 @@ class RequestProcessor:
             logger.error(e)
 
     @logged_method
-    # The process thread will block on requestQueue.get() until something
+    # The process thread will block on request_queue.get() until something
     # arrives.
     def process_requests(self):
         while True:

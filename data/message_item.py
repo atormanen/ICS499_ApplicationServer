@@ -145,7 +145,7 @@ class MessageItem:
 
     @logged_method
     def check_for_game_response(self, player_one_username: str, game_token: str) -> None:  # TODO add docString
-
+        was_successful = bool(player_one_username) and bool(game_token)
         response = {
             "request_type": "create_game",
             "username": player_one_username,

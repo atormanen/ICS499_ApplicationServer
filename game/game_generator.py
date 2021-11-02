@@ -4,23 +4,23 @@ from global_logger import *
 
 
 class GameGenerator:
-    staticCounter = 0
+    static_counter = 0
 
     def __init__(self, mysql_db, game_queue, game_collection):
 
-        self.counter = GameGenerator.staticCounter
-        GameGenerator.staticCounter = GameGenerator.staticCounter + 1
+        self.counter = GameGenerator.static_counter
+        GameGenerator.static_counter = GameGenerator.static_counter + 1
 
         self.db = mysql_db
         self.token = Tokens()
-        self.gameQueue = game_queue
+        self.game_queue = game_queue
         self.game_collection = game_collection
 
     @logged_method
     def validate_username(self, username):
 
-        userExits = self.db.user_exists(username)
-        if (userExits[0][0] == 1):
+        user_exits = self.db.user_exists(username)
+        if (user_exits[0][0] == 1):
             # print("user exists")
             return True
         return False
@@ -28,10 +28,10 @@ class GameGenerator:
     @logged_method
     def token_up_to_date(self, username):
 
-        tokenExpiration = self.db.get_token_creation_time(username)
-        currentTime = time.time()
-        timeDiference = currentTime - tokenExpiration[0][0]
-        if (timeDiference > 86400 * 5):
+        token_expiration = self.db.get_token_creation_time(username)
+        current_time = time.time()
+        time_diference = current_time - token_expiration[0][0]
+        if (time_diference > 86400 * 5):
             return False
         return True
 
@@ -118,15 +118,15 @@ class GameGenerator:
 
         try:
             player_one_username = parsed_data["username"]
-            playerOneSignonToken = parsed_data["signon_token"]
+            player_one_signon_token = parsed_data["signon_token"]
         except KeyError as e:
             logger.error(e)
             return False
-        # gaemToken = parsed_data["game_token"]
+        # gaem_token = parsed_data["game_token"]
         if not self.validate_username(player_one_username):
             req_item.create_random_game_resp_failure(player_one_username, "failure", "failed validation")
             return False
-        if not self.validate_token(player_one_username, playerOneSignonToken):
+        if not self.validate_token(player_one_username, player_one_signon_token):
             req_item.create_random_game_resp_failure(player_one_username, "failure", "failed validation")
             return False
         if not self.token_up_to_date(player_one_username):
@@ -147,7 +147,7 @@ class GameGenerator:
             return False
 
         if (self.game_collection.open_game_available()):
-            game = self.game_collection.add_second_player(player_one_username, playerOneSignonToken,
+            game = self.game_collection.add_second_player(player_one_username, player_one_signon_token,
                                                           p_one_ip, p_one_port, req_item.connection_socket)
             self.game_collection.lock.release()
             game.send_game_response()
@@ -176,46 +176,46 @@ class GameGenerator:
         self.game_collection.get_game(game_token)
 
     @logged_method
-    def acceptGame(self, parsedData, reqItem):
+    def accept_game(self, parsed_data, req_item):
 
-        playerOne = parsedData["player_one_username"]
-        playerTwo = parsedData["player_two"]
-        playerTwoSignonToken = parsedData["signon_token"]
-        gameToken = parsedData["game_token"]
+        player_one = parsed_data["player_one_username"]
+        player_two = parsed_data["player_two"]
+        player_two_signon_token = parsed_data["signon_token"]
+        game_token = parsed_data["game_token"]
 
-        if (self.validate_username(playerOne) == False):
+        if (self.validate_username(player_one) == False):
             return False
-        if (self.validate_username(playerTwo) == False):
+        if (self.validate_username(player_two) == False):
             return False
-        if (self.validate_token(playerTwo, playerTwoSignonToken) == False):
+        if (self.validate_token(player_two, player_two_signon_token) == False):
             return False
-        if (self.token_up_to_date(playerOne) == False):
+        if (self.token_up_to_date(player_one) == False):
             return False
 
-        pOneIp = reqItem.ip_address
-        pOnePort = reqItem.port
+        p_one_ip = req_item.ip_address
+        p_one_port = req_item.port
 
-        self.db.accept_game(gameToken)
-        self.db.update_socket(playerTwo, reqItem.ip_address, reqItem.port)
-        gameId = self.db.get_game_id(gameToken)
-        self.db.create_player(gameId, playerTwo, reqItem.ip_address, reqItem.port,
-                              gameToken)
-        game = self.game_collection.add_second_player(playerTwo, playerTwoSignonToken,
-                                                      pOneIp, pOnePort, reqItem.connection_socket)
+        self.db.accept_game(game_token)
+        self.db.update_socket(player_two, req_item.ip_address, req_item.port)
+        game_id = self.db.get_game_id(game_token)
+        self.db.create_player(game_id, player_two, req_item.ip_address, req_item.port,
+                              game_token)
+        game = self.game_collection.add_second_player(player_two, player_two_signon_token,
+                                                      p_one_ip, p_one_port, req_item.connection_socket)
 
-    # game.sendGameResposne()
+    # game.send_game_resposne()
 
     @logged_method
-    def checkForGame(self, parsedData, reqItem):
+    def check_for_game(self, parsed_data, req_item):
 
-        username = parsedData["username"]
-        playerOneSignonToken = parsedData["signon_token"]
+        username = parsed_data["username"]
+        player_one_signon_token = parsed_data["signon_token"]
         if (self.validate_username(username) == False):
             return False
-        if (self.validate_token(username, playerOneSignonToken) == False):
+        if (self.validate_token(username, player_one_signon_token) == False):
             return False
         if (self.token_up_to_date(username) == False):
             return False
 
         token = self.db.check_for_game(username)
-        reqItem.check_for_game_response(username, token)
+        req_item.check_for_game_response(username, token)

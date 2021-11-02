@@ -133,7 +133,7 @@ class DB:
             return result
 
     @logged_method
-    def create_game(self, game_token, player_one_username, player_one_signon_token, \
+    def create_game(self, game_token, player_one_username, player_one_signon_token,
                     player_two_username, p_one_ip4, p_one_port):
 
         p_one_id = self.user_db_fetch(self.builder.get_user_id(player_one_username))
@@ -141,14 +141,14 @@ class DB:
         p_two_id = self.user_db_fetch(self.builder.get_user_id(player_two_username))
         p_two_id = p_two_id[0][0]
         token_creation = self.get_token_creation_time(player_one_username)
-        nextId = self.db_fetch(self.builder.get_last_game_id())
-        if nextId[0][0] is None:
-            nextId = 1
+        next_id = self.db_fetch(self.builder.get_last_game_id())
+        if next_id[0][0] is None:
+            next_id = 1
         else:
-            nextId = nextId[0][0] + 1;
+            next_id = next_id[0][0] + 1;
 
-        self.db_insert(self.builder.create_game(nextId, game_token, p_one_id, p_two_id))
-        self.db_insert(self.builder.create_player(nextId, p_one_id, player_one_username, "White", p_one_ip4, "", \
+        self.db_insert(self.builder.create_game(next_id, game_token, p_one_id, p_two_id))
+        self.db_insert(self.builder.create_player(next_id, p_one_id, player_one_username, "White", p_one_ip4, "",
                                                   p_one_port, player_one_signon_token))
 
     # FIXME there is an error needing a fix
@@ -168,10 +168,10 @@ class DB:
     @logged_method
     def complete_random_game(self, game):
 
-        pTwoId = self.user_db_fetch(self.builder.get_user_id(game.player_two))
-        pTwoId = pTwoId[0][0]
+        p_two_id = self.user_db_fetch(self.builder.get_user_id(game.player_two))
+        p_two_id = p_two_id[0][0]
 
-        self.db_insert(self.builder.create_player(game.id, pTwoId, game.player_two,
+        self.db_insert(self.builder.create_player(game.id, p_two_id, game.player_two,
                                                   game.player_two_color, game.player_two_ip, "",
                                                   game.player_two_port, game.player_two_signon_token))
 
@@ -218,18 +218,18 @@ class DB:
     @logged_method
     def check_for_game(self, username):
 
-        userId = self.user_db_fetch(self.builder.get_user_id(username))
-        userId = userId[0][0]
-        gameToken = self.db_fetch(self.builder.check_for_game(userId))
-        gameToken = gameToken[0][0]
-        return gameToken
+        user_id = self.user_db_fetch(self.builder.get_user_id(username))
+        user_id = user_id[0][0]
+        game_token = self.db_fetch(self.builder.check_for_game(user_id))
+        game_token = game_token[0][0]
+        return game_token
 
     @logged_method
     def update_socket(self, username, ip, port):
 
-        userId = self.user_db_fetch(self.builder.get_user_id(username))
-        userId = userId[0][0]
-        self.db_update(self.builder.update_socket(userId, ip, port))
+        user_id = self.user_db_fetch(self.builder.get_user_id(username))
+        user_id = user_id[0][0]
+        self.db_update(self.builder.update_socket(user_id, ip, port))
 
     @logged_method
     def get_last_game_id(self):
@@ -241,65 +241,65 @@ class DB:
     @logged_method
     def get_socket(self, username):
 
-        userId = self.user_db_fetch(self.builder.get_user_id(username))
-        userId = userId[0][0]
-        socket = self.db_fetch(self.builder.get_socket(userId))
+        user_id = self.user_db_fetch(self.builder.get_user_id(username))
+        user_id = user_id[0][0]
+        socket = self.db_fetch(self.builder.get_socket(user_id))
         socket = socket[0]
         return socket
 
     @logged_method
     def get_game_id(self, token):
 
-        gameId = self.db_fetch(self.builder.get_game_id(token))
-        gameId = gameId[0][0]
-        return gameId
+        game_id = self.db_fetch(self.builder.get_game_id(token))
+        game_id = game_id[0][0]
+        return game_id
 
     @logged_method
     def create_player(self, game_id, username, ip4, port, signon_token):
 
-        userId = self.user_db_fetch(self.builder.get_user_id(username))
-        userId = userId[0][0]
-        self.db_insert(self.builder.create_player(game_id, userId, ip4, "",
+        user_id = self.user_db_fetch(self.builder.get_user_id(username))
+        user_id = user_id[0][0]
+        self.db_insert(self.builder.create_player(game_id, user_id, ip4, "",
                                                   port, signon_token))
 
     @logged_method
     def get_game(self, game_token):
 
-        gameId = self.get_game_id(game_token)
-        game = self.db_fetch(self.builder.get_game(gameId))
+        game_id = self.get_game_id(game_token)
+        game = self.db_fetch(self.builder.get_game(game_id))
         return game
 
     @logged_method
     def get_avatar(self, username):
 
-        avatarInt = self.user_db_fetch(self.builder.get_avatar(username))
-        avatarInt = avatarInt[0][0]
-        return avatarInt
+        avatar_int = self.user_db_fetch(self.builder.get_avatar(username))
+        avatar_int = avatar_int[0][0]
+        return avatar_int
 
     @logged_method
     def add_game_won(self, username):
 
-        userId = self.user_db_fetch(self.builder.get_user_id(username))
-        userId = userId[0][0]
-        self.user_db_update(self.builder.add_game_won(userId))
+        user_id = self.user_db_fetch(self.builder.get_user_id(username))
+        user_id = user_id[0][0]
+        self.user_db_update(self.builder.add_game_won(user_id))
 
     @logged_method
     def add_game_lost(self, username):
 
-        userId = self.user_db_fetch(self.builder.get_user_id(username))
-        userId = userId[0][0]
-        self.user_db_update(self.builder.add_game_lost(userId))
+        user_id = self.user_db_fetch(self.builder.get_user_id(username))
+        user_id = user_id[0][0]
+        self.user_db_update(self.builder.add_game_lost(user_id))
 
     @logged_method
     def add_game_resigned(self, username):
 
-        userId = self.user_db_fetch(self.builder.get_user_id(username))
-        userId = userId[0][0]
-        self.user_db_update(self.builder.add_game_resigned(userId))
+        user_id = self.user_db_fetch(self.builder.get_user_id(username))
+        user_id = user_id[0][0]
+        self.user_db_update(self.builder.add_game_resigned(user_id))
 
     @logged_method
     def add_game_played(self, username):
 
-        userId = self.user_db_fetch(self.builder.get_user_id(username))
-        userId = userId[0][0]
-        self.user_db_update(self.builder.add_game_played(userId))
+        user_id = self.user_db_fetch(self.builder.get_user_id(username))
+        user_id = user_id[0][0]
+        self.user_db_update(self.builder.add_game_played(user_id))

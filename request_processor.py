@@ -42,7 +42,7 @@ class RequestProcessor:
                 self.game_generator.create_game(parsed_data, req_item)
                 self.responder.send_response(req_item)
             elif parsed_data["request_type"] == RequestType.ACCEPT_GAME:
-                self.game_generator.acceptGame(parsed_data, req_item)
+                self.game_generator.accept_game(parsed_data, req_item)
                 addr = self.database.get_socket(parsed_data["player_one_username"])
                 pOneMsgItem = MessageItem(None, addr, None)  # FIXME
                 self.responder.send_accepted_response(pOneMsgItem, req_item)
@@ -97,7 +97,7 @@ class RequestProcessor:
                 raise NotImplementedError  # FIXME by removing this line after we finish this
 
             elif parsed_data["request_type"] == RequestType.CHECK_FOR_GAME:
-                self.game_generator.checkForGame(parsed_data, req_item)
+                self.game_generator.check_for_game(parsed_data, req_item)
                 self.responder.send_response(req_item)
             elif parsed_data["request_type"] == RequestType.REQUEST_GAME:
                 result = self.game_generator.create_random_game(parsed_data, req_item)

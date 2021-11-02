@@ -1,7 +1,7 @@
 from typing import Union
 
 import mysql.connector
-from mysql.connector import CMySQLConnection, MySQLConnection
+from mysql.connector import MySQLConnection
 from mysql.connector import Error as MySQLError
 
 from database.mysql_db import MysqlDB
@@ -72,12 +72,11 @@ class DB:
 
     def user_db_update(self, statement) -> bool:
         try:
-            mydb: Union[CMySQLConnection,
-                        MySQLConnection] = mysql.connector.connect(user=self.user,
-                                                                   password=self.password,
-                                                                   host=self.writer,
-                                                                   database='userdb',
-                                                                   auth_plugin='mysql_native_password')
+            mydb: MySQLConnection = mysql.connector.connect(user=self.user,
+                                                            password=self.password,
+                                                            host=self.writer,
+                                                            database='userdb',
+                                                            auth_plugin='mysql_native_password')
             cursor = mydb.cursor()
             cursor.execute(statement)
             mydb.commit()

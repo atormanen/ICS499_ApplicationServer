@@ -1,6 +1,6 @@
 import multiprocessing
 from threading import Thread
-from typing import Dict
+from typing import Dict, List
 
 from database.db import DB
 from game.game import Game
@@ -12,7 +12,7 @@ class GameCollection:
     def __init__(self, listener):
         self.listener = listener
         self.game_dict: Dict[str, Game] = dict()
-        self.open_game_queue: list[Game] = []
+        self.open_game_queue: List[Game] = []
         self.moveQueue = []  # I can't find the usage of this anywhere. If we can remove then FIXME
         self.lock = multiprocessing.Lock()
         self.db: Optional[DB] = None

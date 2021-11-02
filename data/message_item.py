@@ -202,7 +202,7 @@ class MessageItem:
     #   If we are not going to use it, we should remove it.
     #   If we will use it, it needs to be fixed because there are Errors.
     #
-    # def get_game_list_response(self, game_list: list[str], request: str = "get_game_list") -> None:
+    # def get_game_list_response(self, game_list: List[str], request: str = "get_game_list") -> None:
     #     game_dict = {
     #         "game0": "games"
     #     }

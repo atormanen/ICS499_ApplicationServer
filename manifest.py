@@ -10,7 +10,7 @@ class Manifest:
         # Username to connect to the database
         self.database_username = 'jarchess'
         # Password used to connect to the database
-        self.database_password = 'TzGuxyBhYVyCTyu4PrWG'
+        self.database_password = 'TzGuxyBhYVyCTyu4PrWG'  # FIXME
         # Name of the game database to connect too
         self.game_database_name = 'gamedb'
         # Name of the user database to connect too

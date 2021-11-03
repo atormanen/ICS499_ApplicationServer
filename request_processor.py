@@ -1,17 +1,15 @@
-from data.message_item import MessageItem
+from data.message_item import MessageItem, RequestType
 from data.responder import Responder
 from database.db import DB
 from game.game_generator import GameGenerator
-from game.request_validator import RequestValidator
 from manifest import Manifest
+from global_logger import *
 
 
 # from game.Tokens import Tokens
 
 
 class RequestProcessor:
-
-    log_function_name = lambda x: logger.debug(f"func {inspect.stack()[1][3]}")
 
     # PrecessReqeust is set up to be a seperate process in the OS and
     # will hold the shared request queue object. It will pull requests
@@ -27,29 +25,28 @@ class RequestProcessor:
         # self.database = DB('app','123','192.168.1.106', '192.168.1.106','gamedb')
         self.request_queue = request_queue
         self.game_queue = game_queue
-        self.req_validation = RequestValidator()
         self.responder = Responder()
         self.game_collection = game_collection
         self.game_collection.set_database(self.database)
         self.game_generator = GameGenerator(self.database, self.game_queue, self.game_collection)
 
+    @logged_method
     ## TODO: find a better way to process these requests types.
     def proccesrequest_type(self, req_item: MessageItem):
-        self.log_function_name()
-        if self.req_validation.is_bad_request(req_item.parsed_data):
+        if req_item.is_bad_request():
             self.responder.send_bad_request_response(req_item.connection_socket)
             return
         parsed_data = req_item.parsed_data
         try:
-            if parsed_data["request_type"] == "CreateGame":
+            if parsed_data["request_type"] == RequestType.CREATE_GAME:
                 self.game_generator.create_game(parsed_data, req_item)
                 self.responder.send_response(req_item)
-            elif parsed_data["request_type"] == "AcceptGame":
-                self.game_generator.acceptGame(parsed_data, req_item)
+            elif parsed_data["request_type"] == RequestType.ACCEPT_GAME:
+                self.game_generator.accept_game(parsed_data, req_item)
                 addr = self.database.get_socket(parsed_data["player_one_username"])
-                pOneMsgItem = MessageItem(None, addr, None)
-                self.responder.send_accepted_response(pOneMsgItem, req_item)
-            elif parsed_data["request_type"] == "MatchCommunication":
+                p_one_msg_item = MessageItem(None, addr, None)  # FIXME
+                self.responder.send_accepted_response(p_one_msg_item, req_item)
+            elif parsed_data["request_type"] == RequestType.MATCH_COMMUNICATION:
 
                 # forward the communication to the opponent
                 game = self.game_collection.get_game_from_token(parsed_data["game_token"])
@@ -59,7 +56,7 @@ class RequestProcessor:
                 req_item.create_match_communication_response(was_successful)
                 self.responder.send_response(req_item)
 
-            elif parsed_data["request_type"] == "MatchResultReport":
+            elif parsed_data["request_type"] == RequestType.MATCH_RESULT_REPORT:
 
                 # send a success response because we understand and accept the report
                 # TODO implement this
@@ -81,7 +78,7 @@ class RequestProcessor:
 
                 raise NotImplementedError  # FIXME by removing this line after we finish this
 
-            elif parsed_data["request_type"] == "ErrorReport":
+            elif parsed_data["request_type"] == RequestType.ERROR_REPORT:
 
                 # send a success response because we understand and accept the report
                 # TODO implement this
@@ -99,14 +96,14 @@ class RequestProcessor:
 
                 raise NotImplementedError  # FIXME by removing this line after we finish this
 
-            elif parsed_data["request_type"] == "CheckForGame":
-                self.game_generator.checkForGame(parsed_data, req_item)
+            elif parsed_data["request_type"] == RequestType.CHECK_FOR_GAME:
+                self.game_generator.check_for_game(parsed_data, req_item)
                 self.responder.send_response(req_item)
-            elif parsed_data["request_type"] == "RequestGame":
+            elif parsed_data["request_type"] == RequestType.REQUEST_GAME:
                 result = self.game_generator.create_random_game(parsed_data, req_item)
                 if (result == False):
                     self.responder.send_random_game_response(req_item)
-            elif parsed_data["request_type"] == "RequestGameCanceled":
+            elif parsed_data["request_type"] == RequestType.CANCEL_GAME_REQUEST:
                 self.game_generator.request_game_canceled(parsed_data, req_item)
                 self.responder.send_response(req_item)
             else:
@@ -114,16 +111,16 @@ class RequestProcessor:
         except KeyError as e:
             logger.error(e)
 
-    # The process thread will block on requestQueue.get() until something
+    @logged_method
+    # The process thread will block on request_queue.get() until something
     # arrives.
     def process_requests(self):
-        self.log_function_name()
         while True:
             request_item = self.request_queue.get()
-             try:
-                 self.proccesrequest_type(request_item)
-             except Exception as e:
-                 logger.error('invalid request')
-             finally:
-                 request_item.invalidRequest()
-                 self.responder.sendResponse(request_item)
+            try:
+                self.proccesrequest_type(request_item)
+            except Exception as e:
+                logger.error('invalid request')
+            finally:
+                request_item.create_invalid_request_response()
+                self.responder.send_response(request_item)

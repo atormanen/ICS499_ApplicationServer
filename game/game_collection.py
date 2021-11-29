@@ -24,15 +24,15 @@ class GameCollection:
         while True:  # should we have this eventually end? If so FIXME
             # print("checking sockets")
             for key, value in self.game_dict.items():
-                logger.log(VERBOSE, "checking sockets")
-                logger.log(VERBOSE, f"key: {key}   game_toke: {value.game_token}")
+                log("checking sockets", level=VERBOSE)
+                log(f"key: {key}   game_toke: {value.game_token}", level=VERBOSE)
                 self.listener.process_request(value.player_one.socket, (value.player_one.ip, value.player_one.port))
                 self.listener.process_request(value.player_two.socket, (value.player_two.ip, value.player_two.port))
 
     @logged_method
     def start_socket_checker(self):
         thread = Thread(target=self.check_sockets)
-        logger.log(VERBOSE, "starting socket checker")
+        log("starting socket checker", level=VERBOSE)
         thread.start()
 
     @logged_method
@@ -42,7 +42,7 @@ class GameCollection:
     @logged_method
     def open_game_available(self):
         if (len(self.open_game_queue) > 0):
-            logger.log(VERBOSE, "open game available")
+            log("open game available", level=VERBOSE)
             return True
         else:
             return False
@@ -50,7 +50,7 @@ class GameCollection:
     @logged_method
     def check_if_already_in_game(self, username):
         for key, games in self.game_dict.items():
-            logger.log(VERBOSE, f"key: {key}   game_toke: {games.game_token}")
+            log(f"key: {key}   game_toke: {games.game_token}", level=VERBOSE)
 
             if (username == games.player_one):
                 if not (games.check_if_still_alive(username)):
@@ -66,16 +66,16 @@ class GameCollection:
                     return True
 
         for games in self.open_game_queue:
-            logger.log(VERBOSE, f"value: {games.player_one}")
+            log(f"value: {games.player_one}", level=VERBOSE)
             if (username == games.player_one):
                 if not (games.check_if_still_alive(username)):
-                    logger.log(VERBOSE, 'socket not available')
+                    log('socket not available', level=VERBOSE)
                     self.open_game_queue.remove(games)
                     return False
                 return True
             elif (username == games.player_two):
                 if not (games.check_if_still_alive(username)):
-                    logger.log(VERBOSE, 'socket not available')
+                    log('socket not available', level=VERBOSE)
                     self.open_game_queue.remove(games)
                     return False
                 return True
@@ -99,7 +99,7 @@ class GameCollection:
         try:
             return self.game_dict[game_token]
         except KeyError as e:
-            logger.error(e)
+            log_error(e)
             return False
 
     @logged_method
@@ -111,7 +111,7 @@ class GameCollection:
                 return games
 
         for games in self.open_game_queue:
-            logger.debug(f"value: {games.player_one.username}")
+            log(f"value: {games.player_one.username}")
             if username == games.player_one.username:
                 return games
             elif username == games.player_two.username:
@@ -124,7 +124,7 @@ class GameCollection:
 
     @logged_method
     def remove_game(self, game):
-        logger.info(VERBOSE, f"removing game: {game.game_token}")
+        log(f"removing game: {game.game_token}", level=VERBOSE)
         removed_result = self.game_dict.pop(game.game_token)
         return removed_result
 

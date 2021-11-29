@@ -86,7 +86,7 @@ class MysqlDB:
     @logged_method
     def get_socket(self, user_id):
         query = "SELECT ip4, port FROM player WHERE player_id = " + str(user_id) + ";"
-        return query;
+        return query
 
     @logged_method
     def get_game_id(self, token):

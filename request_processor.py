@@ -109,7 +109,7 @@ class RequestProcessor:
             else:
                 self.responder.send_bad_request_response(req_item.connection_socket)
         except KeyError as e:
-            logger.error(e)
+            log_error(e)
 
     @logged_method
     # The process thread will block on request_queue.get() until something
@@ -120,7 +120,7 @@ class RequestProcessor:
             try:
                 self.proccesrequest_type(request_item)
             except Exception as e:
-                logger.error('invalid request')
+                log_error(e, msg='invalid request')
             finally:
                 request_item.create_invalid_request_response()
                 self.responder.send_response(request_item)

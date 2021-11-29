@@ -1,12 +1,10 @@
-from typing import Union
-
 import mysql.connector
-from mysql.connector import MySQLConnection
 from mysql.connector import Error as MySQLError
+from mysql.connector import MySQLConnection
 
 from database.mysql_db import MysqlDB
-from manifest import Manifest
 from global_logger import *
+from manifest import Manifest
 
 
 # from queryBuilder import queryBuilder
@@ -145,7 +143,7 @@ class DB:
         if next_id[0][0] is None:
             next_id = 1
         else:
-            next_id = next_id[0][0] + 1;
+            next_id = next_id[0][0] + 1
 
         self.db_insert(self.builder.create_game(next_id, game_token, p_one_id, p_two_id))
         self.db_insert(self.builder.create_player(next_id, p_one_id, player_one_username, "White", p_one_ip4, "",
@@ -158,7 +156,7 @@ class DB:
         p_one_id = self.user_db_fetch(self.builder.get_user_id(game.player_one))
         p_one_id = p_one_id[0][0]
         next_id = self.db_fetch(self.builder.get_last_game_id())
-        next_id = next_id[0][0] + 1;
+        next_id = next_id[0][0] + 1
         self.db_insert(self.builder.create_game(next_id, game.game_token, p_one_id, p_two_id))  # FIXME
 
         self.db_insert(self.builder.create_player(next_id, p_one_id, game.player_one,

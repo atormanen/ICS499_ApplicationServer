@@ -103,12 +103,12 @@ class GameGenerator:
             username = parsed_data["username"]
             signon_token = parsed_data["signon_token"]  # FIXME by removing assignment if we are not using signon_token
         except KeyError as e:
-            logger.error(e)
+            log_error(e)
             return False
         if self.game_collection.check_if_already_in_game(username):
             game = self.game_collection.get_game(username)
             self.game_collection.remove_game(game)
-            logger.log(VERBOSE, 'game removed')
+            log('game removed', level=VERBOSE)
             req_item.cancel_random_game_resp(username, was_successful=True)
         else:
             req_item.cancel_random_game_resp(username, was_successful=False)
@@ -120,7 +120,7 @@ class GameGenerator:
             player_one_username = parsed_data["username"]
             player_one_signon_token = parsed_data["signon_token"]
         except KeyError as e:
-            logger.error(e)
+            log_error(e)
             return False
         # gaem_token = parsed_data["game_token"]
         if not self.validate_username(player_one_username):

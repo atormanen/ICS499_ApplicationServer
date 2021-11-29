@@ -48,13 +48,13 @@ class Game:
             try:
                 self.player_one.socket.send("socket test".encode("utf-8"))
             except socket_error:
-                logger.log(VERBOSE, 'socket is dead')
+                log('socket is dead', level=VERBOSE)
                 return False
         elif self.player_two is not None and username == self.player_two.username:
             try:
                 self.player_two.socket.send("socket test".encode("utf-8"))
             except socket_error:
-                logger.log(VERBOSE, 'socket is dead')
+                log('socket is dead', level=VERBOSE)
                 return False
         else:  # the username is not associated with a player in this game
             return False
@@ -127,7 +127,7 @@ class Game:
 
         # self.player_two.socket.send(str(succsess_response()).encode("utf-8"))
         else:  # no player matched the requester's username
-            logger.log(VERBOSE, f"{sender_username} was not found in this game")
+            log(f"{sender_username} was not found in this game", level=VERBOSE)
             return False
 
     @logged_method

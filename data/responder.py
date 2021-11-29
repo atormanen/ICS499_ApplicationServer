@@ -44,7 +44,7 @@ class Responder:
         try:
             msg_item.connection_socket.send(msg_item.response_obj.encode())
         except ConnectionResetError as e:
-            logger.error(e)
+            log_error(e)
 
     @logged_method
     # FIXME why don't we just use send_response method instead? I don't see any difference
@@ -52,9 +52,9 @@ class Responder:
 
         try:
             msg_item.connection_socket.send(msg_item.response_obj.encode())
-        except ConnectionResetError:
+        except ConnectionResetError as e:
             # This is expected
-            logger.error("connection reset error")
+            log_error(e)
 
     @logged_method
     # FIXME msg_item_p_one is only used to load unused local variables. We should simplify this if it is not needed.
@@ -64,9 +64,9 @@ class Responder:
             ip = msg_item_p_one.ip_address  # this is unused
             port = msg_item_p_one.port  # this is unused
             msg_item_p_two.connection_socket.send(msg_item_p_two.response_obj.encode())
-        except ConnectionResetError:
+        except ConnectionResetError as e:
             # This is expected
-            logger.error("connection reset error")
+            log_error(e)
         # sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         # sock.connect((ip,self.clientPort))
         # sock.send(msg_item_p_two.response_obj.encode())

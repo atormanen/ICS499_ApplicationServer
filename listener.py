@@ -35,7 +35,7 @@ class Listener:
             # doesn't even have to be reachable
             s.connect(('10.255.255.255', 1))
             ip = s.getsockname()[0]
-        except:  # FIXME too broad exception clause
+        except socket.error:
             ip = '127.0.0.1'
         finally:
             s.close()
@@ -67,7 +67,7 @@ class Listener:
                 try:
                     rcvd_msg = connection_socket.recv(self.buffer_size).decode("utf-8", "replace")
                 except UnicodeDecodeError as e:
-                    logger.error(e)
+                    log_error(e)
                     break
                 except BlockingIOError:
                     break
@@ -94,12 +94,12 @@ class Listener:
         # print("TEST ",self.reqCount,"  ",full_msg)
         try:
             parsed_data = json.loads(full_msg)
-        except (json.decoder.JSONDecodeError):
-            logger.error('unable to load json')
+        except (json.decoder.JSONDecodeError) as e:
+            log_error(e)
             self.send_bad_request(connection_socket)
             return
         msg_item = MessageItem(connection_socket, addr, parsed_data)
-        logger.debug(f"message item: {parsed_data}")
+        log(f"message item: {parsed_data}")
         self.request_queue.put(msg_item)
 
     @logged_method
@@ -111,11 +111,11 @@ class Listener:
             self.req_count = self.req_count + 1
             try:
                 connection_socket, addr = self.server_socket.accept()
-                logger.debug(f"received message from {str(addr)}")
+                log(f"received message from {str(addr)}")
                 thread: Thread = Thread(target=self.process_request, args=(connection_socket, addr,))
                 thread.start()
             except IOError as error:
-                logger.error(error)
+                log_error(error)
                 if connection_socket is not None:
                     connection_socket.close()
 

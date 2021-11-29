@@ -35,7 +35,7 @@ class Listener:
             # doesn't even have to be reachable
             s.connect(('10.255.255.255', 1))
             ip = s.getsockname()[0]
-        except Exception:  # FIXME too broad exception clause
+        except socket.error:
             ip = '127.0.0.1'
         finally:
             s.close()
